@@ -13,8 +13,8 @@ assignees: ''
 
 ### Assignees (오른쪽에서 담당자 선택)
 
-### Labels (테마별로 각 1개, 총 2개 선택)
+### Labels (오른쪽에서 테마별로 각 1개, 총 2개 선택)
 - Group : `client`, `server`
 - 예상 시간 : `1h`, `2h`, `3h`, `4h`, `5h`, `6h`, `7h`, `8h`
 
-### Projects (1차 기능구현 선택)
+### Projects (오른쪽에서 1차 기능구현 선택)
