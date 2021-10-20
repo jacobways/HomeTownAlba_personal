@@ -1,6 +1,6 @@
 ---
 name: Task Card
-about: Client 또는 Backend 단위로 해야 할 일 입력 (ex. 랜딩페이지 구현)
+about: Client 또는 Backend 단위로 입력 (ex. [server] User 컨트롤러 구현)
 title: "[Client] 로그인 페이지 구현"
 labels: ''
 assignees: ''
@@ -11,6 +11,8 @@ assignees: ''
 1. [ ] 입력 버튼 구현하기
 2. [ ] 로그인 버튼 구현하기
 
-### 라벨
+### Assignees (오른쪽 상단에서 담당자 선택)
+
+### 라벨 (오른쪽 상단에 2개 선택)
 - Group : `client`, `server`
 - 예상 시간 : `1h`, `2h`, `3h`, `4h`, `5h`, `6h`, `7h`, `8h`
