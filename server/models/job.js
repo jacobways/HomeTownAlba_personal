@@ -10,21 +10,23 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
     }
-  }
-  Job.init(
-    {
-      companyId: DataTypes.INTEGER,
-      title: DataTypes.STRING,
-      location: DataTypes.STRING,
-      period: DataTypes.INTEGER,
-      position: DataTypes.STRING,
-      hourlyWage: DataTypes.INTEGER,
-      monthlyWage: DataTypes.INTEGER,
-    },
-    {
-      sequelize,
-      modelName: "Job",
-    }
-  );
+
+  };
+  Job.init({
+    companyId: DataTypes.INTEGER,
+    title: DataTypes.STRING,
+    location: DataTypes.STRING,
+    day: DataTypes.JSON,
+    startTime: DataTypes.TIME,
+    endTime: DataTypes.TIME,
+    time: DataTypes.INTEGER,
+    position: DataTypes.STRING,
+    hourlyWage: DataTypes.INTEGER,
+    monthlyWage: DataTypes.INTEGER
+  }, {
+    sequelize,
+    modelName: 'Job',
+  });
+
   return Job;
 };
