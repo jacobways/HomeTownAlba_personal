@@ -1,33 +1,41 @@
 require("dotenv").config();
 
 const express = require("express");
-const app = express();
-const port = 3000
 const fs = require("fs");
 const cors = require("cors");
-const cookieParser = require("cookie-parser");
+const app = express();
 
-const jobRouter = require('./routes/job')
-const careerRouter = require("./routes/career.js")
+const cookieParser = require("cookie-parser");
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use(
   cors({
-    origin: ["http://localhost:3000"],
+    origin: "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE"]
   })
 )
+app.use(cookieParser());
 
+const jobSeekerRouter = require("./routes/jobseeker");
+const companyRouter = require("./routes/company");
+const jobRouter = require('./routes/job')
+const careerRouter = require("./routes/career.js")
+
+app.use("/jobseeker", jobSeekerRouter);
+app.use("/company", companyRouter);
 app.use('/job', jobRouter)
 app.use("/career", careerRouter);
 
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
+const port = 5000;
+
+app.get("/test", (req, res) => {
+  res.send("test 성공");
+});
 
 app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`)
-})
+  console.log("yaho1");
+});
+
