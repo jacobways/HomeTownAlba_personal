@@ -17,7 +17,16 @@ module.exports = {
       location: {
         type: Sequelize.STRING
       },
-      period: {
+      day: {
+        type: Sequelize.JSON
+      },
+      startTime: {
+        type: Sequelize.TIME
+      },
+      endTime: {
+        type: Sequelize.TIME
+      },
+      time: {
         type: Sequelize.INTEGER
       },
       position: {
