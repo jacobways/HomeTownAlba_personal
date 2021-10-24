@@ -2,13 +2,13 @@ const { Career } = require('../../models')
 require("dotenv").config();
 
 module.exports = async (req, res) => {
-  const {jobSeekerId} = req.params;
-  console.log(req.params)
+  const {id} = req.query;
+  console.log(req.query)
 
-  if(!jobSeekerId){
-    res.status(400).send("구직자 정보가 필요합니다")
+  if(!id){
+    res.status(400).send("id 정보가 없습니다.")
   } else{
-    const careerInfo = await Career.findAll({ where : {jobSeekerId}})
+    const careerInfo = await Career.findOne({ where : {id}})
     if(!careerInfo){
       res.status(404).send("구직자의 경력이 없습니다")
     }else{
