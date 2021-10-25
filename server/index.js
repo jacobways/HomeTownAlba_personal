@@ -7,8 +7,6 @@ const app = express();
 const morgan = require("morgan");
 const session = require("express-session");
 const passport = require("passport");
-const dotenv = require("dotenv");
-dotenv.config();
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
 
