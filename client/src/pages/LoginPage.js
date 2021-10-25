@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { loginJobSeeker } from "../_actions/user_action";
+import { googleLoginJobSeeker, loginJobSeeker } from "../_actions/user_action";
+import axios from "axios";
 
 function LoginPage(props) {
   const [LoginDisplay, setLoginDisplay] = useState(true);
@@ -44,6 +45,8 @@ function LoginPage(props) {
     // redux
   };
 
+  // Google Oauth
+
   if (LoginDisplay) {
     return (
       <div>
@@ -66,6 +69,11 @@ function LoginPage(props) {
             placeholder="비밀번호를 입력하세요"
           />
           <button type="submit">로그인</button>
+          {/* 구글 Oauth */}
+          <a href="http://localhost:5000/auth/google">Google</a>
+
+          {/* 구글 Oauth */}
+
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
         </form>

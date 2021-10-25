@@ -1,5 +1,6 @@
 import {
   AUTH_JOBSEEKER,
+  GOOGLE_LOGIN_JOBSEEKER,
   LOGIN_JOBSEEKER,
   LOGOUT_JOBSEEKER,
   REGISTER_JOBSEEKER,
@@ -14,6 +15,8 @@ export default function JobSeeker(state = {}, action) {
     case AUTH_JOBSEEKER:
       return { ...state, userData: action.payload };
     case LOGOUT_JOBSEEKER:
+      return { ...state, loginSuccess: action.payload };
+    case GOOGLE_LOGIN_JOBSEEKER:
       return { ...state, loginSuccess: action.payload };
     default:
       return state;
