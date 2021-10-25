@@ -6,5 +6,6 @@ router.post('/', jobController.post)
 router.patch('/', jobController.patch)
 router.get('/:companyId', jobController.get)
 router.delete('/:id', jobController.delete)
+router.get('/', jobController.getAll)
 
 module.exports = router;

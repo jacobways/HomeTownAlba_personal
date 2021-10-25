@@ -6,5 +6,6 @@ router.post("/", careerController.create);
 router.delete("/:id", careerController.delete);
 router.patch("/", careerController.update);
 router.get("/:jobSeekerId", careerController.get);
+router.get("/", careerController.getById)
 
 module.exports = router;

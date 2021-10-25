@@ -11,17 +11,18 @@ module.exports = (req, res) => {
     res.status(400).send('데이터가 불충분합니다.')
   } else {
 
-    // day 배열은 이미 JSON 타입으로 들어오기 때문에 바로 DB에 전달 가능
+    // day는 postman에서 JSON으로 오지만, 클라이언트에서 보내면 배열 타입으로 옴
 
-    let dayParse = JSON.parse(day)  // JSON 타입을 배열 타입으로 바꿔주기
     let time = calculateTime(startTime, endTime)
-    let monthlyWage = calculateMonthlyWage(parseInt(hourlyWage), parseInt(time), dayParse.length)
+    let monthlyWage = calculateMonthlyWage(parseInt(hourlyWage), parseInt(time), day.length)
+
+    let dayJSON = JSON.stringify(day)
 
     Job.create({
       companyId, 
       title, 
       location, 
-      day, 
+      day: dayJSON, 
       startTime, 
       endTime, 
       time, 
