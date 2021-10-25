@@ -43,7 +43,7 @@ export function logoutJobSeeker() {
       withCredentials: true,
     })
     .then((res) => {
-      // console.log(res);
+      console.log("로그아웃", res);
       return res.data;
     });
 
