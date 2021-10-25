@@ -1,59 +1,82 @@
-import React,{useState,useEffect} from "react";
-import {Link} from "react-router-dom";
+/* global kakao */
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
+import "./LandingPage.css";
+// import Map from "./Map";
 
-function LandingPage () {
-  return(
+function LandingPage() {
+
+  return (
     <>
-      <header className = "landingPage-header-container">
-        <div className = "landingPage-header-logo">
-          <Link to = "/" className = "landingPage-header-Link">LOGO</Link>
+      <header className="landingPage-header-container ">
+        <div className="landingPage-header-logo">
+          <Link to="/">logo</Link>
         </div>
-        <div className = "landignPage-header-nav-container">
-          <nav className = "landingPage-header-nav-wrapper">
-          <h2 className = "landingPage-header-h2"></h2>
-            <ul className = "landingPage-header-ul">
-              <li className = "landingPage-header-li">알바찾기</li>
-              <li className = "landingPage-header-li">채팅</li>
-              <li className = "landingPage-header-li">마이페이지</li>
-            </ul>  
-          </nav>
+        <div className="menuBar-container">
+          <div className="menuBar-icon"></div>
         </div>
-        <div className = "landingPage-header-sign-container">
-          <ul className = "landingPage-header-sign-wrapper">
-            <li type = "button" aria-label = "로그인" className = "landingPage-header-signIn-btn icons">
-              <Link to = "/login" className = "landingPage-signUp-link">
-                <i className = "fas fa-sign-in-alt">로그인</i>
-              </Link>
-            </li>
-            <li type = "button" aria-label = "회원가입" className = "landingPage-header-signUp-btn icons test">
-              <Link to = "/signUp" className = "landingPage-signUp-link">
-                <i className = "fas fa-user-plus">회원가입</i>
-              </Link>
-            </li>
-          </ul>
-        </div>
-        {/* 레이아웃 됐을때 나올 화면
-        <aside className = "landingPage-layout">
-          <div className = "landingPage-layout-container">
-            <button className = "landingPage-layout-exit">
-              <i>나가기 아이콘</i>
-            </button>
-            <div className = "landingPage-layout-logo">LOGO</div>
-            <div className = "landingPage-layout-login">
-              <Link to = "/login">
-                로그인
-              </Link>
+        <ul className="landingPage-header-menu">
+          <li>알바찾기</li>
+          <li>알바목록</li>
+          <li>마이페이지</li>
+          <li type="button" aria-label="로그인" className="login-icon">
+            <i className="fa-sign-in-alt"></i>
+          </li>
+          <li type="button" aria-label="회원가입" className="signup-icon">
+            <i className="fa-sign-up-alt"></i>
+          </li>
+        </ul>
+
+        <aside className="hamburgerBar">
+          <div className="hamburgerBar_menu">
+            <div className="hamburgerBar_exitBtn">
+              <i className="hamburgerBar_exit_icon"></i>
             </div>
-            <ul className = "landingPage-layout-nav">
-              <li>알바찾기</li>
-              <li>마이페이지</li>
-              <li>채팅</li>
+            <div className="hamburgerBar_logo-container">
+              <div className="hamburgerBar-header-logo">
+                <Link to="/">logo</Link>
+              </div>
+            </div>
+            <div className="hamburgerBar-login">로그인</div>
+            <ul className="hamburgerBar-menu">
+              <li className="hamburgerBar-list">동네알바</li>
+              <li className="hamburgerBar-list">알바목록</li>
+              <li className="hamburgerBar-list">마이페이지</li>
             </ul>
           </div>
-        </aside> */}
+        </aside>
       </header>
+      <div style={{ overflow: "hidden" }}>
+        {/* 서비스 소개 블럭 */}
+        <div className="service-container"></div>
+        {/* 기능 소개 블럭 */}
+        <div className="feature-container">
+          <div className="feature">
+            <div className="row">
+              <div className=" col">
+                <div className="landingbackground"></div>
+              </div>
+              <div className=" col">
+                <div className="landingbackground">
+                  {/* <Map /> */}
+                </div>
+              </div>
+              <div className=" col">
+                <div className="landingbackground"></div>
+              </div>
+              <div className=" col">
+                <div className="landingbackground"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+      <footer className="footer-container">
+        <div></div>
+      </footer>
     </>
-  )
+  );
 }
 export default LandingPage;

@@ -7,6 +7,7 @@ import CompanyMyPage from './pages/CompanyMyPage'
 import JobSeekerMyPage from './pages/JobSeekerMyPage'
 import Register from "./components/register";
 import LandingPage from "./pages/LandingPage.js"
+import Map from "./pages/Map"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
         <Route exact path="/register" component={Register} />
+        <Route exact path="/map" component={Map} />
       </Switch>
     </>
   );
