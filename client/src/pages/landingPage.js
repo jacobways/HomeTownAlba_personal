@@ -1,4 +1,3 @@
-/* global kakao */
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -6,7 +5,6 @@ import "./LandingPage.css";
 // import Map from "./Map";
 
 function LandingPage() {
-
   const getHandler = () => {
     axios
       .get("http://localhost:5000/jobseeker", { withCredentials: true })
