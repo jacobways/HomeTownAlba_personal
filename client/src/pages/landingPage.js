@@ -7,6 +7,14 @@ import "./LandingPage.css";
 
 function LandingPage() {
 
+  const getHandler = () => {
+    axios
+      .get("http://localhost:5000/jobseeker", { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
+
   return (
     <>
       <header className="landingPage-header-container ">
