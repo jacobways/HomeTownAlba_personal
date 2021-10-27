@@ -2,7 +2,7 @@ const express = require("express");
 const companyRouter = express.Router();
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("../middleware/validationCheck");
-
+const jwt = require("jsonwebtoken");
 const { Company } = require("../models");
 
 const bcrypt = require("bcrypt");
@@ -39,7 +39,8 @@ companyRouter.post("/", isNotLoggedIn, async (req, res) => {
         let registerInfo = {
           userId: req.body.userId,
           password: hashPassword,
-          name: req.body.name,
+          type: "company", // passport 분기 처리를 위해 추가한부분
+          companyName: req.body.companyName,
           location: req.body.location,
           businessNumber: req.body.businessNumber,
           question: req.body.question,
@@ -63,7 +64,7 @@ companyRouter.post("/", isNotLoggedIn, async (req, res) => {
 companyRouter.post("/login", isNotLoggedIn, (req, res, next) => {
   // passport 구현하기
 
-  passport.authenticate("localCompany", (authError, Company) => {
+  passport.authenticate("company-local", (authError, Company) => {
     if (authError) {
       console.error(authError);
       return next(authError);
@@ -231,6 +232,64 @@ companyRouter.patch("/", isLoggedIn, async (req, res) => {
         res.status(500);
       });
   }
+});
+
+// 명현님 작성 코드
+
+companyRouter.post("/kakaoCompanyLogin", async (req, res) => {
+  let companiesInfo = await Company.findOne({
+    where: { userId: req.body.userId },
+  });
+  if (companiesInfo === null) {
+    res.status(404).json({ message: "회원가입 하세요." });
+  } else {
+    const payload = {
+      id: companiesInfo.id,
+      userId: companiesInfo.userId,
+      question: companiesInfo.question,
+      name: companiesInfo.name,
+      location: companiesInfo.location,
+      businessNumber: companiesInfo.businessNumber,
+      createdAt: companiesInfo.createdAt,
+      updatedAt: companiesInfo.updatedAt,
+    };
+    const token = jwt.sign(payload, process.env.ACCESS_SECRET, {
+      expiresIn: "2h",
+    });
+
+    res
+      .status(200)
+      .cookie("token", token, {
+        domain: "localhost",
+        path: "/",
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      })
+      .json({ data: { token }, message: "로그인에 성공하셨습니다." });
+  }
+  console.log(req.body);
+});
+
+companyRouter.post("/kakaoCompanyRegister", async (req, res) => {
+  let companiesInfo = await Company.findOne({
+    where: { userId: req.body.userId },
+  });
+  if (companiesInfo === null) {
+    Company.create({
+      password: req.body.password,
+      userId: req.body.userId,
+      question: req.body.question,
+      companyName: req.body.name,
+      location: req.body.location,
+      businessNumber: req.body.businessNumber,
+    });
+
+    res.status(200).json({ message: "회원가입에 성공하셨습니다." });
+  } else {
+    res.status(404).json({ message: "중복된 아이디가 있습니다." });
+  }
+  console.log(req.body);
 });
 
 module.exports = companyRouter;

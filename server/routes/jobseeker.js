@@ -2,6 +2,7 @@ const { JobSeeker } = require("../models");
 const express = require("express");
 const passport = require("passport");
 const { isLoggedIn, isNotLoggedIn } = require("../middleware/validationCheck");
+const jwt = require("jsonwebtoken");
 
 const jobSeekerRouter = express.Router();
 const bcrypt = require("bcrypt");
@@ -12,6 +13,7 @@ jobSeekerRouter.get("/", isLoggedIn, (req, res) => {
   // console.log(req.user);
   return res.status(200).json({
     loginSuccess: req.isAuthenticated(),
+    user: req.user,
     message: "특정 구직자 불러오기",
   });
 });
@@ -63,7 +65,7 @@ jobSeekerRouter.post("/", isNotLoggedIn, async (req, res) => {
 jobSeekerRouter.post("/login", isNotLoggedIn, (req, res, next) => {
   // passport 구현하기
 
-  passport.authenticate("local", (authError, jobSeekr) => {
+  passport.authenticate("jobseeker-local", (authError, jobSeekr) => {
     if (authError) {
       console.error(authError);
       return next(authError);
@@ -132,8 +134,8 @@ jobSeekerRouter.post("/login", isNotLoggedIn, (req, res, next) => {
   // }
 });
 
-jobSeekerRouter.post("/logout", isLoggedIn, (req, res) => {
-  console.log("구글", req.user);
+jobSeekerRouter.get("/logout", isLoggedIn, (req, res) => {
+  // console.log("구글", req.user);
   // auth 미들웨어 추가
   // auth에서 받아온 req.jobseeker.id = uuid
   // uuid로 찾은 후 token을 삭제
@@ -234,6 +236,67 @@ jobSeekerRouter.patch("/", isLoggedIn, async (req, res) => {
         res.status(500);
       });
   }
+});
+
+// 명현님 작성 코드
+
+jobSeekerRouter.post("/kakaoJobLogin", async (req, res) => {
+  let jobseekersInfo = await JobSeeker.findOne({
+    where: { userId: req.body.userId },
+  });
+  if (jobseekersInfo === null) {
+    JobSeeker.create({
+      password: req.body.password,
+      userId: req.body.userId,
+      question: req.body.question,
+      name: req.body.name,
+      age: req.body.age,
+      gender: req.body.gender,
+      image: req.body.image,
+    });
+
+    res.status(200).json({ message: "회원가입에 성공하셨습니다." });
+  } else {
+    res.status(404).json({ message: "중복된 아이디가 있습니다." });
+  }
+  // console.log(req.body)
+});
+
+jobSeekerRouter.post("/kakaoJobRegister", async (req, res) => {
+  let jobSeekersInfo = await JobSeekers.findOne({
+    where: { userId: req.body.userId },
+  });
+  if (jobSeekersInfo === null) {
+    res.status(404).json({ message: "회원가입 하세요." });
+  } else {
+    const payload = {
+      id: jobSeekersInfo.id,
+      userId: jobSeekersInfo.userId,
+      question: jobSeekersInfo.question,
+      name: jobSeekersInfo.name,
+      age: jobSeekersInfo.age,
+      gender: jobSeekersInfo.gender,
+      image: jobSeekersInfo.image,
+      password: jobSeekersInfo.password,
+      createdAt: jobSeekersInfo.createdAt,
+      updatedAt: jobSeekersInfo.updatedAt,
+    };
+    const token = jwt.sign(payload, process.env.ACCESS_SECRET, {
+      expiresIn: "2h",
+    });
+
+    res
+      .status(200)
+      .cookie("token", token, {
+        domain: "localhost",
+        path: "/",
+        sameSite: "none",
+        secure: true,
+        httpOnly: true,
+      })
+      .json({ data: { token }, message: "로그인에 성공하셨습니다." });
+  }
+  // console.log(req.body);
 });
 
 module.exports = jobSeekerRouter;

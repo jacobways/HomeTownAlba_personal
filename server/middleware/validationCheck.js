@@ -1,10 +1,10 @@
 exports.isLoggedIn = (req, res, next) => {
-  console.log(req.isAuthenticated());
   // 로그인이 되어있으면 passport 라이브러리에 의해 req.user에 유저 정보가 담겨있음
   // req.isAuthenticated()가 true면 로그인 한 상태
 
   if (req.isAuthenticated()) {
     // console.log("로그인 유저 정보", req.user);
+    console.log(req.isAuthenticated());
 
     next();
   } else {

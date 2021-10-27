@@ -21,6 +21,7 @@ module.exports = () => {
             // 이미 있는 경우 넘어가면됨
             done(null, profile);
           } else {
+            // console.log(profile.provider); google이 찍힘 -> type에 저장
             const newUser = await JobSeeker.create({
               userId: profile.id,
               name: profile.displayName,

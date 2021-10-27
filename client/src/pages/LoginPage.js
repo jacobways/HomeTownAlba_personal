@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { googleLoginJobSeeker, loginJobSeeker } from "../_actions/user_action";
-import axios from "axios";
+import { loginCompany, loginJobSeeker } from "../_actions/user_action";
 
 function LoginPage(props) {
   const [LoginDisplay, setLoginDisplay] = useState(true);
@@ -41,8 +40,21 @@ function LoginPage(props) {
     });
   };
   const CompanySubmitHandler = (e) => {
-    e.preventDefault();
+    console.log("사업자 로그인");
     // redux
+    e.preventDefault();
+    let submitData = {
+      userId: Id,
+      password: Password,
+    };
+    //   redux
+    dispatch(loginCompany(submitData)).then((res) => {
+      if (res.payload.loginSuccess) {
+        props.history.push("/");
+      } else {
+        alert("로그인에 실패하였습니다.");
+      }
+    });
   };
 
   // Google Oauth

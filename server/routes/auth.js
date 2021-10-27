@@ -25,4 +25,5 @@ authRouter.get(
     // });
   }
 );
+
 module.exports = authRouter;
