@@ -5,7 +5,7 @@ import axios from 'axios';
 export default function JobSeekerMyPage () {
 
   // JobSeeker 테이블의 id이자, Career 테이블의 jobSeekerId
-  const [jobSeekerId, setJobSeekerId] = useState('')
+  const [jobSeekerId, setJobSeekerId] = useState(0)
 
   // JobSeeker 테이블의 나머지 정보
   const [name, setName] = useState('')
@@ -145,23 +145,21 @@ export default function JobSeekerMyPage () {
   useEffect(()=>{
     
     // JobSeeker 정보 받기
-
-    // axios.get(`http://localhost:5000/jobseeker/${jobSeekerId}`)
-    // .then((res)=>{
-    //   let jobSeekerInfo = res.data.data
-    //   setName(jobSeekerInfo.name)
-    //   setAge(jobSeekerInfo.age)
-    //   setGender(jobSeekerInfo.gender)
-    //   setImage(jobSeekerInfo.image)
-    //   setQuestion(jobSeekerInfo.question)
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })    
+    axios.get(`http://localhost:5000/jobseeker/${jobSeekerId}`)
+    .then((res)=>{
+      let jobSeekerInfo = res.data.data
+      setName(jobSeekerInfo.name)
+      setAge(jobSeekerInfo.age)
+      setGender(jobSeekerInfo.gender)
+      setImage(jobSeekerInfo.image)
+      setQuestion(jobSeekerInfo.question)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })    
 
     // Career 정보 받기
-    // URL : ttp://localhost:5000/career/${jobSeekerId}
-    axios.get(`http://localhost:5000/career/3`,{withCredentials: true})
+    axios.get(`http://localhost:5000/career/${jobSeekerId}`,{withCredentials: true})
     .then((res)=>{
       setCareerList(res.data.data)
     })

@@ -5,8 +5,8 @@ import axios from 'axios';
 export default function CompanyMyPage () {
 
   // company 회원 정보 
-  const [companyId, setCompanyId] = useState('')
-  const [name, setName] = useState('')
+  const [companyId, setCompanyId] = useState(0)
+  const [companyName, setCompanyName] = useState('')
   const [companyLocation, setCompanyLocation] = useState('')
   const [businessNumber, setBusinessNumber] = useState('')
   const [question, setQuestion] = useState('')
@@ -15,7 +15,6 @@ export default function CompanyMyPage () {
   const [companyInfoUpdating, setCompanyInfoUpdating] = useState(false)
 
   // job 정보
-  const [title, setTitle] = useState('')
   const [jobLocation, setJobLocation] = useState('')
 
   const [day, setDay] = useState([])
@@ -45,8 +44,8 @@ export default function CompanyMyPage () {
   const [showingApplicantList, setShowingApplicantList] = useState({})
 
   // company 회원 정보 수정용
-  const nameHandler = (event) => {
-    setName(event.target.value)
+  const companyNameHandler = (event) => {
+    setCompanyName(event.target.value)
   }
 
   const companyLocationHandler = (event) => {
@@ -69,7 +68,7 @@ export default function CompanyMyPage () {
     // company 업데이트 하기
     const updateCompany = () => {
       axios.patch('http://localhost:5000/company', {
-        id:companyId, name, location: companyLocation, businessNumber, question
+        id:companyId, name: companyName, location: companyLocation, businessNumber, question
       })
       setCompanyInfoUpdating(!companyInfoUpdating)
     }
@@ -81,9 +80,6 @@ export default function CompanyMyPage () {
 
 
   // job 정보 생성 및 수정용
-  const titleHandler = (event) => {
-    setTitle(event.target.value)
-  }
 
   const jobLocationHandler = (event) => {
     setJobLocation(event.target.value)
@@ -183,11 +179,11 @@ export default function CompanyMyPage () {
 
   // state에 저장한 정보를 바탕으로 일자리 생성하기
   const createJob = () => {
-    if(!title || !jobLocation || day.length===0 || !startTime || !endTime || !position || !hourlyWage) {
+    if(!jobLocation || day.length===0 || !startTime || !endTime || !position || !hourlyWage) {
       alert('모든 항목에 데이터를 입력해주세요')
     } else {
       axios.post('http://localhost:5000/job', {
-        title, location: jobLocation, day, startTime, endTime, position, hourlyWage},
+        companyId, companyName, location: jobLocation, day, startTime, endTime, position, hourlyWage},
         {withCredentials: true})
     }
   }
@@ -226,26 +222,26 @@ export default function CompanyMyPage () {
   useEffect(()=> {
 
     // company 정보 받기
-    // axios.get(`http://localhost:5000/company/${companyId}`, {withCredentials: true})
-    // .then((res)=>{
-    //   let companyInfo = res.data.data;
-    //   setName(companyInfo.name)
-    //   setCompanyLocation(companyInfo.location)
-    //   setBusinessNumber(companyInfo.businessNumber)
-    //   setQuestion(companyInfo.question)
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })    
+    axios.get(`http://localhost:5000/company/${companyId}`, {withCredentials: true})
+    .then((res)=>{
+      let companyInfo = res.data.data;
+      setCompanyName(companyInfo.name)
+      setCompanyLocation(companyInfo.location)
+      setBusinessNumber(companyInfo.businessNumber)
+      setQuestion(companyInfo.question)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })    
 
-    // jobList 정보 받기
-    // axios.get(`http://localhost:5000/job/${companyId}`, {withCredentials: true})
-    // .then((res)=>{
-    //   setJobList(res.data.data)
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })    
+    
+    axios.get(`http://localhost:5000/job/${companyId}`, {withCredentials: true})
+    .then((res)=>{
+      setJobList(res.data.data)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })    
 
 
   }, [])
@@ -268,7 +264,7 @@ export default function CompanyMyPage () {
 
   {(!companyInfoUpdating) ? 
         (<>
-        <span>{name}</span>
+        <span>{companyName}</span>
         <span>{companyLocation}</span>
         <span>{businessNumber}</span>
         <span>{question}</span>
@@ -279,8 +275,8 @@ export default function CompanyMyPage () {
         <input         
         name="name"
         type="text"
-        onChange={nameHandler}
-        value={name}
+        onChange={companyNameHandler}
+        value={companyName}
         />
         <input         
         name="companyLocation"
@@ -312,13 +308,6 @@ export default function CompanyMyPage () {
 
     <h1>일자리 등록</h1>
     <form>
-      <label> 제목 :
-        <input
-        name="title"
-        type="text"
-        onChange={titleHandler}
-        />
-      </label>
       <label> 주소 :
       <textarea
         name="location"
@@ -406,7 +395,7 @@ export default function CompanyMyPage () {
         />
       </label>
 
-      {(!title || !jobLocation || day.length===0 || !startTime || !endTime || !position || !hourlyWage) ?
+      {(!jobLocation || day.length===0 || !startTime || !endTime || !position || !hourlyWage) ?
       <>
       <button>제출</button>
       <span>모든 항목을 입력해주세요</span>
@@ -431,7 +420,6 @@ export default function CompanyMyPage () {
       {jobList.map((job, idx) => {
         return (
           <div key = {idx}>
-            <h3>{job.title}</h3>
             <h4>
               {job.location}
               {job.position}
