@@ -1,16 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
-
+import { func } from "prop-types";
 
 function Register() {
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
   const [CheckPassword, setCHeckPassword] = useState("");
   const [Question, setQuestion] = useState("");
-  const [Name, setName] = useState("")
-  const [Location, setLocation] = useState("")
-  const [BusinessNumber, setBusinessNumber] = useState("")
+  const [Name, setName] = useState("");
+  const [Location, setLocation] = useState("");
+  const [BusinessNumber, setBusinessNumber] = useState("");
+  //5d581f63f90c16a3faadb25926217e41
+
+  const kakaoLogin = () => {
+    window.Kakao.Auth.login({
+      scope: "profile_nickname, profile_image, gender",
+      success: function (authObj) {
+        console.log(authObj);
+        window.Kakako.API.request({
+          url: "/v2/user.me",
+          success: (res) => {
+            const { profile_nickname, profile_image, gender } =
+              res.kakao_accout;
+            console.log(profile_nickname);
+            history.push("/getUser");
+          },
+        });
+      },
+    });
+  };
+
   const IdHandler = (e) => {
     setId(e.target.value);
   };
@@ -44,11 +64,11 @@ function Register() {
         userId: Id,
         password: Password,
         question: Question,
-        name:Name,
-        location:Location,
-        businessNumber:BusinessNumber,
+        name: Name,
+        location: Location,
+        businessNumber: BusinessNumber,
       };
-      console.log(body)
+      console.log(body);
       axios
         .post("https://localhost:5000/register", body, {
           headers: { "Content-Type": "application/json" },
@@ -57,7 +77,7 @@ function Register() {
         .then((res) => {
           console.log(res);
           alert("회원가입이 완료되었습니다.");
-        //   history.push("/login");
+          //   history.push("/login");
         });
     }
   };
@@ -66,15 +86,15 @@ function Register() {
   };
 
   return (
-    <div className='center'>
+    <div className="center">
       <div className="container" id="container">
         <div className="form-container sign-in-container">
           <form onSubmit={submitHandler}>
-            <h1 className='head'>가입을 시작합니다!</h1>
+            <h1 className="head">가입을 시작합니다!</h1>
             <div className="social-container">{/* Google, kakao auth */}</div>
             <span>아래 내용을 빠짐없이 입력해주세요.</span>
             <input
-            className='login'
+              className="login"
               required
               type="text"
               value={Id}
@@ -82,7 +102,7 @@ function Register() {
               placeholder="아이디"
             />
             <input
-            className='login'
+              className="login"
               required
               type="password"
               value={Password}
@@ -90,31 +110,31 @@ function Register() {
               placeholder="비밀번호"
             />
             <input
-            className='login'
+              className="login"
               required
               type="password"
               value={CheckPassword}
               onChange={CheckPasswordHandler}
               placeholder="비밀번호 확인"
             />
-             <input
-            className='login'
+            <input
+              className="login"
               required
               type="text"
               value={Location}
               onChange={LocationHandler}
               placeholder="회사위치"
             />
-             <input
-            className='login'
+            <input
+              className="login"
               required
               type="text"
               value={BusinessNumber}
               onChange={BusinessNumberHandler}
               placeholder="사업자번호"
             />
-             <input
-            className='login'
+            <input
+              className="login"
               required
               type="text"
               value={Name}
@@ -122,7 +142,7 @@ function Register() {
               placeholder="대표이름"
             />
             <input
-            className='login'
+              className="login"
               required
               type="text"
               value={Question}
@@ -132,20 +152,12 @@ function Register() {
             <span className="ptext">
               위 질문은 비밀번호를 잊어버렸을 경우 사용 됩니다.
             </span>
-            <button type="submit" onClick={submitHandler}>회원가입</button>
+            <button type="submit" onClick={submitHandler}>
+              회원가입
+            </button>
           </form>
         </div>
-        <div className="overlay-container">
-          <div className="overlay">
-            <div className="overlay-panel overlay-right">
-              <h1>안녕하세요! 반가워요!</h1>
-              <p>사용 중인 아이디가 있다면,아래 버튼을 눌러주세요.</p>
-              <button className="ghost" id="signUp" onClick={moveLogin}>
-                로그인
-              </button>
-            </div>
-          </div>
-        </div>
+        <button onClick={kakaoLogin}>kakaoLogin</button>
       </div>
     </div>
   );

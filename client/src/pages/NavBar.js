@@ -6,20 +6,29 @@ import axios from "axios";
 
 function NavBar(props) {
   const [Login, setLogin] = useState(false);
+  const [UserId, setUserId] = useState(null); //GET요청에 사용되는 id , 해당 내용 업데이트
   useEffect(() => {
     axios
       .get("http://localhost:5000/jobSeeker", { withCredentials: true })
       .then((res) => {
         console.log(res.data);
-        if (res.data.loginSuccess) {
-          setLogin(res.data.loginSuccess);
+        if (res.data.user) {
+          setUserId(res.data.user.id); //GET요청시에 사용하면 되는 id : mysql에서 생성해주는 id
+          console.log("mysql에서 생성해주는id", UserId);
+
+          setLogin(true);
         } else {
           setLogin(false);
         }
+        // if (res.data.loginSuccess) {
+        //   setLogin(res.data.loginSuccess);
+        // } else {
+        //   setLogin(false);
+        // }
       });
   }, [Login]);
   const jobSeeker = useSelector((state) => {
-    console.log("useSelector", state.jobSeeker.loginSuccess);
+    // console.log("useSelector", state.jobSeeker.loginSuccess);
     // 로그인한 유저의 Id
     return state.jobSeeker.loginSuccess;
   });
@@ -30,9 +39,8 @@ function NavBar(props) {
 
   const LogoutHandler = () => {
     setLogin(false);
-
     dispatch(logoutJobSeeker()).then((res) => {
-      return res;
+      return res.data;
     });
   };
 

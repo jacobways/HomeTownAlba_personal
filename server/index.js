@@ -54,15 +54,17 @@ const jobSeekerRouter = require("./routes/jobseeker");
 const companyRouter = require("./routes/company");
 const jobRouter = require("./routes/job");
 const careerRouter = require("./routes/career.js");
-const applicantRouter = require('./routes/applicant');
+const applicantRouter = require("./routes/applicant");
 const authRouter = require("./routes/auth.js");
+const mailRouter = require("./nodemailer/node-mailer.js");
 
 app.use("/jobseeker", jobSeekerRouter);
 app.use("/company", companyRouter);
 app.use("/job", jobRouter);
 app.use("/career", careerRouter);
-app.use('/applicant', applicantRouter);
+app.use("/applicant", applicantRouter);
 app.use("/auth", authRouter);
+app.use("/mail", mailRouter);
 
 const port = 5000;
 
