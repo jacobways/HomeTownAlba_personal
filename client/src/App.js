@@ -7,7 +7,7 @@ import CompanyMyPage from './pages/CompanyMyPage'
 import JobSeekerMyPage from './pages/JobSeekerMyPage'
 import Register from "./components/register";
 import LandingPage from "./pages/LandingPage.js";
-import Map from "./pages/Map"
+import Map from "./pages/Map.js"
 
 function App() {
   return (

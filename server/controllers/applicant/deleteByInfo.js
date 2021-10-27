@@ -1,21 +1,21 @@
 const { Applicant } = require('../../models')
 require("dotenv").config();
 
-// 사업자가 지원 요청을 거절하는 컨트롤러
+// 지원자가 지원 요청을 취소하는 컨트롤러
 module.exports = (req, res) => {
-  const {id} = req.params
+  const {jobId, jobSeekerId} = req.query
   
-  if(!id){
-    res.status(400).send("지원자 정보가 없습니다")
+  if(!jobId || !jobSeekerId){
+    res.status(400).send("일자리 또는 지원자 정보가 없습니다.")
   }else{
     Applicant.destroy({
-      where:{id}
+      where:{jobId, jobSeekerId}
     })
     .then((data) => {
       if(!data){
         res.status(404).send("일치하는 지원자가 없습니다")
       }else{
-        res.status(202).send("지원 요청을 거절하였습니다.")
+        res.status(202).send("지원 요청을 취소했습니다")
       }
     })
     .catch(err => {
