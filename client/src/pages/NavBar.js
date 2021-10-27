@@ -5,6 +5,7 @@ import { logoutJobSeeker } from "../_actions/user_action";
 import axios from "axios";
 
 function NavBar(props) {
+//   Get요청을 위한 Mysql - Id 불러오는 요청 -> jobseeker는 /jobseeker , company는 /company
   const [Login, setLogin] = useState(false);
   const [UserId, setUserId] = useState(null); //GET요청에 사용되는 id , 해당 내용 업데이트
   useEffect(() => {
@@ -27,6 +28,8 @@ function NavBar(props) {
         // }
       });
   }, [Login]);
+  //   Get요청을 위한 Mysql - Id 불러오는 요청 -> jobseeker는 /jobseeker , company는 /company
+  
   const jobSeeker = useSelector((state) => {
     // console.log("useSelector", state.jobSeeker.loginSuccess);
     // 로그인한 유저의 Id
