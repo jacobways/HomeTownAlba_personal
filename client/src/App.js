@@ -6,6 +6,7 @@ import RegisterPage from "./pages/RegisterPage";
 import CompanyMyPage from "./pages/CompanyMyPage";
 import JobSeekerMyPage from "./pages/JobSeekerMyPage";
 import LandingPage from "./pages/LandingPage.js";
+
 import Map from "./pages/Map";
 import AdminPage from "./components/AdminPage";
 
@@ -16,6 +17,7 @@ import Comjob from "./components/comjob";
 import Jobkakao from "./components/JobKakao";
 import Jobregister from "./components/jobRegister";
 import Logout from "./components/kakaoLogout";
+
 
 function App() {
   return (
