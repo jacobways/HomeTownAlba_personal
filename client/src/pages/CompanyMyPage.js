@@ -208,7 +208,7 @@ export default function CompanyMyPage () {
   // applicantList의 형태 예시 : {0: [jobSeeker1, jobSeeker2, JobSeeker3], 1: [JobSeeker1], 3: [Jobseeker4]}
   const openApplicantList = (idx, jobId) => {
     setShowingApplicantList({...showingApplicantList, [idx]:true })
-    axios.get(`http://localhost:5000/applicant/${jobId}`, {withCredentials: true})
+    axios.get(`http://localhost:5000/applicant/jobseeker/${jobId}`, {withCredentials: true})
     .then((res)=> {
       if (res.data.data.length !== 0) setApplicantList({...applicantList, [idx]: res.data.data})
       // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
@@ -251,7 +251,7 @@ export default function CompanyMyPage () {
   }, [])
 
   const deleteApplicant = (id) => {
-    axios.delete(`http://localhost:5000/applicant/${id}`)
+    axios.delete(`http://localhost:5000/applicant/jobseeker/${id}`)
     .then(console.log)
     .catch((err)=>{
       console.log(err)
