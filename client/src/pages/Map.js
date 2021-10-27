@@ -125,9 +125,8 @@ export default function Map() {
               let infowindowHover = new kakao.maps.InfoWindow({
                 content: `<div style="width:230px;text-align:center;padding:6px 0;"><div>근무요일 : ${JSON.parse(
                   data[i].day
-                )}</div><div>하루 근무시간 : ${
-                  data[i].time
-                }시간</div><div>월급여 : ${
+                )}</div><div>하루 근무시간 : ${data[i].startTime}~${data[i].endTime}
+                </div><div>월급여 : ${
                   data[i].monthlyWage
                 }</div><div>포지션 : ${data[i].position}</div></div>`,
               });
@@ -136,7 +135,7 @@ export default function Map() {
               contentClick.style.cssText =
                 "width: 230px; text-align:center; padding:6px 0; 1px 0;";
               let companyName = document.createElement("div");
-              companyName.textContent = `회사명 : ${data[i].companyId}`;
+              companyName.textContent = `회사명 : ${data[i].companyName}`;
               let day = document.createElement("div");
               day.textContent = `근무요일 : ${JSON.parse(data[i].day)}`;
               let time = document.createElement("div");
