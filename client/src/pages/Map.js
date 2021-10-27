@@ -6,11 +6,11 @@ const { kakao } = window;
 export default function Map() {
 
   const [jobSeekerId, setJobSeekerId] = useState(0);
-
   const [applyStatus, setApplyStatus] = useState({})  // 지원 여부를 저장하는 곳
 
   const CheckApplyStatus = (idx) => {
     setApplyStatus({...applyStatus, [idx]:true})
+
   }
 
   const UnCheckApplyStatus = (idx) => {
