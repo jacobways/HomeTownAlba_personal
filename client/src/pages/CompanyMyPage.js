@@ -101,73 +101,66 @@ export default function CompanyMyPage () {
   }
 
   const monHandler = () => {
-    setMonChecked(!monChecked) 
-    if(monChecked) {
+    if(!monChecked) {
       setMon(["월"])
     } else {
       setMon([])
     }
-    dayHandler()
+    setMonChecked(!monChecked) 
   }
 
   const tueHandler = () => {
-    setTueChecked(!tueChecked)
-    if(tueChecked) {
+    if(!tueChecked) {
       setTue(["화"])
     } else {
       setTue([])
     }
-    dayHandler()
+    setTueChecked(!tueChecked)
   }
 
   const wedHandler = () => {
-    setWedChecked(!wedChecked)
-    if(wedChecked) {
+    if(!wedChecked) {
       setWed(['수'])
     } else {
       setWed([])
     }
-    dayHandler()
+    setWedChecked(!wedChecked)
   }
 
   const thuHandler = () => {
-    setThuChecked(!thuChecked)
-    if(thuChecked) {
+    if(!thuChecked) {
       setThu(['목'])
     } else {
       setThu([])
     }
-    dayHandler()
+    setThuChecked(!thuChecked)
   }
 
   const friHandler = () => {
-    setFriChecked(!friChecked)
-    if(friChecked) {
+    if(!friChecked) {
       setFri(['금'])
     } else {
       setFri([])
     }
-    dayHandler()
+    setFriChecked(!friChecked)
   }
 
   const satHandler = () => {
-    setSatChecked(!satChecked)
-    if(satChecked) {
+    if(!satChecked) {
       setSat(['토'])
     } else {
       setSat([])
     }
-    dayHandler()
+    setSatChecked(!satChecked)
   }
 
   const sunHandler = () => {
-    setSunChecked(!sunChecked)
-    if(sunChecked) {
+    if(!sunChecked) {
       setSun(['일'])
     } else {
       setSun([])
     }
-    dayHandler()
+    setSunChecked(!sunChecked)
   }
 
   const startTimeHandler = (event) => {
@@ -277,7 +270,10 @@ export default function CompanyMyPage () {
 
   }, [eventStatus])
 
-
+  // 체크박스로 체크한 요일을 day에 담기 위한 기능
+  useEffect(() => {
+    dayHandler()
+  }, [mon, tue, wed, thu, fri, sat, sun])
 
 
 
