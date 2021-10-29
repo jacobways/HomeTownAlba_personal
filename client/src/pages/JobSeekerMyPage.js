@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import DeleteCareerModal from "../components/Modal_DeleteCareer";
+import CancelApplyModal from "../components/Modal_CancelApply";
+import WithdrawJobSeekerModal from '../components/Modal_WithdrawJobseeker';
 
 // 구직자 마이페이지
 export default function JobSeekerMyPage () {
@@ -28,12 +31,11 @@ export default function JobSeekerMyPage () {
 
   // 커리어 수정 버튼을 클릭 시, 업데이트 중인 상태를 저장 (키는 idx, 값은 true - 수정중)
   const [careerUpdating, setCareerUpdating] = useState({})
-   
 
-  // 회원 탈퇴
-  const Withdrawal = () => {
-    axios.delete('link')
-  }
+  const [applyList, setApplyList] = useState([])  // jobSeeker가 지원한 job 목록 보여주기
+
+  const [eventStatus, setEventStatus] = useState(false)  // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
+   
 
   // jobSeeker 정보 수정용
   const nameHandler = (event) => {
@@ -66,11 +68,14 @@ export default function JobSeekerMyPage () {
     axios.patch('http://localhost:5000/jobseeker', {
       id:jobSeekerId, name, age, gender, image, question
     })
+    .then(res=>{
+      setEventStatus(!eventStatus)
+    })
     setJobSeekerInfoUpdating(!jobSeekerInfoUpdating)
   }
 
   // jobSeeker 회원 정보 탈퇴 기능 넣기
-  const withdrawalJobseeker = () => {
+  const WithdrawJobseeker = () => {
     axios.delete('link')
   }
 
@@ -96,30 +101,34 @@ export default function JobSeekerMyPage () {
       position
     },
     {withCredentials: true})
+    .then(res=>{
+      setEventStatus(!eventStatus)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+  
+
+  // 경력 사항 '수정'을 위한 핸들러 (클릭 시 경력 정보 수정 가능)
+  const careerHandler = (idx, id) => {
+    
+    // 클릭시 update 상태가 true로 바뀌며, 조건부 렌더링 진행
+    setCareerUpdating({...careerUpdating, [idx]:true })
+
+    // 수정하려는 커리어 해당 항목이 state에 담기기 (id 기반 axios 요청이 있어야 할 듯?)
+    axios.get('http://localhost:5000/career', {params: {id}}, {withCredentials: true})
+    .then((res)=>{
+      let careerInfo = res.data.data // 객체로 불러옴
+      setCareerId(careerInfo.id)
+      setCompany(careerInfo.company)
+      setPeriod(careerInfo.period)
+      setPosition(careerInfo.position)
+    })
     .catch((err)=>{
       console.log(err)
     })    
   }
-
-    // 경력 사항 '수정'을 위한 핸들러 (클릭 시 경력 정보 수정 가능)
-    const careerHandler = (idx, id) => {
-      
-      // 클릭시 update 상태가 true로 바뀌며, 조건부 렌더링 진행
-      setCareerUpdating({...careerUpdating, [idx]:true })
-
-      // 수정하려는 커리어 해당 항목이 state에 담기기 (id 기반 axios 요청이 있어야 할 듯?)
-      axios.get('http://localhost:5000/career', {params: {id}}, {withCredentials: true})
-      .then((res)=>{
-        let careerInfo = res.data.data // 객체로 불러옴
-        setCareerId(careerInfo.id)
-        setCompany(careerInfo.company)
-        setPeriod(careerInfo.period)
-        setPosition(careerInfo.position)
-      })
-      .catch((err)=>{
-        console.log(err)
-      })    
-    }
 
   // update할 내용이 입력된 후에 shubmit 용 핸들러
   const updateCareer = (idx, id) => {
@@ -128,35 +137,69 @@ export default function JobSeekerMyPage () {
     axios.patch('http://localhost:5000/career', {
       id, jobSeekerId, company, period, position
     })
-    .catch((err)=>{
-      console.log(err)
-    })    
-
-  }
-
-  const deleteCareer = (id) => {
-    axios.delete(`http://localhost:5000/career/${id}`, {withCredentials:true})
-    .then(console.log)
-    .catch((err)=>{
-      console.log(err)
-    })    
-  }
-
-  useEffect(()=>{
-    
-    // JobSeeker 정보 받기
-    axios.get(`http://localhost:5000/jobseeker/${jobSeekerId}`)
-    .then((res)=>{
-      let jobSeekerInfo = res.data.data
-      setName(jobSeekerInfo.name)
-      setAge(jobSeekerInfo.age)
-      setGender(jobSeekerInfo.gender)
-      setImage(jobSeekerInfo.image)
-      setQuestion(jobSeekerInfo.question)
+    .then(res=>{
+      setEventStatus(!eventStatus)
     })
     .catch((err)=>{
       console.log(err)
-    })    
+    })
+  }
+
+
+  const deleteCareer = (id) => {
+    axios.delete(`http://localhost:5000/career/${id}`, {withCredentials:true})
+    .then(res=>{
+      setEventStatus(!eventStatus)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+  }
+
+  // 지원 목록에서 지원을 취소하는 핸들러
+  const CancelApply = (jobId) => {
+  axios.delete('http://localhost:5000/applicant',
+  {params: {jobId, jobSeekerId: jobSeekerId}},
+  {withCredentials: true})
+  .then(res=>{
+    setEventStatus(!eventStatus)
+  })
+}
+
+  useEffect(()=>{
+    
+    // JobSeeker 정보 받기 (기존 코드)
+    // axios.get(`http://localhost:5000/jobseeker/${jobSeekerId}`)
+    // .then((res)=>{
+    //   let jobSeekerInfo = res.data.data
+    //   setName(jobSeekerInfo.name)
+    //   setAge(jobSeekerInfo.age)
+    //   setGender(jobSeekerInfo.gender)
+    //   setImage(jobSeekerInfo.image)
+    //   setQuestion(jobSeekerInfo.question)
+    // })
+    // .catch((err)=>{
+    //   console.log(err)
+    // }) 
+
+
+    // 동혁님 전달 코드
+    axios
+      .get('http://localhost:5000/jobseeker', { withCredentials: true })
+      .then((res) => {
+        let jobSeekerInfo = res.data.user;
+        setName(jobSeekerInfo.name);
+        setAge(jobSeekerInfo.age);
+        setGender(jobSeekerInfo.gender);
+        setImage(jobSeekerInfo.image);
+        setQuestion(jobSeekerInfo.question);
+        console.log(res.data.user);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
+
 
     // Career 정보 받기
     axios.get(`http://localhost:5000/career/${jobSeekerId}`,{withCredentials: true})
@@ -167,7 +210,13 @@ export default function JobSeekerMyPage () {
       console.log(err)
     })    
 
-  }, [])
+    // applicant 테이블 통해 지원한 jobList 받기
+    axios.get(`http://localhost:5000/applicant/job/${jobSeekerId}`)
+    .then((res)=>{
+      setApplyList(res.data.data)
+    })
+
+  }, [eventStatus])
 
   return (
     <div>
@@ -219,7 +268,7 @@ export default function JobSeekerMyPage () {
         </>)
       }
       <br></br>
-      <button onClick={withdrawalJobseeker}>회원탈퇴</button>
+      <WithdrawJobSeekerModal WithdrawJobseeker={WithdrawJobseeker} id={jobSeekerId} />
       <br></br>
       <br></br>
       <h2>경력 사항</h2>
@@ -243,7 +292,7 @@ export default function JobSeekerMyPage () {
               <td>{career.position}</td>
               <td>{career.period}</td>
               <button onClick={()=>{careerHandler(idx, career.id)}}>수정</button>
-              <button onClick={()=>{deleteCareer(career.id)}}>삭제</button>
+              <DeleteCareerModal deleteCareer={deleteCareer} id={career.id} />
               </tr>
               )
               :
@@ -311,7 +360,39 @@ export default function JobSeekerMyPage () {
         value="등록"
         onClick={createCareer} />
       </form>
-
+    <br></br>
+    <h3>지원 현황</h3>
+    {
+      (applyList.length===0) ?
+      (<div>지원 내역이 없습니다</div>) :
+      (<table>
+        <tr>
+          <th>회사명</th>
+          <th>주소</th>
+          <th>근무요일</th>
+          <th>근무시간</th>
+          <th>시급</th>
+          <th>예상 월급여</th>
+          <th>포지션</th>
+          <th></th>
+        </tr>
+      {applyList.map((job) => {
+        return (
+          <tr key={job.id}>
+            <td>{job.companyName}</td>
+            <td>{job.location}</td>
+            <td>{job.day}</td>
+            <td>{job.startTime}~{job.endTime} ({job.time}시간)</td>
+            <td>{job.hourlyWage}</td>
+            <td>{job.monthlyWage}</td>
+            <td>{job.position}</td>
+            <CancelApplyModal CancelApply={CancelApply} jobId={job.id}/>
+          </tr>
+        )
+      })}
+      </table>)
+      
+    }
     </div>
   )
 }

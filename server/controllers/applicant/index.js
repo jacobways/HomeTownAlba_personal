@@ -6,5 +6,6 @@ module.exports = {
   deleteByInfo: require('./deleteByInfo.js'),
   getJobSeeker: require('./getJobSeeker.js'),
   getAllJobSeeker: require('./getAllJobSeeker.js'),
+  getAllJob: require('./getAllJob.js'),
   get: require('./get.js')
 }

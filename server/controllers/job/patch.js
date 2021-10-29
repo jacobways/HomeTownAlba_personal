@@ -5,7 +5,7 @@ const calculateMonthlyWage = require('./calculateMonthlyWage')
 // companyId를 통해 해당 company가 등록한 job을 모두 불러오는 컨트롤러
 module.exports = async (req, res) => {
 
-  const { id, companyId, title, location, day, startTime, endTime, position, hourlyWage} = req.body
+  const { id, companyId, companyName, location, day, startTime, endTime, position, hourlyWage} = req.body
 
   if(!id) {
     res.status(400).send('일자리의 id 정보가 없습니다.')
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
 
       Job.update({
         companyId, 
-        title, 
+        companyName, 
         location, 
         day, 
         startTime, 

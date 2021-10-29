@@ -263,7 +263,7 @@ jobSeekerRouter.post("/kakaoJobLogin", async (req, res) => {
 });
 
 jobSeekerRouter.post("/kakaoJobRegister", async (req, res) => {
-  let jobSeekersInfo = await JobSeekers.findOne({
+  let jobSeekersInfo = await JobSeeker.findOne({
     where: { userId: req.body.userId },
   });
   if (jobSeekersInfo === null) {

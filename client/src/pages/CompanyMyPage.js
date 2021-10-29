@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import DeleteJobModal from "../components/Modal_DeleteJob";
+import RejectApplyModal from "../components/Modal_RejectApply";
+import ApplicantInfoModal from "../components/Modal_ApplicantInfo";
+import WithdrawCompanyModal from '../components/Modal_WithdrawCompany';
 
 // 사업자 마이페이지
 export default function CompanyMyPage () {
 
   // company 회원 정보 
-  const [companyId, setCompanyId] = useState(0)
+  const [companyId, setCompanyId] = useState(0)       // Company 테이블의 id이자 Job 테이블의 companyId
   const [companyName, setCompanyName] = useState('')
   const [companyLocation, setCompanyLocation] = useState('')
   const [businessNumber, setBusinessNumber] = useState('')
@@ -43,6 +47,8 @@ export default function CompanyMyPage () {
   const [applicantList, setApplicantList] = useState({}) // 객체이며 key 는 idx 값
   const [showingApplicantList, setShowingApplicantList] = useState({})
 
+  const [eventStatus, setEventStatus] = useState(false)  // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
+
   // company 회원 정보 수정용
   const companyNameHandler = (event) => {
     setCompanyName(event.target.value)
@@ -60,21 +66,24 @@ export default function CompanyMyPage () {
     setQuestion(event.target.value)
   }
 
-    // company 회원정보를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
-    const companyHandler = () => {
-      setCompanyInfoUpdating(!companyInfoUpdating)
-    }
-  
-    // company 업데이트 하기
-    const updateCompany = () => {
-      axios.patch('http://localhost:5000/company', {
-        id:companyId, name: companyName, location: companyLocation, businessNumber, question
-      })
-      setCompanyInfoUpdating(!companyInfoUpdating)
-    }
+  // company 회원정보를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
+  const companyHandler = () => {
+    setCompanyInfoUpdating(!companyInfoUpdating)
+  }
+
+  // company 업데이트 하기
+  const updateCompany = () => {
+    axios.patch('http://localhost:5000/company', {
+      id:companyId, name: companyName, location: companyLocation, businessNumber, question
+    })
+    .then(res=>{
+      setEventStatus(!eventStatus)
+    })
+    setCompanyInfoUpdating(!companyInfoUpdating)
+  }
 
   // company 회원 정보 탈퇴 기능 넣기
-  const withdrawalCompany = () => {
+  const WithdrawCompany = () => {
     axios.delete('link')
   }
 
@@ -185,13 +194,18 @@ export default function CompanyMyPage () {
       axios.post('http://localhost:5000/job', {
         companyId, companyName, location: jobLocation, day, startTime, endTime, position, hourlyWage},
         {withCredentials: true})
+      .then(res=>{
+        setEventStatus(!eventStatus)
+      })
     }
   }
 
   // 일자리 삭제하기
-  const deleteJob = (id) => {
+  const DeleteJob = (id) => {
     axios.delete(`http://localhost:5000/job/${id}`, {withCredentials: true})
-    .then(console.log)
+    .then(res=>{
+      setEventStatus(!eventStatus)
+    })
     .catch((err)=> {
       console.log(err)
     })
@@ -206,8 +220,12 @@ export default function CompanyMyPage () {
     setShowingApplicantList({...showingApplicantList, [idx]:true })
     axios.get(`http://localhost:5000/applicant/jobseeker/${jobId}`, {withCredentials: true})
     .then((res)=> {
-      if (res.data.data.length !== 0) setApplicantList({...applicantList, [idx]: res.data.data})
       // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
+      if (res.data.data.length !== 0) {
+        setApplicantList({...applicantList, [idx]: res.data.data})
+      } else {
+        setApplicantList({...applicantList, [idx]: null})
+      }
     })
     .catch((err)=>{
       console.log(err)
@@ -218,6 +236,19 @@ export default function CompanyMyPage () {
   const closeApplicantList = (idx) => {
     setShowingApplicantList({...showingApplicantList, [idx]:false })
   }
+
+  // 자원자의 지원 거절
+  const RejectApply = (idx, jobId, jobSeekerId) => {
+    axios.delete(`http://localhost:5000/applicant`, 
+    {params: {jobId, jobSeekerId}})
+    .then(res=>{
+      openApplicantList(idx, jobId)
+    })
+    .catch((err)=>{
+      console.log(err)
+    })    
+  }
+
 
   useEffect(()=> {
 
@@ -244,15 +275,9 @@ export default function CompanyMyPage () {
     })    
 
 
-  }, [])
+  }, [eventStatus])
 
-  const deleteApplicant = (id) => {
-    axios.delete(`http://localhost:5000/applicant/jobseeker/${id}`)
-    .then(console.log)
-    .catch((err)=>{
-      console.log(err)
-    })    
-  }
+
 
 
 
@@ -302,7 +327,7 @@ export default function CompanyMyPage () {
 
       <br></br>
 
-    <button onClick={withdrawalCompany}>회원탈퇴</button>
+    <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} id={companyId} />
     <br></br>
     <br></br>
 
@@ -421,12 +446,12 @@ export default function CompanyMyPage () {
         return (
           <div key = {idx}>
             <h4>
-              {job.location}
-              {job.position}
-              {job.hourlyWage}
-              {JSON.parse(job.day)}
-              {job.startTime}~{job.endTime}     
-              <button onClick={()=>{deleteJob(job.id)}}>삭제하기</button>
+              주소 : {job.location}
+              포지션 : {job.position}
+              시급 : {job.hourlyWage}
+              요일 : {JSON.parse(job.day)}
+              시간 : {job.startTime}~{job.endTime}     
+              <DeleteJobModal DeleteJob={DeleteJob} id={job.id} />
             </h4>
 
             {(!showingApplicantList[idx]) ? 
@@ -435,18 +460,26 @@ export default function CompanyMyPage () {
             <button onClick={()=>{closeApplicantList(idx)}}>지원자 숨기기</button>
               { (!applicantList[idx]) ? 
                 <h5>아직 지원자가 없습니다</h5> : 
-                <>
-                  {applicantList[idx].map((applicant)=> {
+                <table>
+                  <tr>
+                    <th>이름</th>
+                    <th>나이</th>
+                    <th>성별</th>
+                    <th></th>
+                    <th></th>
+                  </tr>
+                  {applicantList[idx].map((jobSeeker)=> {
                     return (
-                      <div key = {applicant.id}>
-                        {applicant.name}
-                        {applicant.age}
-                        {applicant.gender}
-                        <button onClick={()=>{deleteApplicant(applicant.id)}}>지원 거절</button>
-                      </div>
+                      <tr key = {jobSeeker.id}>
+                        <td>{jobSeeker.name}</td>
+                        <td>{jobSeeker.age}</td>
+                        <td>{jobSeeker.gender}</td>
+                        <ApplicantInfoModal jobSeeker={jobSeeker}/>
+                        <RejectApplyModal RejectApply={RejectApply} idx={idx} jobId={job.id} jobSeekerId={jobSeeker.id} />
+                      </tr>
                     )
                   })}
-                </>
+                </table>
               }
             </>
             }
