@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 export const ModalBackdrop = styled.div`
-  position: fixed;
+  /* position: fixed; */
   z-index: 999;
   top: 1;
   left: 1;

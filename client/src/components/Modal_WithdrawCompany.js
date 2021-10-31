@@ -15,7 +15,7 @@ export const ModalBackdrop = styled.div`
   place-items: center;
 `;
 
-function WithdrawCompany({  }) {
+function WithdrawCompany({ WithdrawCompany }) {
   const [isOpen, setIsOpen] = useState(false);
 
   const openModalHandler = () => {
@@ -28,8 +28,7 @@ function WithdrawCompany({  }) {
 
   const CloseAndDeleteHandler = () => {
     setIsOpen(!isOpen);
-
-    // props 로 받은 핸들러 여기 추가
+    WithdrawCompany()
   };
 
 

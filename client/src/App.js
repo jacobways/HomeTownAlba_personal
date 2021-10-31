@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import axios from "axios";
 import LoginPage from "./pages/LoginPage";
 import NavBar from "./pages/NavBar";
 import RegisterPage from "./pages/RegisterPage";
@@ -20,6 +21,7 @@ import Logout from "./components/kakaoLogout";
 
 
 function App() {
+
   return (
     <>
       <NavBar />
@@ -31,7 +33,6 @@ function App() {
         <Route exact path="/register2" component={RegisterPage} />
         <Route exact path="/map" component={Map} />
         <Route exact path="/admin" component={AdminPage} />
-
         <Route exact path="/test/logout" component={Logout} />
         <Route exact path="/test/choice" component={Comjob} />
         <Route exact path="/test/register" component={Register} />

@@ -7,7 +7,6 @@ router.get("/jobseeker/:jobId", applicantController.getAllJobSeeker);
 router.get("/jobseeker", applicantController.getJobSeeker);
 router.get("/job/:jobSeekerId", applicantController.getAllJob)
 router.get("/", applicantController.get);
-router.delete("/:id", applicantController.delete);
-router.delete("/", applicantController.deleteByInfo)
+router.delete("/", applicantController.delete);
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import DeleteJobModal from "../components/Modal_DeleteJob";
 import RejectApplyModal from "../components/Modal_RejectApply";
 import ApplicantInfoModal from "../components/Modal_ApplicantInfo";
@@ -8,15 +9,25 @@ import WithdrawCompanyModal from '../components/Modal_WithdrawCompany';
 // 사업자 마이페이지
 export default function CompanyMyPage () {
 
+  const history = useHistory();
+
   // company 회원 정보 
   const [companyId, setCompanyId] = useState(0)       // Company 테이블의 id이자 Job 테이블의 companyId
+  console.log(companyId)
+  
+  // Company 테이블의 나머지 정보
   const [companyName, setCompanyName] = useState('')
   const [companyLocation, setCompanyLocation] = useState('')
   const [businessNumber, setBusinessNumber] = useState('')
+
+  const [password, setPassword] = useState('')
   const [question, setQuestion] = useState('')
 
   // company 회원 정보를 수정중인지 아닌지 상태로 관리 (조건부 렌더링용)
   const [companyInfoUpdating, setCompanyInfoUpdating] = useState(false)
+
+  const [passwordUpdating, setPasswordUpdating] = useState(false) // 비밀 번호를 수정중인지 아닌지 상태로 관리 (조건부 렌더링용)
+  const [passwordErrorMessage, setPasswordErrorMessage] = useState('')  // 비밀번호 입력 실패시 메세지
 
   // job 정보
   const [jobLocation, setJobLocation] = useState('')
@@ -62,10 +73,6 @@ export default function CompanyMyPage () {
     setBusinessNumber(event.target.value)
   }
 
-  const questionHandler = (event) => {
-    setQuestion(event.target.value)
-  }
-
   // company 회원정보를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
   const companyHandler = () => {
     setCompanyInfoUpdating(!companyInfoUpdating)
@@ -74,17 +81,58 @@ export default function CompanyMyPage () {
   // company 업데이트 하기
   const updateCompany = () => {
     axios.patch('http://localhost:5000/company', {
-      id:companyId, name: companyName, location: companyLocation, businessNumber, question
-    })
+      id:companyId, name: companyName, location: companyLocation, businessNumber
+    },
+    {withCredentials: true})
     .then(res=>{
       setEventStatus(!eventStatus)
     })
     setCompanyInfoUpdating(!companyInfoUpdating)
   }
 
+
+  // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
+  const OpenPasswordUpdate = () => {
+    setPasswordUpdating(!passwordUpdating)
+  }
+
+  const passwordHandler = (event) => {
+    setPassword(event.target.value)
+  }
+
+  const questionHandler = (event) => {
+    setQuestion(event.target.value)
+  }
+
+  // password 업데이트 하기
+  const UpdatePassword = () => {
+    axios.patch('http://localhost:5000/company', {
+      password, question
+    }, 
+    {withCredentials: true})
+    .then((res)=>{
+      setPasswordUpdating(!passwordUpdating)
+      setPassword('')
+      setQuestion('')
+      setPasswordErrorMessage('')
+    })
+    .catch((err)=>{
+      setPasswordErrorMessage('질문의 답이 올바르지 않습니다')
+    })
+  }
+
+  const CancelUpdatePassword = () => {  // 비밀번호 업데이트 취소
+    setPasswordUpdating(!passwordUpdating)
+    setPassword('')
+    setQuestion('')
+    setPasswordErrorMessage('')
+  }
+
   // company 회원 정보 탈퇴 기능 넣기
   const WithdrawCompany = () => {
-    axios.delete('link')
+    axios.delete('http://localhost:5000/company', {withCredentials: true})  // company 회원정보 삭제
+    axios.delete('http://localhost:5000/job', {params:{companyId}}, {withCredentials: true})  // company의 job과 관련 applicant 모두 삭제
+    history.push("/map");
   }
 
 
@@ -194,14 +242,17 @@ export default function CompanyMyPage () {
   }
 
   // 일자리 삭제하기
-  const DeleteJob = (id) => {
-    axios.delete(`http://localhost:5000/job/${id}`, {withCredentials: true})
+  const DeleteJob = (jobId) => {
+    axios.delete(`http://localhost:5000/job/${jobId}`, {withCredentials: true})
     .then(res=>{
       setEventStatus(!eventStatus)
     })
     .catch((err)=> {
       console.log(err)
     })
+
+    // 일자리에 묶인 지원자들도 삭제하기
+    axios.delete('http://localhost:5000/applicant', {params: {jobId}}, {withCredentials: true})
   }
 
   // 각 일자리별 지원자를 applicantList state에 저장
@@ -233,7 +284,7 @@ export default function CompanyMyPage () {
   // 자원자의 지원 거절
   const RejectApply = (idx, jobId, jobSeekerId) => {
     axios.delete(`http://localhost:5000/applicant`, 
-    {params: {jobId, jobSeekerId}})
+    {params: {jobId, jobSeekerId}}, {withCredentials: true})
     .then(res=>{
       openApplicantList(idx, jobId)
     })
@@ -246,19 +297,33 @@ export default function CompanyMyPage () {
   useEffect(()=> {
 
     // company 정보 받기
-    axios.get(`http://localhost:5000/company/${companyId}`, {withCredentials: true})
+    // axios.get(`http://localhost:5000/company/${companyId}`, {withCredentials: true})
+    // .then((res)=>{
+    //   let companyInfo = res.data.data;
+    //   setCompanyId(companyInfo.id)
+    //   setCompanyName(companyInfo.name)
+    //   setCompanyLocation(companyInfo.location)
+    //   setBusinessNumber(companyInfo.businessNumber)
+    // })
+    // .catch((err)=>{
+    //   console.log(err)
+    // })    
+
+    // company 정보 불러오기 : 동혁님과 협의하기
+    axios.get(`http://localhost:5000/company`, {withCredentials: true})
     .then((res)=>{
-      let companyInfo = res.data.data;
+      let companyInfo = res.data.user;
       setCompanyName(companyInfo.name)
       setCompanyLocation(companyInfo.location)
       setBusinessNumber(companyInfo.businessNumber)
-      setQuestion(companyInfo.question)
     })
     .catch((err)=>{
       console.log(err)
     })    
 
-    
+
+
+    // job 정보 받기
     axios.get(`http://localhost:5000/job/${companyId}`, {withCredentials: true})
     .then((res)=>{
       setJobList(res.data.data)
@@ -268,7 +333,7 @@ export default function CompanyMyPage () {
     })    
 
 
-  }, [eventStatus])
+  }, [companyId, eventStatus])
 
   // 체크박스로 체크한 요일을 day에 담기 위한 기능
   useEffect(() => {
@@ -282,48 +347,80 @@ export default function CompanyMyPage () {
   <>
   <h1>사업자 마이페이지</h1>
   <br></br>
-
+  <h2>회원 정보</h2>
   {(!companyInfoUpdating) ? 
-        (<>
-        <span>{companyName}</span>
-        <span>{companyLocation}</span>
-        <span>{businessNumber}</span>
-        <span>{question}</span>
-        <button onClick={companyHandler}>수정</button>
-        </>)
+        (<table>
+          <tr>
+            <th scope="row">회사명</th>
+            <td>{companyName}</td>
+          </tr>
+          <tr>
+            <th scope="row">회사 주소</th>
+            <td>{companyLocation}</td>
+          </tr>
+          <tr>
+            <th scope="row">사업자등록번호</th>
+            <td>{businessNumber}</td>
+          </tr>
+          <tr>
+            <button onClick={companyHandler}>회원 정보 수정</button>
+          </tr>
+        </table>)
       :
-        (<>
-        <input         
-        name="name"
-        type="text"
-        onChange={companyNameHandler}
-        value={companyName}
-        />
-        <input         
-        name="companyLocation"
-        type="text"
-        onChange={companyLocationHandler}
-        value={companyLocation}
-        />
-        <input         
-        name="businessNumber"
-        type="text"
-        onChange={businessNumberHandler}
-        value={businessNumber}
-        />
-        <input         
-        name="question"
-        type="text"
-        onChange={questionHandler}
-        value={question}
-        />
-        <button onClick={updateCompany}>수정 완료</button>
-        </>)
+        (<table>
+          <tr>
+          <th scope="row">회사명</th>
+            <input         
+            name="name"
+            type="text"
+            onChange={companyNameHandler}
+            value={companyName}
+            />
+          </tr>
+          <tr>
+            <th scope="row">회사 주소</th>
+            <input         
+            name="companyLocation"
+            type="text"
+            onChange={companyLocationHandler}
+            value={companyLocation}
+            />
+          </tr>
+          <tr>
+            <th scope="row">사업자등록번호</th>
+            <input         
+            name="businessNumber"
+            type="text"
+            onChange={businessNumberHandler}
+            value={businessNumber}
+            />
+          </tr>
+            <button onClick={updateCompany}>수정 완료</button>
+        </table>)
       }
-
-      <br></br>
-
-    <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} id={companyId} />
+    <br></br>
+    {(!passwordUpdating) ? 
+      <button onClick={OpenPasswordUpdate}>비밀번호 변경</button> :
+      <>
+      <label>질문: 출신 초등학교는?</label>
+      <input         
+      name="question"
+      type="text"
+      onChange={questionHandler}
+      />
+      <label>수정할 비밀번호</label>
+      <input         
+      name="password"
+      type="password"
+      onChange={passwordHandler}
+      />
+      <span>{passwordErrorMessage}</span>
+      <button onClick={UpdatePassword}>완료</button>
+      <button onClick={CancelUpdatePassword}>취소</button>
+      </>
+      }
+    <br></br>
+    <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
     <br></br>
     <br></br>
 

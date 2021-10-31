@@ -6,6 +6,9 @@ const { kakao } = window;
 export default function Map() {
 
   const [jobSeekerId, setJobSeekerId] = useState(0);
+  const [Login, setLogin] = useState(false);
+  console.log('jobSeekerId', jobSeekerId)
+
   const [applyLocation, setApplyLocation] = useState([]) // 지원시 해당 위치를 지도에 띄우도록 하기 위한 state
 
   const [startTimeFilter, setStartTimeFilter] = useState()
@@ -46,6 +49,21 @@ export default function Map() {
     setSearchPlace("");
     setApplyLocation([])
   };
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/jobSeeker", { withCredentials: true })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.user) {
+          console.log('useEffect 내부', res.data.user.id)
+          setJobSeekerId(res.data.user.id);
+          setLogin(true);
+        } else {
+          setLogin(false);
+        }
+      });
+  }, [Login]);
 
   
   useEffect(() => {
@@ -362,7 +380,7 @@ export default function Map() {
         });
       }
     });
-  }, [applyLocation, startTimeFilter, endTimeFilter, minWageFilter, maxWageFilter])
+  }, [jobSeekerId, applyLocation, startTimeFilter, endTimeFilter, minWageFilter, maxWageFilter, jobSeekerId])
 
   return (
     <>
