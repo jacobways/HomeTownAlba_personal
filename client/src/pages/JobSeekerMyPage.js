@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import DeleteCareerModal from "../components/Modal_DeleteCareer";
-import CancelApplyModal from "../components/Modal_CancelApply";
-import WithdrawJobSeekerModal from '../components/Modal_WithdrawJobseeker';
+import DeleteCareerModal from "../components/MyPageModal/Modal_DeleteCareer";
+import CancelApplyModal from "../components/MyPageModal/Modal_CancelApply";
+import WithdrawJobSeekerModal from '../components/MyPageModal/Modal_WithdrawJobseeker';
 
 // 구직자 마이페이지
 export default function JobSeekerMyPage () {

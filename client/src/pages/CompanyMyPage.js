@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useHistory } from 'react-router-dom';
-import DeleteJobModal from "../components/Modal_DeleteJob";
-import RejectApplyModal from "../components/Modal_RejectApply";
-import ApplicantInfoModal from "../components/Modal_ApplicantInfo";
-import WithdrawCompanyModal from '../components/Modal_WithdrawCompany';
+import DeleteJobModal from "../components/MyPageModal/Modal_DeleteJob";
+import RejectApplyModal from "../components/MyPageModal/Modal_RejectApply";
+import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
+import WithdrawCompanyModal from '../components/MyPageModal/Modal_WithdrawCompany';
 
 // 사업자 마이페이지
 export default function CompanyMyPage () {
