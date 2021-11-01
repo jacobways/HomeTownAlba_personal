@@ -106,7 +106,7 @@ export default function CompanyMyPage () {
 
   // password 업데이트 하기
   const UpdatePassword = () => {
-    axios.patch('http://localhost:5000/company', {
+    axios.patch(`http://localhost:5000/company/password`, {
       password, question
     }, 
     {withCredentials: true})
@@ -313,7 +313,8 @@ export default function CompanyMyPage () {
     axios.get(`http://localhost:5000/company`, {withCredentials: true})
     .then((res)=>{
       let companyInfo = res.data.user;
-      setCompanyName(companyInfo.name)
+      setCompanyId(companyInfo.id)
+      setCompanyName(companyInfo.companyName)
       setCompanyLocation(companyInfo.location)
       setBusinessNumber(companyInfo.businessNumber)
     })

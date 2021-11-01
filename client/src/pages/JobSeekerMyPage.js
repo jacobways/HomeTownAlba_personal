@@ -97,7 +97,7 @@ export default function JobSeekerMyPage () {
 
   // password 업데이트 하기
   const UpdatePassword = () => {
-    axios.patch('http://localhost:5000/jobseeker', {
+    axios.patch('http://localhost:5000/jobseeker/password', {
       password, question
     }, 
     {withCredentials: true})
@@ -286,7 +286,7 @@ export default function JobSeekerMyPage () {
           </tr>
           <tr>
             <th scope="row">사진</th>
-            <td>{image}</td>
+            <td><img src={image}></img></td>
           </tr>
           <tr>
             <button onClick={jobSeekerHandler}>회원 정보 수정</button>
