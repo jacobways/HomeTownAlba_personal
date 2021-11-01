@@ -18,7 +18,6 @@ import Jobkakao from "./components/JobKakao";
 import Jobregister from "./components/jobRegister";
 import Logout from "./components/kakaoLogout";
 
-
 function App() {
   return (
     <>
