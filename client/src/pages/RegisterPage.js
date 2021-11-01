@@ -4,7 +4,6 @@ import { withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
-import KaKaoRegister from "../components/KaKaoRegister";
 import KakaoR from "../components/jobRegister";
 
 function RegisterPage(props) {
