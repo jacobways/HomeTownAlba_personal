@@ -39,6 +39,7 @@ jobSeekerRouter.post("/", isNotLoggedIn, async (req, res) => {
         // console.log(hashPassword); 암호화된 비밀번호
         let registerInfo = {
           userId: req.body.userId,
+          email: req.body.email,
           password: hashPassword,
           name: req.body.name,
           age: req.body.age,
@@ -245,6 +246,29 @@ jobSeekerRouter.post("/kakaoJobLogin", async (req, res) => {
     where: { userId: req.body.userId },
   });
   if (jobseekersInfo === null) {
+    res.status(404).json({ message: "회원가입 하세요.", user: jobseekersInfo });
+  } else {
+    // JobSeeker.create({
+    //   password: req.body.password,
+    //   userId: req.body.userId,
+    //   question: req.body.question,
+    //   name: req.body.name,
+    //   age: req.body.age,
+    //   gender: req.body.gender,
+    //   image: req.body.image,
+    // });
+    res.status(200).json({ message: "로그인", user: jobseekersInfo });
+  }
+  // console.log(req.body)
+});
+
+jobSeekerRouter.post("/kakaoJobRegister", async (req, res) => {
+
+  let jobseekersInfo = await JobSeeker.findOne({
+
+    where: { userId: req.body.userId },
+  });
+  if (jobseekersInfo === null) {
     JobSeeker.create({
       password: req.body.password,
       userId: req.body.userId,
@@ -255,48 +279,14 @@ jobSeekerRouter.post("/kakaoJobLogin", async (req, res) => {
       image: req.body.image,
     });
 
-    res.status(200).json({ message: "회원가입에 성공하셨습니다." });
+    res
+      .status(200)
+      .json({ message: "회원가입에 성공하셨습니다.", user: jobseekersInfo });
   } else {
-    res.status(404).json({ message: "중복된 아이디가 있습니다." });
+    res
+      .status(404)
+      .json({ message: "중복된 아이디가 있습니다.", user: jobseekersInfo });
   }
   // console.log(req.body)
 });
-
-jobSeekerRouter.post("/kakaoJobRegister", async (req, res) => {
-  let jobSeekersInfo = await JobSeeker.findOne({
-    where: { userId: req.body.userId },
-  });
-  if (jobSeekersInfo === null) {
-    res.status(404).json({ message: "회원가입 하세요." });
-  } else {
-    const payload = {
-      id: jobSeekersInfo.id,
-      userId: jobSeekersInfo.userId,
-      question: jobSeekersInfo.question,
-      name: jobSeekersInfo.name,
-      age: jobSeekersInfo.age,
-      gender: jobSeekersInfo.gender,
-      image: jobSeekersInfo.image,
-      password: jobSeekersInfo.password,
-      createdAt: jobSeekersInfo.createdAt,
-      updatedAt: jobSeekersInfo.updatedAt,
-    };
-    const token = jwt.sign(payload, process.env.ACCESS_SECRET, {
-      expiresIn: "2h",
-    });
-
-    res
-      .status(200)
-      .cookie("token", token, {
-        domain: "localhost",
-        path: "/",
-        sameSite: "none",
-        secure: true,
-        httpOnly: true,
-      })
-      .json({ data: { token }, message: "로그인에 성공하셨습니다." });
-  }
-  // console.log(req.body);
-});
-
 module.exports = jobSeekerRouter;

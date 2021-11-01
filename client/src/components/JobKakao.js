@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import axios from "axios";
-import KakaoR from "./kakaoregister";
+import KakaoR from "./KaKaoRegister";
 const { Kakao } = window;
 
 function KakaoLogin() {

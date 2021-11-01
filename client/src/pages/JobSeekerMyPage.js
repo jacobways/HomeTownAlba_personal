@@ -30,43 +30,46 @@ export default function JobSeekerMyPage () {
   
   const [careerList, setCareerList] = useState([]) // career 정보 모두 불러와 배열로 저장
 
+
   // career 항목 나머지 개별 정보
-  const [careerId, setCareerId] = useState('')
-  const [company, setCompany] = useState('')
-  const [period, setPeriod] = useState('')
-  const [position, setPosition] = useState('')
+  const [careerId, setCareerId] = useState("");
+  const [company, setCompany] = useState("");
+  const [period, setPeriod] = useState("");
+  const [position, setPosition] = useState("");
 
   // 커리어 수정 버튼을 클릭 시, 업데이트 중인 상태를 저장 (키는 idx, 값은 true - 수정중)
+  
   const [careerUpdating, setCareerUpdating] = useState({})
 
   const [applyList, setApplyList] = useState([])  // jobSeeker가 지원한 job 목록 보여주기
 
   const [eventStatus, setEventStatus] = useState(false)  // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
-   
 
   // jobSeeker 정보 수정용
   const nameHandler = (event) => {
-    setName(event.target.value)
-  }
+    setName(event.target.value);
+  };
 
   const ageHandler = (event) => {
-    setAge(event.target.value)
-  }
+    setAge(event.target.value);
+  };
 
   const genderHandler = (event) => {
-    setGender(event.target.value)
-  }
+    setGender(event.target.value);
+  };
 
   const imageHandler = (event) => {
-    setImage(event.target.value)
-  }
+    setImage(event.target.value);
+  };
+
 
   // 회원정보를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
   const jobSeekerHandler = () => {
-    setJobSeekerInfoUpdating(!jobSeekerInfoUpdating)
-  }
+    setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
+  };
 
   // jobSeeker 업데이트 하기
+
   const UpdateJobSeeker = () => {
     axios.patch('http://localhost:5000/jobseeker', {
       id:jobSeekerId, name, age, gender, image
@@ -118,6 +121,7 @@ export default function JobSeekerMyPage () {
   }
 
   // jobSeeker 회원 정보 탈퇴 기능 넣기
+
   const WithdrawJobseeker = () => {
     axios.delete('http://localhost:5000/jobseeker', {withCredentials: true})  // jobSeeker 정보 삭제
     axios.delete('http://localhost:5000/career', {params: {jobSeekerId}}, {withCredentials: true}) // career 정보 삭제
@@ -125,21 +129,23 @@ export default function JobSeekerMyPage () {
     history.push("/map");
   }
 
+
   // 경력 정보 생성 및 수정 핸들러
   const companyHandler = (event) => {
-    setCompany(event.target.value)
-  }
+    setCompany(event.target.value);
+  };
 
   const periodHandler = (event) => {
-    setPeriod(event.target.value)
-  }
+    setPeriod(event.target.value);
+  };
 
   const positionHandler = (event) => {
-    setPosition(event.target.value)
-  }
+    setPosition(event.target.value);
+  };
 
   // 경력 사항을 등록 하는 핸들러
   const createCareer = () => {
+
     axios.post('http://localhost:5000/career', {
       jobSeekerId,
       company,
@@ -176,9 +182,11 @@ export default function JobSeekerMyPage () {
     })    
   }
 
+
   // update할 내용이 입력된 후에 shubmit 용 핸들러
   const updateCareer = (idx, id) => {
     // 클릭시 해당 idx의 updating이 false 또는 삭제됨
+
     setCareerUpdating({...careerUpdating, [idx]:false })
     axios.patch('http://localhost:5000/career', {
       id, jobSeekerId, company, period, position
@@ -193,7 +201,9 @@ export default function JobSeekerMyPage () {
   }
 
 
+
   const deleteCareer = (id) => {
+
     axios.delete(`http://localhost:5000/career/${id}`, {withCredentials:true})
     .then(res=>{
       setEventStatus(!eventStatus)
@@ -221,10 +231,13 @@ export default function JobSeekerMyPage () {
       .then((res) => {
         let jobSeekerInfo = res.data.user;
         setJobSeekerId(jobSeekerInfo.id)
+
         setName(jobSeekerInfo.name);
         setAge(jobSeekerInfo.age);
         setGender(jobSeekerInfo.gender);
         setImage(jobSeekerInfo.image);
+
+
         console.log(res.data.user);
       })
       .catch((err) => {
@@ -232,6 +245,7 @@ export default function JobSeekerMyPage () {
       });
 
     // Career 정보 받기
+
     axios.get(`http://localhost:5000/career/${jobSeekerId}`,{withCredentials: true})
     .then((res)=>{
       setCareerList(res.data.data)
@@ -248,11 +262,14 @@ export default function JobSeekerMyPage () {
 
   }, [eventStatus, jobSeekerId])
 
+
   return (
     <div>
       <h1>구직자 마이페이지</h1>
+
       <br></br>
       <h2>회원 정보</h2>
+
       {(!jobSeekerInfoUpdating) ? 
         (<table>
           <tr>
@@ -298,10 +315,12 @@ export default function JobSeekerMyPage () {
           <tr>
             <th scope="row">성별</th>
             <input         
+
             name="gender"
             type="text"
             onChange={genderHandler}
             value={gender}
+
             />
           </tr>
           <tr>
@@ -337,11 +356,13 @@ export default function JobSeekerMyPage () {
         <button onClick={CancelUpdatePassword}>취소</button>
         </>
         }
+
       <br></br>
       <WithdrawJobSeekerModal WithdrawJobseeker={WithdrawJobseeker} />
       <br></br>
       <br></br>
       <h2>경력 사항</h2>
+
       {careerList.length===0 ? 
       (<div>등록된 경력 사항이 없습니다.</div>) :
       (<table>
@@ -405,31 +426,22 @@ export default function JobSeekerMyPage () {
       </table>)
     }
     <h3>경력 사항 등록</h3>
+
       <form>
         <label>근무 회사명 : </label>
-        <input         
-        name="company"
-        type="text"
-        onChange={companyHandler}
-        />
+        <input name="company" type="text" onChange={companyHandler} />
         <label>포지션 : </label>
-        <input         
-        name="position"
-        type="text"
-        onChange={positionHandler}
-        />
+        <input name="position" type="text" onChange={positionHandler} />
         <label>근무 기간(월) : </label>
-        <input         
-        name="period"
-        type="text"
-        onChange={periodHandler}
-        placeholder="입력예시 : 3"
+        <input
+          name="period"
+          type="text"
+          onChange={periodHandler}
+          placeholder="입력예시 : 3"
         />
-        <input 
-        type="submit" 
-        value="등록"
-        onClick={createCareer} />
+        <input type="submit" value="등록" onClick={createCareer} />
       </form>
+
     <br></br>
     <h3>지원 현황</h3>
     {
@@ -463,6 +475,7 @@ export default function JobSeekerMyPage () {
       </table>)
       
     }
+
     </div>
-  )
+  );
 }

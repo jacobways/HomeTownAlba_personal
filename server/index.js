@@ -9,7 +9,7 @@ const session = require("express-session");
 const passport = require("passport");
 const { sequelize } = require("./models");
 const passportConfig = require("./passport");
-
+const multer = require("multer");
 const cookieParser = require("cookie-parser");
 
 sequelize
@@ -22,6 +22,7 @@ sequelize
   });
 
 app.use(morgan("dev"));
+app.use(express.static("public"));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -50,6 +51,33 @@ app.use(passport.session()); //id를 알아내고 그 id를 des로 넘겨줌
 
 passportConfig();
 
+// 멀터 테스트
+
+const storage = multer.diskStorage({
+  destination: "./public/img/",
+  filename: function (req, file, cb) {
+    const ext = path.extname(file.originalname);
+    cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 1000000 },
+});
+
+// app.get("/upload",(req,res)=>{
+//   res.sendFile(path.join(__dirname,"multipart.html"))
+// })
+// upload 객체를 라우터에 장착
+app.post("/upload", upload.single("image"), (req, res) => {
+  console.log("저장한 이미지", req.file);
+  res.json({
+    fileName: req.file.filename,
+  });
+});
+// 멀터 테스트
+
 const jobSeekerRouter = require("./routes/jobseeker");
 const companyRouter = require("./routes/company");
 const jobRouter = require("./routes/job");
@@ -57,6 +85,7 @@ const careerRouter = require("./routes/career.js");
 const applicantRouter = require("./routes/applicant");
 const authRouter = require("./routes/auth.js");
 const mailRouter = require("./nodemailer/node-mailer.js");
+const path = require("path");
 
 app.use("/jobseeker", jobSeekerRouter);
 app.use("/company", companyRouter);
