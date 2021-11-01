@@ -9,6 +9,7 @@ function NavBar(props) {
   //   Get요청을 위한 Mysql - Id 불러오는 요청 -> jobseeker는 /jobseeker , company는 /company
   const [Login, setLogin] = useState(false);
   const [UserId, setUserId] = useState(null); //GET요청에 사용되는 id , 해당 내용 업데이트
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/jobSeeker", { withCredentials: true })

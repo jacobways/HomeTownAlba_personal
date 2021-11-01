@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Route, Switch } from "react-router-dom";
+import axios from "axios";
 import LoginPage from "./pages/LoginPage";
 import NavBar from "./pages/NavBar";
 import RegisterPage from "./pages/RegisterPage";
@@ -16,10 +17,13 @@ import Comjob from "./components/comjob";
 import Jobkakao from "./components/JobKakao";
 import Jobregister from "./components/jobRegister";
 import Logout from "./components/kakaoLogout";
+
 import GuestMyPage from "./pages/GuestMyPage";
 import KaKaoRegister from "./components/KaKaoRegister";
 
+
 function App() {
+
   return (
     <>
       <NavBar />
@@ -29,6 +33,7 @@ function App() {
         <Route exact path="/mypage/jobseeker" component={JobSeekerMyPage} />
         <Route exact path="/map" component={Map} />
         <Route exact path="/admin" component={AdminPage} />
+
         <Route exact path="/guest/mypage" component={GuestMyPage} />
         {/* 로그인 페이지 합치는 부분 */}
         <Route exact path="/login" component={LoginPage} />
@@ -55,6 +60,7 @@ function App() {
         {/* <Route exact path="/test/logout" component={Logout} /> */}
         {/* <Route exact path="/test/choice" component={Comjob} /> */}
         {/* NavBar*/}
+
       </Switch>
     </>
   );

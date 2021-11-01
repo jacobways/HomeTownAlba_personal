@@ -13,6 +13,7 @@ companyRouter.get("/", isLoggedIn, (req, res) => {
   // console.log(req.user);
   return res.status(200).json({
     loginSuccess: req.isAuthenticated(),
+    user: req.user,
     message: "특정 사업자 불러오기",
   });
 });

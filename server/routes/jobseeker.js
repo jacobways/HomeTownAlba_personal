@@ -74,7 +74,7 @@ jobSeekerRouter.post("/login", isNotLoggedIn, (req, res, next) => {
     if (!jobSeekr) {
       return res.status(403).json({ message: "가입되지 않은 회원입니다." });
     }
-    return req.login(jobSeekr, (loginError) => {
+    return req.login(jobSeekr, loginError => {
       if (loginError) {
         console.error(loginError);
         return next(loginError);
@@ -156,7 +156,7 @@ jobSeekerRouter.delete("/", isLoggedIn, (req, res) => {
   console.log(req.user.dataValues.id);
   const jobSeekerId = req.user.dataValues.id; //mysql에서 생성해주는 id
   // id가 없는 경우는 미들웨어에 의해 걸림
-  JobSeeker.destroy({ where: { id: jobSeekerId } }).then((data) => {
+  JobSeeker.destroy({ where: { id: jobSeekerId } }).then(data => {
     if (!data) {
       res.status(404).json({ message: "일치하는 구직정보가 없습니다" });
     } else {
@@ -189,12 +189,12 @@ jobSeekerRouter.patch("/password", isLoggedIn, async (req, res) => {
           { password: hashPassword },
           { where: { id: jobSeekerId } }
         )
-          .then((data) => {
+          .then(data => {
             res
               .status(200)
               .json({ message: "입력하신 비밀번호로 수정되었습니다." });
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
             res.status(500);
           });
@@ -227,12 +227,12 @@ jobSeekerRouter.patch("/", isLoggedIn, async (req, res) => {
       { name, age, gender, image },
       { where: { id: jobSeekerId } }
     )
-      .then((data) => {
+      .then(data => {
         res
           .status(200)
           .json({ message: "입력하신 정보로 구직자의 정보가 수정되었습니다." });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         res.status(500);
       });
@@ -263,7 +263,9 @@ jobSeekerRouter.post("/kakaoJobLogin", async (req, res) => {
 });
 
 jobSeekerRouter.post("/kakaoJobRegister", async (req, res) => {
+
   let jobseekersInfo = await JobSeeker.findOne({
+
     where: { userId: req.body.userId },
   });
   if (jobseekersInfo === null) {

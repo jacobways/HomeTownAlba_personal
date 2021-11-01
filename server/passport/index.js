@@ -1,6 +1,6 @@
 const passport = require("passport");
 const local = require("./localStrategy");
-const goggle = require("./goggleStrategy");
+// const goggle = require("./goggleStrategy");
 const { JobSeeker, Company } = require("../models");
 
 module.exports = () => {
