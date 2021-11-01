@@ -7,7 +7,6 @@ export default function Map() {
 
   const [jobSeekerId, setJobSeekerId] = useState(0);
   const [Login, setLogin] = useState(false);
-  console.log('jobSeekerId', jobSeekerId)
 
   const [applyLocation, setApplyLocation] = useState([]) // 지원시 해당 위치를 지도에 띄우도록 하기 위한 state
 
@@ -380,7 +379,7 @@ export default function Map() {
         });
       }
     });
-  }, [jobSeekerId, applyLocation, startTimeFilter, endTimeFilter, minWageFilter, maxWageFilter, jobSeekerId])
+  }, [jobSeekerId, applyLocation, startTimeFilter, endTimeFilter, minWageFilter, maxWageFilter])
 
   return (
     <>
