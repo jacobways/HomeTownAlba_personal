@@ -25,6 +25,7 @@ module.exports = () => {
             const newUser = await JobSeeker.create({
               userId: profile.id,
               name: profile.displayName,
+              type: "G",
             });
             done(null, newUser);
           }

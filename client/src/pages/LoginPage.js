@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { Link, withRouter } from "react-router-dom";
+import { useHistory } from "react-router";
+import axios from "axios";
 import { useDispatch } from "react-redux";
 import { loginCompany, loginJobSeeker } from "../_actions/user_action";
+const { Kakao } = window;
 
 function LoginPage(props) {
   const [LoginDisplay, setLoginDisplay] = useState(true);
@@ -59,13 +62,70 @@ function LoginPage(props) {
 
   // Google Oauth
 
+  // 명현님 카카오 로그인
+  let history = useHistory();
+  const loginWithKakao = () => {
+    const scope = " account_email";
+    Kakao.Auth.login({
+      scope,
+      // success는 인증 정보를 응답(response)으로 받는다.
+      success: function (response) {
+        //카카오 SDK에 사용자 토큰을 설정한다.
+        window.Kakao.Auth.setAccessToken(response.access_token);
+        //console.log(`is set?: ${window.Kakao.Auth.getAccessToken()}`);
+
+        let ACCESS_TOKEN = window.Kakao.Auth.getAccessToken();
+
+        window.Kakao.API.request({
+          url: "/v2/user/me",
+          success: function ({ kakao_account }) {
+            //어떤 정보 넘어오는지 확인
+
+            const { email } = kakao_account;
+            setId(email);
+          },
+          fail: function (error) {
+            console.log(error);
+          },
+        });
+      },
+      fail: function (error) {
+        console.log(error);
+      },
+    });
+    axios
+      .post(
+        "http://localhost:5000/jobseeker/kakaoJobLogin",
+        { userId: Id },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        console.log("id", res.data);
+        if (res.data.message) {
+          history.push("/company/login");
+        } else {
+          history.push("/register");
+        }
+      });
+  };
+
   if (LoginDisplay) {
     return (
       <div>
         <button onClick={ChangeJobDisplay}>구직자</button>
         <button onClick={ChangeCompanyDisplay}>사업자</button>
 
-        <form onSubmit={JobSeekrSubmitHandler}>
+        <form
+          onSubmit={JobSeekrSubmitHandler}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <label>아이디</label>
           <input
             value={Id}
@@ -83,8 +143,10 @@ function LoginPage(props) {
           <button type="submit">로그인</button>
           {/* 구글 Oauth */}
           <a href="http://localhost:5000/auth/google">Google</a>
-
           {/* 구글 Oauth */}
+          {/* KaKao Oauth */}
+          <button onClick={loginWithKakao}>KaKao</button>
+          {/* KaKao Oauth */}
 
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
@@ -97,7 +159,15 @@ function LoginPage(props) {
         <button onClick={ChangeJobDisplay}>구직자</button>
         <button onClick={ChangeCompanyDisplay}>사업자</button>
 
-        <form onSubmit={CompanySubmitHandler}>
+        <form
+          onSubmit={CompanySubmitHandler}
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
           <label>아이디</label>
           <input
             value={Id}

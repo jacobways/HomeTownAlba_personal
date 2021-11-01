@@ -3,10 +3,56 @@ import { registerCompany, registerJobSeeker } from "../_actions/user_action";
 import { withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
+import DaumPostcode from "react-daum-postcode";
+import KaKaoRegister from "../components/KaKaoRegister";
+import KakaoR from "../components/jobRegister";
 
 function RegisterPage(props) {
-  const [RegisterDisplay, setRegisterDisplay] = useState(true);
+  const [RegisterDisplay, setRegisterDisplay] = useState("jobseeker");
   // true : 구직자 , false : 사업자
+
+  // 카카오 주소검색 API 활용 공간
+
+  const [address, setAddress] = useState(""); // 주소
+  const [addressDetail, setAddressDetail] = useState(""); // 상세주소
+
+  const [isOpenPost, setIsOpenPost] = useState(false);
+
+  const onChangeOpenPost = () => {
+    setIsOpenPost(!isOpenPost);
+  };
+
+  const onCompletePost = (data) => {
+    let fullAddr = data.address;
+    let extraAddr = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddr += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
+    }
+
+    setAddress(data.zonecode);
+    setAddressDetail(fullAddr);
+    setIsOpenPost(false);
+    console.log("주소", address);
+    console.log("상세 주소", addressDetail);
+  };
+
+  const postCodeStyle = {
+    display: "block",
+    position: "relative",
+    top: "0%",
+    width: "400px",
+    height: "400px",
+    padding: "7px",
+  };
+  // 카카오 주소검색 API 활용 공간
 
   // 구직자
 
@@ -26,19 +72,37 @@ function RegisterPage(props) {
   const [Name, setName] = useState("");
   const [Age, setAge] = useState(null);
   const [Email, setEmail] = useState("");
+  const [Gender, setGender] = useState(""); //select
   const [CompanyEmail, setCompanyEmail] = useState("");
+  const [Question, setQuestion] = useState("");
   const [CompanyName, setCompanyName] = useState("");
   const [Locations, setLocations] = useState("");
   const [BusinessNumber, setBusinessNumber] = useState("");
 
+  // 이미지 업로드 테스트
+
+  const BASE_URL = "http://localhost:5000";
+  const [Content, setContent] = useState("");
+  const [FilePath, setFilePath] = useState("");
+
+  const ImgUploadHandler = (e) => {
+    // console.log(e.target.files);
+    setContent(e.target.files[0]);
+  };
+
+  // 이미지 업로드 테스트
+
   const dispatch = useDispatch();
 
   const ChangeJobDisplay = () => {
-    setRegisterDisplay(true);
+    setRegisterDisplay("jobseeker");
   };
 
   const ChangeCompanyDisplay = () => {
-    setRegisterDisplay(false);
+    setRegisterDisplay("company");
+  };
+  const ChangeKaKaoDisplay = () => {
+    setRegisterDisplay("kakao");
   };
 
   const IdHandler = (e) => {
@@ -60,6 +124,22 @@ function RegisterPage(props) {
   const AgeHandler = (e) => {
     setAge(e.target.value);
   };
+  const genderHandler = (e) => {
+    // console.log(e.target.value);
+    setGender(e.target.value);
+  };
+  const QuestionHandler = (e) => {
+    setQuestion(e.target.value);
+  };
+  const CompanyNameHandler = (e) => {
+    setCompanyName(e.target.value);
+  };
+  const LocationHandler = (e) => {
+    setLocations(e.target.value);
+  };
+  const BusinessNumberHandler = (e) => {
+    setBusinessNumber(e.target.value);
+  };
 
   // 인증번호 입력란
   const InputHandler = (e) => {
@@ -73,6 +153,25 @@ function RegisterPage(props) {
 
   const JobSeekrSubmitHandler = (e) => {
     e.preventDefault();
+
+    // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
+
+    const formData = new FormData();
+    formData.append("image", Content);
+    console.log(formData);
+
+    axios
+      .post("http://localhost:5000/upload", formData, {
+        header: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFilePath(`${BASE_URL}/img/${res.data.fileName}`);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
 
     let authEmailData = {
       email: Email,
@@ -96,9 +195,13 @@ function RegisterPage(props) {
 
     let submitData = {
       userId: Id,
+      email: Email,
       password: Password,
       name: Name,
       age: Age,
+      gender: Gender,
+      image: FilePath,
+      question: Question,
     };
 
     // console.log("AuthCode", typeof AuthCode, AuthCode);
@@ -145,6 +248,11 @@ function RegisterPage(props) {
     let submitData = {
       userId: Id,
       password: Password,
+      email: Email,
+      companyName: CompanyName,
+      location: addressDetail,
+      businessNumber: BusinessNumber,
+      question: Question,
     };
     //   redux
     if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
@@ -159,11 +267,12 @@ function RegisterPage(props) {
     }
   };
 
-  if (RegisterDisplay) {
+  if (RegisterDisplay === "jobseeker") {
     return (
       <div>
         <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
         <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
+        <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
 
         <form
           onSubmit={finalJobSeekerSubmitHandler}
@@ -173,6 +282,7 @@ function RegisterPage(props) {
             justifyContent: "center",
             alignItems: "center",
           }}
+          encType="multipart/form-data"
         >
           <label>아이디</label>
           <input
@@ -193,6 +303,7 @@ function RegisterPage(props) {
           <label>이름</label>
 
           <input
+            required
             type="text"
             value={Name}
             onChange={NameHandler}
@@ -201,10 +312,37 @@ function RegisterPage(props) {
           <label>나이</label>
 
           <input
+            required
             type="number"
             value={Age}
             onChange={AgeHandler}
             placeholder="나이를 입력하세요"
+          />
+          <label>성별</label>
+          <select onChange={genderHandler}>
+            <option value="">--성별을 선택해주세요--</option>
+            <option value="남자">남자</option>
+            <option value="여자">여자</option>
+          </select>
+
+          <label>
+            졸업한 초등학교를 입력해주세요(비밀번호 수정을 위해 사용됩니다.)
+          </label>
+          <input
+            required
+            type="text"
+            value={Question}
+            placeholder="졸업한 초등학교를 입력해주세요"
+            onChange={QuestionHandler}
+          />
+
+          <label>프로필사진</label>
+          <input
+            required
+            name="image"
+            type="file"
+            placeholder="프로필 사진을 등록하세요"
+            onChange={ImgUploadHandler}
           />
           <label>이메일</label>
 
@@ -225,6 +363,7 @@ function RegisterPage(props) {
               <h4>회원 가입을 위한 인증번호 입니다.</h4>
               <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
               <input
+                required
                 type="text"
                 placeholder="인증번호를 입력하세요"
                 value={JobSeekerInputAuthCode}
@@ -236,11 +375,12 @@ function RegisterPage(props) {
         </form>
       </div>
     );
-  } else {
+  } else if (RegisterDisplay === "company") {
     return (
       <div>
         <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
         <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
+        <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
 
         <form
           onSubmit={finalCompanySubmitHandler}
@@ -275,6 +415,52 @@ function RegisterPage(props) {
             placeholder="인증번호 발송을 위한 이메일을 입력하세요"
           />
 
+          <label>사업자 위치</label>
+          {/* 위치 검색할수있는 input */}
+          <input
+            type="text"
+            onClick={onChangeOpenPost}
+            placeholder="클릭하셔서 사업자 위치를 검색해주세요"
+            value={addressDetail}
+          />
+          {isOpenPost ? (
+            <DaumPostcode
+              style={postCodeStyle}
+              autoClose
+              onComplete={onCompletePost}
+            />
+          ) : null}
+          {/* 위치 검색할수있는 input */}
+
+          <label>사업자 번호</label>
+
+          <input
+            required
+            type="text"
+            value={BusinessNumber}
+            onChange={BusinessNumberHandler}
+            placeholder="-를 제외하고 사업자번호를 입력하세요"
+          />
+          <label>사업자명</label>
+
+          <input
+            required
+            type="text"
+            value={CompanyName}
+            onChange={CompanyNameHandler}
+            placeholder="사업자명을 입력하세요"
+          />
+          <label>
+            자사 상품의 핵심 상품을 적어주세요(비밀번호 수정을 위해 사용됩니다.)
+          </label>
+          <input
+            required
+            type="text"
+            value={Question}
+            placeholder="자사 상품의 핵심 상품을 적어주세요"
+            onChange={QuestionHandler}
+          />
+
           <button onClick={CompanySubmitHandler}>
             이메일 인증번호를 받으시고 회원가입을 완료하세요
           </button>
@@ -294,6 +480,16 @@ function RegisterPage(props) {
           ) : null}
         </form>
       </div>
+    );
+  } else {
+    // 카카오 회원가입
+    return (
+      <>
+        <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
+        <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
+        <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
+        <KakaoR />
+      </>
     );
   }
 }
