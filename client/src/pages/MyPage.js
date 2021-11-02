@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { withRouter } from "react-router-dom";
-import JobSeekerMyPage from "../pages/JobSeekerMyPage";
-import CompanyMyPage from "../pages/CompanyMyPage";
+import JobSeekerMyPage from "./JobSeekerMyPage";
+import CompanyMyPage from "./CompanyMyPage";
 
 function AdminPage(props) {
   //   로그인한 유저의 id를 불러오기 위함
@@ -14,18 +14,17 @@ function AdminPage(props) {
     axios
       .get("http://localhost:5000", { withCredentials: true })
       .then((res) => {
-        console.log(res.data.user.type, typeof res.data.user.type);
-        setUserLoginType(res.data.user.type);
-        // if (res.data.user.type === "admin") {
-        //   console.log("관리자");
-        // } else {
-        //   props.history.push("/");
-        // }
+        // console.log(res.data.user.type, typeof res.data.user.type);
+        if (res.data.user.type) {
+          setUserLoginType(res.data.user.type);
+        } else {
+          props.history.push("/");
+        }
       });
   }, [UserLoginType]);
 
   if (
-    UserLoginType === null ||
+    UserLoginType === "job" ||
     UserLoginType === "G" ||
     UserLoginType === "K"
   ) {
