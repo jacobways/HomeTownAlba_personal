@@ -15,7 +15,7 @@ const cookieParser = require("cookie-parser");
 sequelize
   .sync({ force: false })
   .then(() => {
-    console.log("데이터 베이스 연결 성공");
+    console.log("Database connection Success");
   })
   .catch((err) => {
     console.error(err);
@@ -95,7 +95,7 @@ app.use("/applicant", applicantRouter);
 app.use("/auth", authRouter);
 app.use("/mail", mailRouter);
 
-const port = 5000;
+const port = 443;
 
 app.get("/", (req, res) => {
   // console.log("로그인했니", req.user);
