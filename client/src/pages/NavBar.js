@@ -12,7 +12,7 @@ function NavBar(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/jobSeeker", { withCredentials: true })
+      .get("http://localhost:5000", { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         if (res.data.user) {
@@ -84,8 +84,10 @@ function NavBar(props) {
     return (
       <div>
         <button onClick={LogoutHandler}>로그아웃</button>
-        <Link to="/mypage/jobseeker">구직자MyPage</Link>
-        <Link to="/mypage/company">사업자MyPage</Link>
+        <Link to="/mypage">MyPage</Link>
+
+        {/* <Link to="/mypage/jobseeker">구직자MyPage</Link> */}
+        {/* <Link to="/mypage/company">사업자MyPage</Link> */}
       </div>
     );
   } else {

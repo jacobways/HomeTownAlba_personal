@@ -5,17 +5,18 @@ import { useDispatch } from "react-redux";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
 import KakaoR from "../components/jobRegister";
+import LoadingModal from "../components/LoadingModal";
 
 function RegisterPage(props) {
   const [RegisterDisplay, setRegisterDisplay] = useState("jobseeker");
   // true : 구직자 , false : 사업자
 
   // 카카오 주소검색 API 활용 공간
-
   const [address, setAddress] = useState(""); // 주소
   const [addressDetail, setAddressDetail] = useState(""); // 상세주소
 
   const [isOpenPost, setIsOpenPost] = useState(false);
+  const [LoadingStatus, setLoadingStatus] = useState(false);
 
   const onChangeOpenPost = () => {
     setIsOpenPost(!isOpenPost);
@@ -68,6 +69,7 @@ function RegisterPage(props) {
   // 회원가입 입력정보
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const [Name, setName] = useState("");
   const [Age, setAge] = useState(null);
   const [Email, setEmail] = useState("");
@@ -75,7 +77,6 @@ function RegisterPage(props) {
   const [CompanyEmail, setCompanyEmail] = useState("");
   const [Question, setQuestion] = useState("");
   const [CompanyName, setCompanyName] = useState("");
-  const [Locations, setLocations] = useState("");
   const [BusinessNumber, setBusinessNumber] = useState("");
 
   // 이미지 업로드 테스트
@@ -110,6 +111,9 @@ function RegisterPage(props) {
   const PasswordHandler = (e) => {
     setPassword(e.target.value);
   };
+  const ConfirmPasswordHandler = (e) => {
+    setConfirmPassword(e.target.value);
+  };
   const NameHandler = (e) => {
     setName(e.target.value);
   };
@@ -133,9 +137,7 @@ function RegisterPage(props) {
   const CompanyNameHandler = (e) => {
     setCompanyName(e.target.value);
   };
-  const LocationHandler = (e) => {
-    setLocations(e.target.value);
-  };
+
   const BusinessNumberHandler = (e) => {
     setBusinessNumber(e.target.value);
   };
@@ -152,6 +154,7 @@ function RegisterPage(props) {
 
   const JobSeekrSubmitHandler = (e) => {
     e.preventDefault();
+    setLoadingStatus(true);
 
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
 
@@ -184,6 +187,7 @@ function RegisterPage(props) {
       })
       .then((res) => {
         // console.log(res.data);
+        setLoadingStatus(false);
         setJobSeekerEmailInput(true);
         setJobSeekerAuthCode(res.data);
       });
@@ -205,18 +209,21 @@ function RegisterPage(props) {
 
     // console.log("AuthCode", typeof AuthCode, AuthCode);
     // console.log("InputAuthCode", typeof InputAuthCode, InputAuthCode);
-
-    if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
-      dispatch(registerJobSeeker(submitData)).then((res) => {
-        // console.log(res.payload);
-        if (res.payload.registersuccess) {
-          props.history.push("/login");
-        } else {
-          alert("회원가입에 실패하였습니다.");
-        }
-      });
+    if (Password !== ConfirmPassword) {
+      console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
     } else {
-      console.log("인증번호가 다릅니다");
+      if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
+        dispatch(registerJobSeeker(submitData)).then((res) => {
+          // console.log(res.payload);
+          if (res.payload.registersuccess) {
+            props.history.push("/login");
+          } else {
+            alert("회원가입에 실패하였습니다.");
+          }
+        });
+      } else {
+        console.log("인증번호가 다릅니다");
+      }
     }
   };
 
@@ -225,17 +232,21 @@ function RegisterPage(props) {
   const CompanySubmitHandler = (e) => {
     e.preventDefault();
     // 회원가입할때 Db에 type이라는 field를 한개 추가
+    setLoadingStatus(true);
 
     let authEmailData = {
       email: CompanyEmail,
       //req.body.email로 바꾸어야함 -> post 2번쨰 인자로 요청에도 넣어주어야함
     };
+
     axios
       .post("http://localhost:5000/mail", authEmailData, {
         withCredentials: true,
       })
       .then((res) => {
         // console.log(res.data);
+        setLoadingStatus(false);
+
         setCompanyEmailInput(true);
         setCompanyAuthCode(res.data);
       });
@@ -254,15 +265,19 @@ function RegisterPage(props) {
       question: Question,
     };
     //   redux
-    if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
-      dispatch(registerCompany(submitData)).then((res) => {
-        // console.log(res.payload);
-        if (res.payload.registersuccess) {
-          props.history.push("/login");
-        } else {
-          alert("회원가입에 실패하였습니다.");
-        }
-      });
+    if (Password !== ConfirmPassword) {
+      console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
+    } else {
+      if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
+        dispatch(registerCompany(submitData)).then((res) => {
+          // console.log(res.payload);
+          if (res.payload.registersuccess) {
+            props.history.push("/login");
+          } else {
+            alert("회원가입에 실패하였습니다.");
+          }
+        });
+      }
     }
   };
 
@@ -298,6 +313,14 @@ function RegisterPage(props) {
             value={Password}
             onChange={PasswordHandler}
             placeholder="비밀번호를 입력하세요"
+          />
+          <label>비밀번호 확인</label>
+          <input
+            required
+            type="password"
+            value={ConfirmPassword}
+            onChange={ConfirmPasswordHandler}
+            placeholder="비밀번호를 한번 더 입력하세요"
           />
           <label>이름</label>
 
@@ -352,10 +375,14 @@ function RegisterPage(props) {
             onChange={EmailHandler}
             placeholder="인증번호 발송을 위한 이메일을 입력하세요"
           />
+          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+          {LoadingStatus && <LoadingModal />}
+          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
 
           <button onClick={JobSeekrSubmitHandler}>
             이메일 인증번호를 받으시고 회원가입을 완료하세요
           </button>
+
           {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
           {JobSeekerEmailInput ? (
             <div>
@@ -404,6 +431,16 @@ function RegisterPage(props) {
             onChange={PasswordHandler}
             placeholder="비밀번호를 입력하세요"
           />
+
+          <label>비밀번호 확인</label>
+          <input
+            required
+            type="password"
+            value={ConfirmPassword}
+            onChange={ConfirmPasswordHandler}
+            placeholder="비밀번호를 한번 더 입력하세요"
+          />
+
           <label>이메일</label>
 
           <input
@@ -459,6 +496,10 @@ function RegisterPage(props) {
             placeholder="자사 상품의 핵심 상품을 적어주세요"
             onChange={QuestionHandler}
           />
+
+          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+          {LoadingStatus && <LoadingModal />}
+          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
 
           <button onClick={CompanySubmitHandler}>
             이메일 인증번호를 받으시고 회원가입을 완료하세요
