@@ -47,7 +47,7 @@ function ApplicantInfo({ jobSeeker }) {
   useEffect(()=>{
     
     // Career 정보 받기
-    axios.get(`http://localhost:5000/career/${jobSeeker.id}`,{withCredentials: true})
+    axios.get(`${process.env.REACT_APP_serverURL}/career/${jobSeeker.id}`,{withCredentials: true})
     .then((res)=>{
       setCareerList(res.data.data)
     })

@@ -24,7 +24,7 @@ function KakaoR() {
       question: Question,
     };
     axios
-      .post("http://localhost:5000/jobseeker/kakaoJobRegister", body, {
+      .post(`${process.env.REACT_APP_serverURL}/jobseeker/kakaoJobRegister`, body, {
         withCredentials: true,
       })
       .then((res) => {

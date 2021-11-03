@@ -11,7 +11,7 @@ import axios from "axios";
 
 export function loginJobSeeker(submitData) {
   const request = axios
-    .post("http://localhost:5000/jobseeker/login", submitData, {
+    .post(`${process.env.REACT_APP_SERVER_URL}/jobseeker/login`, submitData, {
       withCredentials: true,
     })
     .then((res) => {
@@ -25,7 +25,7 @@ export function loginJobSeeker(submitData) {
 }
 export function loginCompany(submitData) {
   const request = axios
-    .post("http://localhost:5000/company/login", submitData, {
+    .post(`${process.env.REACT_APP_SERVER_URL}/company/login`, submitData, {
       withCredentials: true,
     })
     .then((res) => {
@@ -40,7 +40,7 @@ export function loginCompany(submitData) {
 
 export function registerJobSeeker(submitData) {
   const request = axios
-    .post("http://localhost:5000/jobseeker", submitData, {
+    .post(`${process.env.REACT_APP_SERVER_URL}/jobseeker`, submitData, {
       withCredentials: true,
     })
     .then((res) => {
@@ -54,7 +54,7 @@ export function registerJobSeeker(submitData) {
 }
 export function registerCompany(submitData) {
   const request = axios
-    .post("http://localhost:5000/company", submitData, {
+    .post(`${process.env.REACT_APP_SERVER_URL}/company`, submitData, {
       withCredentials: true,
     })
     .then((res) => {
@@ -69,7 +69,7 @@ export function registerCompany(submitData) {
 
 export function logoutJobSeeker() {
   const request = axios
-    .get("http://localhost:5000/jobseeker/logout", {
+    .get(`${process.env.REACT_APP_SERVER_URL}/jobseeker/logout`, {
       withCredentials: true,
     })
     .then((res) => {
@@ -85,7 +85,7 @@ export function logoutJobSeeker() {
 
 export function authJobSeeker() {
   const request = axios
-    .get("http://localhost:5000/jobseeker/auth", {
+    .get(`${process.env.REACT_APP_SERVER_URL}/jobseeker/auth`, {
       withCredentials: true,
     })
     .then((res) => {

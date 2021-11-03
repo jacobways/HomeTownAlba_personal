@@ -18,7 +18,7 @@ export default function JobSeekerMyPage() {
   const [gender, setGender] = useState("");
   const [image, setImage] = useState("");
   // 이미지 수정을 위한 변수 선언
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
   // 이미지 수정을 위한 변수 선언
@@ -78,7 +78,7 @@ export default function JobSeekerMyPage() {
 
     if (formData) {
       axios
-        .post("http://localhost:5000/upload", formData, {
+        .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
           header: { "content-type": "multipart/form-data" },
         })
         .then((res) => {
@@ -87,7 +87,7 @@ export default function JobSeekerMyPage() {
           if (FilePath) {
             axios
               .patch(
-                "http://localhost:5000/jobseeker",
+                `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
                 {
                   id: jobSeekerId,
                   image: FilePath,
@@ -112,7 +112,7 @@ export default function JobSeekerMyPage() {
 
     axios
       .patch(
-        "http://localhost:5000/jobseeker",
+        `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
         {
           id: jobSeekerId,
           name,
@@ -144,7 +144,7 @@ export default function JobSeekerMyPage() {
   const UpdatePassword = () => {
     axios
       .patch(
-        "http://localhost:5000/jobseeker/password",
+        `${process.env.REACT_APP_SERVER_URL}/jobseeker/password`,
         {
           password,
           question,
@@ -173,14 +173,14 @@ export default function JobSeekerMyPage() {
   // jobSeeker 회원 정보 탈퇴 기능 넣기
 
   const WithdrawJobseeker = () => {
-    axios.delete("http://localhost:5000/jobseeker", { withCredentials: true }); // jobSeeker 정보 삭제
+    axios.delete(`${process.env.REACT_APP_SERVER_URL}/jobseeker`, { withCredentials: true }); // jobSeeker 정보 삭제
     axios.delete(
-      "http://localhost:5000/career",
+      `${process.env.REACT_APP_SERVER_URL}/career`,
       { params: { jobSeekerId } },
       { withCredentials: true }
     ); // career 정보 삭제
     axios.delete(
-      "http://localhost:5000/applicant",
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
       { params: { jobSeekerId } },
       { withCredentials: true }
     ); // applicant 정보 삭제
@@ -204,7 +204,7 @@ export default function JobSeekerMyPage() {
   const createCareer = () => {
     axios
       .post(
-        "http://localhost:5000/career",
+        `${process.env.REACT_APP_SERVER_URL}/career`,
         {
           jobSeekerId,
           company,
@@ -229,7 +229,7 @@ export default function JobSeekerMyPage() {
     // 수정하려는 커리어 해당 항목이 state에 담기기 (id 기반 axios 요청이 있어야 할 듯?)
     axios
       .get(
-        "http://localhost:5000/career",
+        `${process.env.REACT_APP_SERVER_URL}/career`,
         { params: { id } },
         { withCredentials: true }
       )
@@ -252,7 +252,7 @@ export default function JobSeekerMyPage() {
     setCareerUpdating({ ...careerUpdating, [idx]: false });
     axios
       .patch(
-        "http://localhost:5000/career",
+        `${process.env.REACT_APP_SERVER_URL}/career`,
         {
           id,
           jobSeekerId,
@@ -272,7 +272,7 @@ export default function JobSeekerMyPage() {
 
   const deleteCareer = (id) => {
     axios
-      .delete(`http://localhost:5000/career/${id}`, { withCredentials: true })
+      .delete(`${process.env.REACT_APP_SERVER_URL}/career/${id}`, { withCredentials: true })
       .then((res) => {
         setEventStatus(!eventStatus);
       })
@@ -285,7 +285,7 @@ export default function JobSeekerMyPage() {
   const CancelApply = (jobId) => {
     axios
       .delete(
-        "http://localhost:5000/applicant",
+        `${process.env.REACT_APP_SERVER_URL}/applicant`,
         { params: { jobId, jobSeekerId: jobSeekerId } },
         { withCredentials: true }
       )
@@ -297,7 +297,7 @@ export default function JobSeekerMyPage() {
   useEffect(() => {
     // JobSeeker 정보 받기 (동혁님 전달 코드)
     axios
-      .get("http://localhost:5000", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
       .then((res) => {
         let jobSeekerInfo = res.data.user;
         setJobSeekerId(jobSeekerInfo.id);
@@ -316,7 +316,7 @@ export default function JobSeekerMyPage() {
     // Career 정보 받기
 
     axios
-      .get(`http://localhost:5000/career/${jobSeekerId}`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/career/${jobSeekerId}`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -328,7 +328,7 @@ export default function JobSeekerMyPage() {
 
     // applicant 테이블 통해 지원한 jobList 받기
     axios
-      .get(`http://localhost:5000/applicant/job/${jobSeekerId}`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/applicant/job/${jobSeekerId}`, {
         withCredentials: true,
       })
       .then((res) => {

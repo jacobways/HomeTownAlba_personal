@@ -13,7 +13,6 @@ export default function CompanyMyPage() {
 
   // company 회원 정보
   const [companyId, setCompanyId] = useState(0); // Company 테이블의 id이자 Job 테이블의 companyId
-  console.log(companyId);
 
   // Company 테이블의 나머지 정보
   const [companyName, setCompanyName] = useState("");
@@ -21,11 +20,8 @@ export default function CompanyMyPage() {
   const [businessNumber, setBusinessNumber] = useState("");
 
   // 사업자위치 state
-  const [addressDetail, setAddressDetail] = useState(""); // 상세주소
-  const [isOpenPost, setIsOpenPost] = useState(false);
-  const [address, setAddress] = useState(""); // 주소
-
-  // 사업자위치 state
+  const [isOpenCompanyPost, setIsOpenCompanyPost] = useState(false);
+  const [companyAddress, setCompanyAddress] = useState(""); // 주소
 
   const [password, setPassword] = useState("");
   const [question, setQuestion] = useState("");
@@ -38,6 +34,8 @@ export default function CompanyMyPage() {
 
   // job 정보
   const [jobLocation, setJobLocation] = useState("");
+  const [isOpenJobPost, setIsOpenJobPost] = useState(false);
+  const [jobAddress, setJobAddress] = useState(""); // 주소
 
   const [day, setDay] = useState([]);
   const [mon, setMon] = useState([]);
@@ -72,18 +70,49 @@ export default function CompanyMyPage() {
     setCompanyName(event.target.value);
   };
 
-  const companyLocationHandler = (event) => {
-    setCompanyLocation(event.target.value);
-  };
-
   const businessNumberHandler = (event) => {
     setBusinessNumber(event.target.value);
   };
 
-  // company 사업자 위치 수정용
-  const onChangeOpenPost = () => {
-    setIsOpenPost(!isOpenPost);
+  // company 사업자 위치 수정창 오픈
+  const OpenCompanyPost = () => {
+    setIsOpenCompanyPost(!isOpenCompanyPost);
   };
+
+  const CancelCompanyPost = () => {
+    setIsOpenCompanyPost(false);
+  }
+
+  // 카카오 지도 API 활용하여 주소 선택 후 닫기
+  const CompleteCompanyPost = (data) => {
+    let fullAddr = data.address;
+    let extraAddr = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddr += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
+    }
+
+    setCompanyAddress(data.zonecode);
+    setCompanyLocation(fullAddr);
+    setIsOpenCompanyPost(false);
+  };
+
+  const postCodeStyle = {
+    display: "block",
+    position: "relative",
+    top: "0%",
+    width: "400px",
+    height: "400px",
+    padding: "7px",
+  };
+  // 카카오 주소검색 API 활용 공간
 
   // company 회원정보를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
   const companyHandler = () => {
@@ -94,11 +123,11 @@ export default function CompanyMyPage() {
   const updateCompany = () => {
     axios
       .patch(
-        "http://localhost:5000/company",
+        `${process.env.REACT_APP_SERVER_URL}/company`,
         {
           id: companyId,
           name: companyName,
-          location: addressDetail,
+          location: companyLocation,
           businessNumber,
         },
         { withCredentials: true }
@@ -126,7 +155,7 @@ export default function CompanyMyPage() {
   const UpdatePassword = () => {
     axios
       .patch(
-        `http://localhost:5000/company/password`,
+        `${process.env.REACT_APP_SERVER_URL}/company/password`,
         {
           password,
           question,
@@ -154,9 +183,9 @@ export default function CompanyMyPage() {
 
   // company 회원 정보 탈퇴 기능 넣기
   const WithdrawCompany = () => {
-    axios.delete("http://localhost:5000/company", { withCredentials: true }); // company 회원정보 삭제
+    axios.delete(`${process.env.REACT_APP_SERVER_URL}/company`, { withCredentials: true }); // company 회원정보 삭제
     axios.delete(
-      "http://localhost:5000/job",
+      `${process.env.REACT_APP_SERVER_URL}/job`,
       { params: { companyId } },
       { withCredentials: true }
     ); // company의 job과 관련 applicant 모두 삭제
@@ -165,8 +194,34 @@ export default function CompanyMyPage() {
 
   // job 정보 생성 및 수정용
 
-  const jobLocationHandler = (event) => {
-    setJobLocation(event.target.value);
+  // company 사업자 위치 수정창 오픈
+  const OpenJobPost = () => {
+    setIsOpenJobPost(!isOpenJobPost);
+  };
+
+  const CancelJobPost = () => {
+    setIsOpenJobPost(false);
+  }
+
+  // 카카오 지도 API 활용하여 주소 선택 후 닫기
+  const CompleteJobPost = (data) => {
+    let fullAddr = data.address;
+    let extraAddr = "";
+
+    if (data.addressType === "R") {
+      if (data.bname !== "") {
+        extraAddr += data.bname;
+      }
+      if (data.buildingName !== "") {
+        extraAddr +=
+          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
+    }
+
+    setJobAddress(data.zonecode);
+    setJobLocation(fullAddr);
+    setIsOpenJobPost(false);
   };
 
   // check된 요일을 day state에 모아주기
@@ -267,7 +322,7 @@ export default function CompanyMyPage() {
     } else {
       axios
         .post(
-          "http://localhost:5000/job",
+          `${process.env.REACT_APP_SERVER_URL}/job`,
           {
             companyId,
             companyName,
@@ -289,7 +344,7 @@ export default function CompanyMyPage() {
   // 일자리 삭제하기
   const DeleteJob = (jobId) => {
     axios
-      .delete(`http://localhost:5000/job/${jobId}`, { withCredentials: true })
+      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
       .then((res) => {
         setEventStatus(!eventStatus);
       })
@@ -299,7 +354,7 @@ export default function CompanyMyPage() {
 
     // 일자리에 묶인 지원자들도 삭제하기
     axios.delete(
-      "http://localhost:5000/applicant",
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
       { params: { jobId } },
       { withCredentials: true }
     );
@@ -313,7 +368,7 @@ export default function CompanyMyPage() {
   const openApplicantList = (idx, jobId) => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: true });
     axios
-      .get(`http://localhost:5000/applicant/jobseeker/${jobId}`, {
+      .get(`${process.env.REACT_APP_SERVER_URL}/applicant/jobseeker/${jobId}`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -338,7 +393,7 @@ export default function CompanyMyPage() {
   const RejectApply = (idx, jobId, jobSeekerId) => {
     axios
       .delete(
-        `http://localhost:5000/applicant`,
+        `${process.env.REACT_APP_SERVER_URL}/applicant`,
         { params: { jobId, jobSeekerId } },
         { withCredentials: true }
       )
@@ -351,22 +406,10 @@ export default function CompanyMyPage() {
   };
 
   useEffect(() => {
-    // company 정보 받기
-    // axios.get(`http://localhost:5000/company/${companyId}`, {withCredentials: true})
-    // .then((res)=>{
-    //   let companyInfo = res.data.data;
-    //   setCompanyId(companyInfo.id)
-    //   setCompanyName(companyInfo.name)
-    //   setCompanyLocation(companyInfo.location)
-    //   setBusinessNumber(companyInfo.businessNumber)
-    // })
-    // .catch((err)=>{
-    //   console.log(err)
-    // })
 
-    // company 정보 불러오기 : 동혁님과 협의하기
+    // company 정보 불러오기
     axios
-      .get(`http://localhost:5000`, { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
       .then((res) => {
         let companyInfo = res.data.user;
         setCompanyId(companyInfo.id);
@@ -380,7 +423,7 @@ export default function CompanyMyPage() {
 
     // job 정보 받기
     axios
-      .get(`http://localhost:5000/job/${companyId}`, { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/job/${companyId}`, { withCredentials: true })
       .then((res) => {
         setJobList(res.data.data);
       })
@@ -396,38 +439,7 @@ export default function CompanyMyPage() {
 
   // 구인내역 클릭하면 지원자 현황 표시됨
 
-  // 카카오 지도 API 활용
-  const onCompletePost = (data) => {
-    let fullAddr = data.address;
-    let extraAddr = "";
 
-    if (data.addressType === "R") {
-      if (data.bname !== "") {
-        extraAddr += data.bname;
-      }
-      if (data.buildingName !== "") {
-        extraAddr +=
-          extraAddr !== "" ? `, ${data.buildingName}` : data.buildingName;
-      }
-      fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
-    }
-
-    setAddress(data.zonecode);
-    setAddressDetail(fullAddr);
-    setIsOpenPost(false);
-    console.log("주소", address);
-    console.log("상세 주소", addressDetail);
-  };
-
-  const postCodeStyle = {
-    display: "block",
-    position: "relative",
-    top: "0%",
-    width: "400px",
-    height: "400px",
-    padding: "7px",
-  };
-  // 카카오 주소검색 API 활용 공간
   return (
     <>
       <h1>사업자 마이페이지</h1>
@@ -464,19 +476,18 @@ export default function CompanyMyPage() {
           </tr>
           <tr>
             <th scope="row">회사 주소</th>
-            <input
-              name="companyLocation"
-              type="text"
-              placeholder="클릭하셔서 사업자 위치를 수정해주세요"
-              onClick={onChangeOpenPost}
-              value={addressDetail}
-            />
-            {isOpenPost ? (
+            <td>{companyLocation}</td>
+            <button onClick={OpenCompanyPost}>주소창 열기</button>
+            {isOpenCompanyPost ? (
+              <>
               <DaumPostcode
+                onClick={OpenCompanyPost}
                 style={postCodeStyle}
                 autoClose
-                onComplete={onCompletePost}
+                onComplete={CompleteCompanyPost}
               />
+              <button onClick={CancelCompanyPost}>주소창 닫기</button>
+              </>
             ) : null}
             {/* 위치 검색할수있는 input */}
           </tr>
@@ -516,12 +527,22 @@ export default function CompanyMyPage() {
         <label>
           {" "}
           주소 :
-          <textarea
+          <input
             name="location"
-            onChange={jobLocationHandler}
-            rows="3"
-            cols="20"
+            onClick={OpenJobPost}
+            placeholder="클릭하셔서 주소를 검색해주세요"
+            value={jobLocation}
           />
+            {isOpenJobPost ? (
+            <>
+            <DaumPostcode
+              onClick={OpenJobPost}
+              style={postCodeStyle}
+              autoClose
+              onComplete={CompleteJobPost}
+            />
+            </>
+          ) : null}
         </label>
         <label>
           {" "}

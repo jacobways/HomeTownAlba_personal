@@ -81,7 +81,7 @@ function RegisterPage(props) {
 
   // 이미지 업로드 테스트
 
-  const BASE_URL = "http://localhost:5000";
+  const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
 
@@ -163,7 +163,7 @@ function RegisterPage(props) {
     console.log(formData);
 
     axios
-      .post("http://localhost:5000/upload", formData, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
       .then((res) => {
@@ -182,7 +182,7 @@ function RegisterPage(props) {
 
     //   redux
     axios
-      .post("http://localhost:5000/mail", authEmailData, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
       .then((res) => {
@@ -240,7 +240,7 @@ function RegisterPage(props) {
     };
 
     axios
-      .post("http://localhost:5000/mail", authEmailData, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
       .then((res) => {
