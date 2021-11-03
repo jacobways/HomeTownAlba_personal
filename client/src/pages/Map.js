@@ -5,6 +5,7 @@ import "./Map.css";
 
 const { kakao } = window;
 export default function Map() {
+    
   const [jobSeekerId, setJobSeekerId] = useState(0);
   const [Login, setLogin] = useState(false);
   const [applyLocation, setApplyLocation] = useState([]); // 지원시 해당 위치를 지도에 띄우도록 하기 위한 state
@@ -52,7 +53,7 @@ export default function Map() {
   //로그인 정보 불러오는 이팩트
   useEffect(() => {
     axios
-      .get("http://localhost:5000/jobSeeker", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/jobSeeker`, { withCredentials: true })
       .then(res => {
         console.log(res.data);
         if (res.data.user) {
@@ -67,7 +68,7 @@ export default function Map() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/job")
+      .get(`${process.env.REACT_APP_SERVER_URL}/job`)
       .then(res => {
         // 시간 관련 필터기능 입력
         if (startTimeFilter && endTimeFilter) {
@@ -138,49 +139,9 @@ export default function Map() {
         if (applyLocation.length === 0) {
           // 지원 또는 지원 취소시 지도가 해당 일자리로 이동하므로, 이 경우는 제외하기
           if (place) {
-            // // 검색한 장소가 있는 경우
-            // const ps = new kakao.maps.services.Places();
-            // ps.keywordSearch(place, placesSearchCB);
-            // function placesSearchCB(data, status, pagination) {
-            //   if (status === kakao.maps.services.Status.OK) {
-            //     let bounds = new kakao.maps.LatLngBounds();
-            //     for (let i = 0; i < data.length; i++) {
-            //       bounds.extend(new kakao.maps.LatLng(data[i].y, data[i].x));
-            //     }
-            //     console.log(placesData);
-            //     map.setBounds(bounds);
-            //     // displayPagination(pagination);
-            //     // setPlacesData(data);
-            //   }
-            // }
-            // 검색결과 목록 하단에 페이지 번호 표시
-            // function displayPagination(pagination) {
-            //   var paginationEl = document.getElementById("pagination"),
-            //     fragment = document.createDocumentFragment(),
-            //     i;
-            //   // 기존에 추가된 페이지 번호 삭제
-            //   while (paginationEl.hasChildNodes()) {
-            //     paginationEl.removeChild(paginationEl.lastChild);
-            //   }
-            //   for (i = 1; i <= pagination.last; i++) {
-            //     var el = document.createElement("a");
-            //     el.href = "#";
-            //     el.textContent = i;
-            //     if (i === pagination.current) {
-            //       el.className = "on";
-            //     } else {
-            //       el.onclick = (function (i) {
-            //         return function () {
-            //           pagination.gotoPage(i);
-            //         };
-            //       })(i);
-            //     }
-            //     fragment.appendChild(el);
-            //   }
-            //   paginationEl.appendChild(fragment);
-            // }
+
             axios
-              .get("http://localhost:5000/job")
+              .get(`${process.env.REACT_APP_SERVER_URL}/job`)
               .then(res => {
                 return res.data.data.filter(x => {
                   return x.location.includes(place);
@@ -202,7 +163,7 @@ export default function Map() {
                         );
                         // 지원 여부에 따라, 마커 및 클릭 infowindow를 다르게 표시하기
                         axios
-                          .get("http://localhost:5000/applicant", {
+                          .get(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
                             params: { jobId: data[i].id, jobSeekerId },
                           })
                           .then(applicant => {
@@ -276,7 +237,7 @@ export default function Map() {
                               btn.onclick = () => {
                                 axios
                                   .delete(
-                                    "http://localhost:5000/applicant",
+                                    `${process.env.REACT_APP_SERVER_URL}/applicant`,
                                     {
                                       params: {
                                         jobId: data[i].id,
@@ -379,7 +340,7 @@ export default function Map() {
                               btn.textContent = "지원하기";
                               btn.onclick = () => {
                                 axios
-                                  .post("http://localhost:5000/applicant", {
+                                  .post(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
                                     jobId: data[i].id,
                                     jobSeekerId,
                                   })
@@ -467,7 +428,7 @@ export default function Map() {
 
               // 지원 여부에 따라, 마커 및 클릭 infowindow를 다르게 표시하기
               axios
-                .get("http://localhost:5000/applicant", {
+                .get(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
                   params: { jobId: data[i].id, jobSeekerId },
                 })
                 .then(applicant => {
@@ -545,7 +506,7 @@ export default function Map() {
                     btn.onclick = () => {
                       axios
                         .delete(
-                          "http://localhost:5000/applicant",
+                          `${process.env.REACT_APP_SERVER_URL}/applicant`,
                           {
                             params: { jobId: data[i].id, jobSeekerId },
                           },
@@ -639,7 +600,7 @@ export default function Map() {
                     btn.textContent = "지원하기";
                     btn.onclick = () => {
                       axios
-                        .post("http://localhost:5000/applicant", {
+                        .post(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
                           jobId: data[i].id,
                           jobSeekerId,
                         })

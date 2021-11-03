@@ -38,7 +38,7 @@ function KakaoLogin() {
     });
     axios
       .post(
-        "http://localhost:5000/jobseeker/kakaoJobLogin",
+        `${process.env.REACT_APP_serverURL}/jobseeker/kakaoJobLogin`,
         { userId: Id },
         {
           withCredentials: true,

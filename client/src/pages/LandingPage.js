@@ -7,7 +7,7 @@ import "./LandingPage.css";
 function LandingPage() {
   const getHandler = () => {
     axios
-      .get("http://localhost:5000/jobseeker", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}/jobseeker`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
       });

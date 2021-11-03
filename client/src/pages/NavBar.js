@@ -12,7 +12,7 @@ function NavBar(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         if (res.data.user) {

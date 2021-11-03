@@ -12,7 +12,7 @@ function AdminPage(props) {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000", { withCredentials: true })
+      .get(`${process.env.REACT_APP_serverURL}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data.user.type, typeof res.data.user.type);
         setUserLoginType(res.data.user.type);

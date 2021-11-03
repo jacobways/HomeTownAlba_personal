@@ -13,6 +13,8 @@ function LoginPage(props) {
   const [Password, setPassword] = useState("");
   const dispatch = useDispatch();
 
+  const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`
+
   const ChangeJobDisplay = () => {
     setLoginDisplay(true);
   };
@@ -95,7 +97,7 @@ function LoginPage(props) {
     });
     axios
       .post(
-        "http://localhost:5000/jobseeker/kakaoJobLogin",
+        `${process.env.REACT_APP_SERVER_URL}/jobseeker/kakaoJobLogin`,
         { userId: Id },
         {
           withCredentials: true,
@@ -142,7 +144,7 @@ function LoginPage(props) {
           />
           <button type="submit">로그인</button>
           {/* 구글 Oauth */}
-          <a href="http://localhost:5000/auth/google">Google</a>
+          <a href={loginURL}>Google</a>
           {/* 구글 Oauth */}
           {/* KaKao Oauth */}
           <button onClick={loginWithKakao}>KaKao</button>

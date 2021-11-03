@@ -70,7 +70,7 @@ function Register() {
       };
       console.log(body);
       axios
-        .post("https://localhost:5000/register", body, {
+        .post(`${process.env.REACT_APP_serverURL}/register`, body, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         })
