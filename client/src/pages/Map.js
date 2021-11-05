@@ -17,10 +17,7 @@ export default function Map() {
 
   const [mapLocation, setMapLocation] = useState([37.5665406708322, 126.97787259165268]);   //[위도, 경도]
   const [mapLevel, setMapLevel] = useState(6);
-  console.log('mapLocation', mapLocation)
-  console.log('mapLevel', mapLevel)
-  
-  
+
   const [searchPlace, setSearchPlace] = useState(""); // 장소 검색 키워드
   const [searchLocation, setSearchLocation] = useState(""); // 장소 검색 결과 (useEffect 조건으로 사용 위해 searchPlace와 분리)
   
@@ -60,7 +57,6 @@ export default function Map() {
     // setSearchPlace(""); 검색 기록을 남기지 않으려면 이 주석을 해제
     setApplyLocation([]);
     mapLocationBySearch(searchPlace);  // 일단 초기화 시키고, 검색 장소로 이동 후 값 넣어주기
-    console.log('검색 클릭 완료')
   };
 
   // 검색된 장소의 위치가 mapLocation State에 저장되도록 하는 핸들러
@@ -73,7 +69,6 @@ export default function Map() {
       if (status === kakao.maps.services.Status.OK) {
 
         setMapLocation([parseFloat(data[0].y), parseFloat(data[0].x)])
-        console.log('검색 클릭 후 MapLocation에 검색된 위치 좌표 담기')
       }
     }
   }
@@ -88,6 +83,20 @@ export default function Map() {
     setApplyLocation([]);
     setSearchLocation("")
     setMapLocation([parseFloat(latitude), parseFloat(longitude)])
+  }
+
+  // 숫자에 콤마를 붙이는 함수
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  }
+
+  // 숫자에 콤마 제거 방법 : parseInt('12,345'.replace(/,/g, ""))
+
+  // 시간에서 초를 제외하고 시, 분 만 표시하는 함수
+  function simplifyTime(time) {
+    //시-분-초 형태로 된 시간 데이터를 시-분으로 간단히 변경하기 위한 함수
+    if (!time) return time;
+    return time[0] + time[1] + time[2] + time[3] + time[4];
   }
 
   //로그인 정보 불러오는 이팩트
@@ -218,7 +227,6 @@ export default function Map() {
         
         // 지도 확대 레벨을 state에 저장
         setMapLevel(level)
-        console.log('setMapLevel 발동')
       });
 
 
@@ -248,8 +256,6 @@ export default function Map() {
             );
             map.setCenter(locPosition);
 
-
-            console.log('검색한 곳으로 지도 이동')
           }
         }
 
@@ -302,7 +308,6 @@ export default function Map() {
         setApplyLocation([])
         setSearchLocation("")
         setMapLocation([latlng.Ma, latlng.La])
-        console.log('드래그 통한 setMapLocation 발동')
       });
 
 
@@ -380,8 +385,8 @@ export default function Map() {
                   content: 
                   `<div style="width:230px;text-align:center;padding:6px 0;">
                     <div>근무요일 : ${JSON.parse(data[i].day)}</div>
-                    <div>하루 근무시간 : ${data[i].startTime}~${data[i].endTime}</div>
-                    <div>월급여 : ${data[i].monthlyWage}</div>
+                    <div>하루 근무시간 : ${simplifyTime(data[i].startTime)}~${simplifyTime(data[i].endTime)}</div>
+                    <div>월급여 : ${numberWithCommas(data[i].monthlyWage)}원</div>
                     <div>포지션 : ${data[i].position}</div>
                   </div>`,
                 });
@@ -394,11 +399,11 @@ export default function Map() {
                 let day = document.createElement("div");
                 day.textContent = `근무요일 : ${JSON.parse(data[i].day)}`;
                 let time = document.createElement("div");
-                time.textContent = `근무시간 : ${data[i].startTime}~${data[i].endTime}(${data[i].time}시간)`;
+                time.textContent = `근무시간 : ${simplifyTime(data[i].startTime)}~${simplifyTime(data[i].endTime)}(${data[i].time}시간)`;
                 let hourlyWage = document.createElement("div");
-                hourlyWage.textContent = `시급 : ${data[i].hourlyWage}`;
+                hourlyWage.textContent = `시급 : ${numberWithCommas(data[i].hourlyWage)}원`;
                 let monthlyWage = document.createElement("div");
-                monthlyWage.textContent = `예상 월급여 : ${data[i].monthlyWage}`;
+                monthlyWage.textContent = `예상 월급여 : ${numberWithCommas(data[i].monthlyWage)}원`;
                 let position = document.createElement("div");
                 position.textContent = `포지션 : ${data[i].position}`;
 
@@ -525,33 +530,22 @@ export default function Map() {
       <div>
         <h2>검색 필터 기능</h2>
         <label>최소 월급 : </label>
-        <input
-          name="minWage"
-          type="text"
-          list="minWage"
-          onChange={minWageFilterHandler}
-        />
-        <datalist id="minWage">
-          <option value="0"></option>
-          <option value="300000"></option>
-          <option value="600000"></option>
-          <option value="900000"></option>
-          <option value="1200000"></option>
-        </datalist>
+          <select onChange={minWageFilterHandler}>
+            <option value="">--선택하지 않기--</option>
+            <option value="300000">300,000원</option>
+            <option value="600000">600,000원</option>
+            <option value="900000">900,000원</option>
+            <option value="1200000">1,200,000원</option>
+          </select>
         <label>최대 월급 : </label>
-        <input
-          name="maxWage"
-          type="text"
-          list="maxWage"
-          onChange={maxWageFilterHandler}
-        />
-        <datalist id="maxWage">
-          <option value="300000"></option>
-          <option value="600000"></option>
-          <option value="900000"></option>
-          <option value="1200000"></option>
-          <option value="1500000"></option>
-        </datalist>
+        <select onChange={maxWageFilterHandler}>
+          <option value="">--선택하지 않기--</option>
+          <option value="300000">300,000원</option>
+          <option value="600000">600,000원</option>
+          <option value="900000">900,000원</option>
+          <option value="1200000">1,200,000원</option>
+          <option value="1500000">1,500,000원</option>
+        </select>
         <label>시작 시간 : </label>
         <input
           name="startTime"
