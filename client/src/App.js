@@ -8,6 +8,7 @@ import JobSeekerMyPage from "./pages/JobSeekerMyPage";
 import LandingPage from "./pages/LandingPage.js";
 
 import Map from "./pages/Map";
+import MapTest from "./pages/MapTest";
 import AdminPage from "./components/AdminPage";
 
 import GuestMyPage from "./pages/GuestMyPage";
@@ -23,6 +24,7 @@ function App() {
         {/* <Route exact path="/mypage/company" component={CompanyMyPage} /> */}
         {/* <Route exact path="/mypage/jobseeker" component={JobSeekerMyPage} /> */}
         <Route exact path="/map" component={Map} />
+        <Route exact path="/maptest" component={MapTest} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/guest/mypage" component={GuestMyPage} />
         <Route exact path="/login" component={LoginPage} />

@@ -6,6 +6,7 @@ import RejectApplyModal from "../components/MyPageModal/Modal_RejectApply";
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import WithdrawCompanyModal from "../components/MyPageModal/Modal_WithdrawCompany";
 import DaumPostcode from "react-daum-postcode";
+const { kakao } = window;
 
 // 사업자 마이페이지
 export default function CompanyMyPage() {
@@ -21,7 +22,7 @@ export default function CompanyMyPage() {
 
   // 사업자위치 state
   const [isOpenCompanyPost, setIsOpenCompanyPost] = useState(false);
-  const [companyAddress, setCompanyAddress] = useState(""); // 주소
+  const [companyZipCode, setCompanyZipCode] = useState(""); // 회사 우편번호
 
   const [password, setPassword] = useState("");
   const [question, setQuestion] = useState("");
@@ -33,9 +34,13 @@ export default function CompanyMyPage() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(""); // 비밀번호 입력 실패시 메세지
 
   // job 정보
-  const [jobLocation, setJobLocation] = useState("");
+  const [jobLocation, setJobLocation] = useState("");  // DB에 등록될 일자리 주소
   const [isOpenJobPost, setIsOpenJobPost] = useState(false);
-  const [jobAddress, setJobAddress] = useState(""); // 주소
+  const [jobZipCode, setJobZipCode] = useState(""); // 우편번호
+  const [latitude, setLatitude] = useState(0)    // 일자리의 위치의 위도
+  const [longitude, setLongitude] = useState(0)  // 일자리 위치의 경도
+  console.log(latitude)
+  console.log(longitude)
 
   const [day, setDay] = useState([]);
   const [mon, setMon] = useState([]);
@@ -98,8 +103,7 @@ export default function CompanyMyPage() {
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
-
-    setCompanyAddress(data.zonecode);
+    setCompanyZipCode(data.zonecode);
     setCompanyLocation(fullAddr);
     setIsOpenCompanyPost(false);
   };
@@ -203,7 +207,7 @@ export default function CompanyMyPage() {
     setIsOpenJobPost(false);
   }
 
-  // 카카오 지도 API 활용하여 주소 선택 후 닫기
+  // 카카오 지도 API 활용하여 Job 주소 선택 후 닫기
   const CompleteJobPost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
@@ -219,10 +223,25 @@ export default function CompanyMyPage() {
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
 
-    setJobAddress(data.zonecode);
+    setJobZipCode(data.zonecode);
     setJobLocation(fullAddr);
     setIsOpenJobPost(false);
+    ChangeLocationToCoordinate(fullAddr)
   };
+
+  // 카카오 API를 통해 주소를 위도와 경도로 좌표로 저장하기
+  const ChangeLocationToCoordinate = (location) => {
+
+    // 주소-좌표 변환 객체를 생성합니다
+    let geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(location, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          
+          setLatitude(result[0].y)
+          setLongitude(result[0].x)
+        }
+      })
+  }
 
   // check된 요일을 day state에 모아주기
   const dayHandler = () => {
@@ -327,6 +346,8 @@ export default function CompanyMyPage() {
             companyId,
             companyName,
             location: jobLocation,
+            latitude,
+            longitude,
             day,
             startTime,
             endTime,

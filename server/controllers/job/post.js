@@ -5,7 +5,7 @@ const calculateMonthlyWage = require('./calculateMonthlyWage')
 // companyId를 통해 해당 company가 등록한 job을 모두 불러오는 컨트롤러
 module.exports = (req, res) => {
 
-  const { companyId, companyName, location, day, startTime, endTime, position, hourlyWage} = req.body
+  const { companyId, companyName, location, latitude, longitude, day, startTime, endTime, position, hourlyWage} = req.body
 
   if(!companyId && !companyName && !location && !day && !startTime && !endTime && !position && !hourlyWage) {
     res.status(400).send('데이터가 불충분합니다.')
@@ -22,6 +22,8 @@ module.exports = (req, res) => {
       companyId, 
       companyName, 
       location, 
+      latitude, 
+      longitude,
       day: dayJSON, 
       startTime, 
       endTime, 
