@@ -37,7 +37,7 @@ module.exports = async (req, res) => {
         });
 
         let emailTemplete = `
-        <h2>아래 사업장으로부터 지원이 승인되었습니다</h2>
+        <h2>아래 사업장으로부터 지원이 승인되었습니다.</h2>
         <br></br>
         <span>회사명 : ${jobInfo.dataValues.companyName}</span>
         <br></br>

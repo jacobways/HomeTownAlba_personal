@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
         });
 
         let emailTemplete = `
-        <h2>아래 일자리가 삭제되어 지원이 자동으로 취소되었습니다</h2>
+        <h2>아래 일자리가 삭제되어 지원이 자동으로 취소되었습니다.</h2>
         <br></br>
         <span>회사명 : ${jobInfo.dataValues.companyName}</span>
         <br></br>
