@@ -5,6 +5,9 @@ module.exports = {
   delete: require('./delete.js'),
   getJobSeeker: require('./getJobSeeker.js'),
   getAllJobSeeker: require('./getAllJobSeeker.js'),
-  getAllJob: require('./getAllJob.js'),
-  get: require('./get.js')
+  getAllWaitingJob: require('./getAllWaitingJob.js'),
+  getAllJobResult: require('./getAllJobResult.js'),
+  get: require('./get.js'),
+  reject: require('./reject'),
+  accept: require('./accept')
 }

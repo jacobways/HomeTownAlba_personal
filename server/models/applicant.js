@@ -15,7 +15,8 @@ module.exports = (sequelize, DataTypes) => {
   };
   Applicant.init({
     jobId: DataTypes.INTEGER,
-    jobSeekerId: DataTypes.INTEGER
+    jobSeekerId: DataTypes.INTEGER,
+    status: {type: DataTypes.STRING, defaultValue: 'waiting'}
   }, {
     sequelize,
     modelName: 'Applicant',

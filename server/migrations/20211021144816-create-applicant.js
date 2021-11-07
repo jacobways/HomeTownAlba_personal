@@ -14,6 +14,10 @@ module.exports = {
       jobSeekerId: {
         type: Sequelize.INTEGER
       },
+      status: {
+        type: Sequelize.STRING,
+        defaultValue: 'waiting'
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

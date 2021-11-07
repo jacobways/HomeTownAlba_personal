@@ -5,8 +5,11 @@ const applicantController = require("../controllers/applicant");
 router.post("/", applicantController.post);
 router.get("/jobseeker/:jobId", applicantController.getAllJobSeeker);
 router.get("/jobseeker", applicantController.getJobSeeker);
-router.get("/job/:jobSeekerId", applicantController.getAllJob)
+router.get("/job/:jobSeekerId", applicantController.getAllWaitingJob)
+router.get("/job", applicantController.getAllJobResult)
 router.get("/", applicantController.get);
 router.delete("/", applicantController.delete);
+router.patch("/", applicantController.reject);
+router.patch("/status", applicantController.accept)
 
 module.exports = router;

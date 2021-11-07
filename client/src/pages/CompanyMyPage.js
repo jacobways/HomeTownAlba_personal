@@ -3,6 +3,7 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import DeleteJobModal from "../components/MyPageModal/Modal_DeleteJob";
 import RejectApplyModal from "../components/MyPageModal/Modal_RejectApply";
+import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply"
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import WithdrawCompanyModal from "../components/MyPageModal/Modal_WithdrawCompany";
 import DaumPostcode from "react-daum-postcode";
@@ -39,8 +40,6 @@ export default function CompanyMyPage() {
   const [jobZipCode, setJobZipCode] = useState(""); // 우편번호
   const [latitude, setLatitude] = useState(0)    // 일자리의 위치의 위도
   const [longitude, setLongitude] = useState(0)  // 일자리 위치의 경도
-  console.log(latitude)
-  console.log(longitude)
 
   const [day, setDay] = useState([]);
   const [mon, setMon] = useState([]);
@@ -67,6 +66,7 @@ export default function CompanyMyPage() {
   const [jobList, setJobList] = useState("");
   const [applicantList, setApplicantList] = useState({}); // 객체이며 key 는 idx 값
   const [showingApplicantList, setShowingApplicantList] = useState({});
+  const [applyStatusList, setApplyStatusList] = useState({});
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
 
@@ -364,21 +364,25 @@ export default function CompanyMyPage() {
 
   // 일자리 삭제하기
   const DeleteJob = (jobId) => {
-    axios
+
+
+    // 일자리에 묶인 지원자들도 삭제하기 + 메일 보내기
+    axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { params: { jobId } },
+      { withCredentials: true }
+    )
+    .then((res)=>{ 
+      // 지원자에게 메일이 발송된 이후에 해당 Job을 삭제하기
+      axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
       .then((res) => {
         setEventStatus(!eventStatus);
       })
       .catch((err) => {
         console.log(err);
-      });
-
-    // 일자리에 묶인 지원자들도 삭제하기
-    axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/applicant`,
-      { params: { jobId } },
-      { withCredentials: true }
-    );
+      })
+    })
   };
 
   // 각 일자리별 지원자를 applicantList state에 저장
@@ -394,10 +398,13 @@ export default function CompanyMyPage() {
       })
       .then((res) => {
         // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
+        console.log('res.data.applyStatus----', res.data.applyStatus)
         if (res.data.data.length !== 0) {
           setApplicantList({ ...applicantList, [idx]: res.data.data });
+          setApplyStatusList({...applyStatusList, [idx]: res.data.applyStatus})
         } else {
           setApplicantList({ ...applicantList, [idx]: null });
+          setApplyStatusList({ ...applyStatusList, [idx]: null });
         }
       })
       .catch((err) => {
@@ -410,21 +417,34 @@ export default function CompanyMyPage() {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
 
-  // 자원자의 지원 거절
+  // 자원자에 대해 지원 거절
   const RejectApply = (idx, jobId, jobSeekerId) => {
     axios
-      .delete(
-        `${process.env.REACT_APP_SERVER_URL}/applicant`,
-        { params: { jobId, jobSeekerId } },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        openApplicantList(idx, jobId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    .patch(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { jobId, jobSeekerId },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
+
+  // 지원자에 대해 지원 승인
+  const AcceptApply = (idx, jobId, jobSeekerId) => {
+    axios.patch(`${process.env.REACT_APP_SERVER_URL}/applicant/status`,
+    { jobId, jobSeekerId },
+    { withCredentials: true })
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   useEffect(() => {
 
@@ -675,21 +695,47 @@ export default function CompanyMyPage() {
                           <th></th>
                           <th></th>
                         </tr>
-                        {applicantList[idx].map((jobSeeker) => {
-                          return (
-                            <tr key={jobSeeker.id}>
-                              <td>{jobSeeker.name}</td>
-                              <td>{jobSeeker.age}</td>
-                              <td>{jobSeeker.gender}</td>
-                              <ApplicantInfoModal jobSeeker={jobSeeker} />
-                              <RejectApplyModal
-                                RejectApply={RejectApply}
-                                idx={idx}
-                                jobId={job.id}
-                                jobSeekerId={jobSeeker.id}
-                              />
-                            </tr>
-                          );
+                        {applicantList[idx].map((jobSeeker, number) => {
+                          if(applyStatusList[idx]) {
+                            if(applyStatusList[idx][number].status==="waiting") {
+                              return (
+                                <tr key={jobSeeker.id}>
+                                  <td>{jobSeeker.name}</td>
+                                  <td>{jobSeeker.age}</td>
+                                  <td>{jobSeeker.gender}</td>
+                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                  <RejectApplyModal
+                                    RejectApply={RejectApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                  <AcceptApplyModal
+                                    AcceptApply={AcceptApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                </tr>
+                              );
+                            } else if (applyStatusList[idx][number].status==="accepted") {
+                              return (
+                                <tr key={jobSeeker.id}>
+                                  <td>{jobSeeker.name}</td>
+                                  <td>{jobSeeker.age}</td>
+                                  <td>{jobSeeker.gender}</td>
+                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                  <RejectApplyModal
+                                    RejectApply={RejectApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                  <button>채팅창 열기</button>
+                                </tr>
+                              );
+                            }
+                          }
                         })}
                       </table>
                     )}
