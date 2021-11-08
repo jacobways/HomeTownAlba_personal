@@ -1,0 +1,82 @@
+/* 헤더 */
+.navbar-header-container {
+  display: flex;
+  align-items: center;
+  -webkit-box-align: center;
+  position: fixed;
+  height: 150px;
+  width: 100%;
+  z-index: 100;
+  background: linear-gradient(
+    112deg,
+    rgba(31, 80, 222, 1) 0%,
+    rgba(50, 38, 236, 1) 31%,
+    rgba(51, 46, 195, 1) 71%,
+    rgba(51, 51, 166, 1) 100%
+  );
+  padding: 0 20px 0 20px;
+}
+.wrapper {
+  position: fixed;
+}
+.navbar-header-logo {
+  flex: 1 1 auto;
+  padding-left: 20px;
+}
+
+.navbar-header-logo a {
+  background-image: url("../images/hta.svg");
+  background-repeat: no-repeat;
+  width: 250px;
+  height: 80px;
+  display: block;
+  text-indent: -100em;
+}
+
+.navbar-header-menu {
+  list-style: none;
+  display: flex;
+  padding-left: 0;
+  font-size: 1.3rem;
+}
+
+.navbar-header-menu a {
+  padding-left: 20px;
+  text-align: end;
+  color: white;
+}
+
+.menuBar-container > div {
+  background-image: url("../images/meat.svg");
+  width: 80px;
+  height: 80px;
+}
+
+.navbar-header-menu li:after {
+  content: "|";
+  margin-left: 20px;
+  color: white;
+}
+
+.navbar-header-menu li:nth-last-child(1)::after,
+.navbar-header-menu li:nth-last-child(2)::after,
+.navbar-header-menu li:nth-last-child(3)::after {
+  content: "";
+}
+
+/* .sign-in::before {
+  font-size: 30px;
+  content: "\f2f6";
+  cursor: pointer;
+}
+
+.sign-in:hover {
+  font-size: 20px;
+  content: "로그인";
+} */
+
+@media screen and (min-width: 1140px) {
+}
+
+@media screen and (min-width: 768px) {
+}

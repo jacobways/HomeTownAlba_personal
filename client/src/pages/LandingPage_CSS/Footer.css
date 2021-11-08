@@ -1,0 +1,50 @@
+.footer-container {
+  width: 100%;
+  position: relative;
+  background: #dcdde1;
+}
+
+.footer-wrapper {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  padding: 40px 60px;
+  text-align: center;
+}
+
+.footer-wrapper p {
+  font-size: 1.2em;
+}
+
+.footer-logo {
+  background-image: url("../images/hta_footer.svg");
+  background-repeat: no-repeat;
+  display: block;
+  height: 80px;
+  width: 240px;
+}
+
+.footer-content {
+  margin-top: 12px;
+  line-height: 2.5em;
+}
+.footer-title {
+  font-size: 2em;
+}
+/* 아이콘 */
+.fa-github-square,
+.fa-twitter-square,
+.fa-instagram-square,
+.fa-headset {
+  font-size: 3em;
+  margin-right: 0.3em;
+  color: #353b48;
+}
+
+/* 푸터 인포 */
+.footer-info-container {
+  text-align: center;
+  padding-bottom: 60px;
+  opacity: 0.6;
+  font-size: 20px;
+}

@@ -1,15 +1,85 @@
+.search-filter-container {
+  background-color: #fff;
+  border-bottom: 1px solid rgb(205, 205, 205);
+  position: relative;
+  padding-top: 150px;
+  display: flex;
+  height: 220px;
+}
+
+.search-wrapper {
+  width: 400px;
+  display: flex;
+  border-right: 1px solid rgb(231, 231, 231);
+  padding: 10px;
+}
+
+.search-input {
+  flex: 3;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  border: none;
+  outline: none;
+  background-color: transparent;
+  margin-left: 20px;
+  font-size: 20px;
+}
+
+.search-input::placeholder {
+  font-size: 18px;
+  color: rgb(195, 195, 195);
+  flex: 1;
+}
+
+.search-btn {
+  flex: 1;
+  border: none;
+  border-radius: 4px;
+  background-color: rgb(50, 108, 249);
+  color: #fff;
+  margin-right: 5px;
+  font-size: 1em;
+}
+
+.filter-list {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 10px 20px 10px 20px;
+}
+
+.filter-list > select,
+input {
+  height: 100%;
+}
+
+.filter-list > select {
+  font-size: 18px;
+  border-radius: 4px;
+  border: 1px solid rgb(223, 223, 223);
+}
+
+.filter-list > input {
+  font-size: 18px;
+  border-radius: 4px;
+  border: 1px solid rgb(223, 223, 223);
+}
+
+.fa-search {
+  font-size: 20px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
 .inputForm {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  width: 25%;
-  margin: 30px 0 0px 20px;
-  border-bottom: 30px;
-  height: 78%;
-  padding: 5px;
-  overflow-y: auto;
-  background: rgba(255, 255, 255, 0.7);
-  font-size: 1.5em;
-  border-radius: 10px;
+  position: fixed;
+  width: 400px;
+  margin-top: 70px;
+  height: 100%;
+  overflow-y: hidden;
+  border-right: 1px solid rgb(231, 231, 231);
+  background-color: #fff;
 }

@@ -44,7 +44,7 @@ function KakaoLogin() {
           withCredentials: true,
         }
       )
-      .then((res) => {
+      .then(res => {
         console.log("id", res.data);
         if (res.data.message) {
           history.push("/company/login");
