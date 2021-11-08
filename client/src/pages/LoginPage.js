@@ -116,10 +116,45 @@ function LoginPage(props) {
   if (LoginDisplay) {
     return (
       <div>
-        <button onClick={ChangeJobDisplay}>구직자</button>
-        <button onClick={ChangeCompanyDisplay}>사업자</button>
-
-        <form
+        <div className="mypage">
+          <ul className="tag">
+            <li className="on">
+              <a onClick={ChangeJobDisplay}>개인회원</a>
+            </li>
+            <li>
+              <a onClick={ChangeCompanyDisplay}>기업회원</a>
+            </li>
+          </ul>
+          <br />
+          <br />
+          <div className="loginSection">
+            <tbody onSubmit={JobSeekrSubmitHandler}>
+              <tr>
+                <td>
+                  <input
+                    value={Id}
+                    type="text"
+                    onChange={IdHandler}
+                    placeholder="아이디를 입력하세요"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    type="password"
+                    value={Password}
+                    onChange={PasswordHandler}
+                    placeholder="비밀번호를 입력하세요"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </div>
+          <button className="bubbly-button" type="submit">
+            로그인
+          </button>
+          {/* <form
           onSubmit={JobSeekrSubmitHandler}
           style={{
             display: "flex",
@@ -128,6 +163,7 @@ function LoginPage(props) {
             alignItems: "center",
           }}
         >
+         
           <label>아이디</label>
           <input
             value={Id}
@@ -142,26 +178,61 @@ function LoginPage(props) {
             onChange={PasswordHandler}
             placeholder="비밀번호를 입력하세요"
           />
-          <button type="submit">로그인</button>
+          <button type="submit">로그인</button> */}
           {/* 구글 Oauth */}
-          <a href={loginURL}>Google</a>
+          <a className="googleSns" href="http://localhost:5000/auth/google"></a>
           {/* 구글 Oauth */}
           {/* KaKao Oauth */}
-          <button onClick={loginWithKakao}>KaKao</button>
+          <button className="kakaoSns" onClick={loginWithKakao}></button>
           {/* KaKao Oauth */}
 
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
-        </form>
+
+          {/* </form> */}
+        </div>
       </div>
     );
   } else {
     return (
       <div>
-        <button onClick={ChangeJobDisplay}>구직자</button>
-        <button onClick={ChangeCompanyDisplay}>사업자</button>
+        <div className="mypage">
+          <ul className="tag">
+            <li>
+              <a onClick={ChangeJobDisplay}>개인회원</a>
+            </li>
+            <li className="on">
+              <a onClick={ChangeCompanyDisplay}>기업회원</a>
+            </li>
+          </ul>
+          <br />
+          <br />
+          <div className="loginSection">
+            <tbody onSubmit={JobSeekrSubmitHandler}>
+              <tr>
+                <td>
+                  <input
+                    value={Id}
+                    type="text"
+                    onChange={IdHandler}
+                    placeholder="아이디를 입력하세요"
+                  />
+                </td>
+              </tr>
+              <tr>
+                <td>
+                  <input
+                    type="password"
+                    value={Password}
+                    onChange={PasswordHandler}
+                    placeholder="비밀번호를 입력하세요"
+                  />
+                </td>
+              </tr>
+            </tbody>
+          </div>
 
-        <form
+          {/* <form
           onSubmit={CompanySubmitHandler}
           style={{
             display: "flex",
@@ -183,11 +254,14 @@ function LoginPage(props) {
             value={Password}
             onChange={PasswordHandler}
             placeholder="비밀번호를 입력하세요"
-          />
-          <button type="submit">로그인</button>
+          /> */}
+          <button className="bubbly-button" type="submit">
+            로그인
+          </button>
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
-        </form>
+          {/* </form> */}
+        </div>
       </div>
     );
   }
