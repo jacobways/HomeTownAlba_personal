@@ -17,7 +17,7 @@ sequelize
   .then(() => {
     console.log("Database connection Success");
   })
-  .catch((err) => {
+  .catch(err => {
     console.error(err);
   });
 

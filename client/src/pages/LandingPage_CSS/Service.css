@@ -1,0 +1,121 @@
+/* 서비스 소개 블럭 */
+.service-container {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  height: 750px;
+  margin-top: 150px;
+  position: fixed;
+  width: 100%;
+  background: url(../images/layered-waves-haikei.svg), url(../images/alba.svg),
+    url(../images/bubble-1.svg), url(../images/bubble-2.svg) center;
+  background-size: cover, auto, cover, cover;
+  background-repeat: repeat-x, no-repeat, no-repeat, repeat-y;
+  animation: wave-moving 3s linear infinite;
+}
+
+@keyframes wave-moving {
+  0% {
+    background-position: 100% 90%, center 105%, center, center;
+  }
+
+  50% {
+    background-position: 80% 85%, center 105%, center, center;
+  }
+
+  100% {
+    background-position: 100% 90%, center 105%, center, center;
+  }
+}
+
+.service-wrapper {
+  margin-top: 10vh;
+  line-height: 10vh;
+  width: 60%;
+}
+
+.service-title {
+  font-size: 3.5vw;
+  /* text-shadow: blue 2px 2px 50px; */
+  animation: showText 0.5s;
+  animation-fill-mode: both;
+}
+.service-title:nth-child(1) {
+  animation-delay: 0.1s;
+}
+
+@keyframes showText {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
+
+.service-scroll {
+  position: relative;
+  text-shadow: #adb8c5 0 0 4px;
+  font-size: 2em;
+  color: #fff;
+  margin-top: 180px;
+  animation: showText 0.5s;
+  animation: scroll 1.5s infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes scroll {
+  0% {
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.7;
+  }
+  100% {
+    opacity: 0.4;
+  }
+}
+
+.typing-wrapper {
+  display: flex;
+  justify-content: center;
+  background-color: #fff;
+  margin-top: 50px;
+  border-radius: 20px;
+  box-shadow: 0px 12px 18px -6px rgba(0, 0, 0, 0.4);
+  animation: showTyping 0.8s;
+}
+
+.typing-text {
+  font-size: 2vw;
+}
+
+#typing {
+  position: relative;
+}
+
+#typing::after {
+  content: "|";
+  display: block;
+  position: absolute;
+  top: 0;
+  right: -5px;
+  width: 4px;
+  height: 100%;
+}
+#typing.active::after {
+  display: none;
+}
+
+@keyframes showTyping {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0px);
+    opacity: 1;
+  }
+}
