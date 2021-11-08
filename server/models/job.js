@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       companyId: DataTypes.INTEGER,
       companyName: DataTypes.STRING,
       location: DataTypes.STRING,
+      latitude: DataTypes.DECIMAL(15, 13),
+      longitude: DataTypes.DECIMAL(15, 13),
       day: DataTypes.JSON,
       startTime: DataTypes.TIME,
       endTime: DataTypes.TIME,

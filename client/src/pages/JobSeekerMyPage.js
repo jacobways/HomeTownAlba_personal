@@ -45,6 +45,11 @@ export default function JobSeekerMyPage() {
 
   const [applyList, setApplyList] = useState([]); // jobSeeker가 지원한 job 목록 보여주기
 
+  const [resultList, setResultList] = useState([]);  // 지원 결과가 나온 job 목록 보여주기
+  const [statusList, setStatusList] = useState([]);  // 지원 결과의 상태 보여주기
+  console.log('resultList', resultList)
+  console.log('statusList', statusList)
+
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
 
   // jobSeeker 정보 수정용
@@ -314,7 +319,6 @@ export default function JobSeekerMyPage() {
       });
 
     // Career 정보 받기
-
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/career/${jobSeekerId}`, {
         withCredentials: true,
@@ -334,6 +338,17 @@ export default function JobSeekerMyPage() {
       .then((res) => {
         setApplyList(res.data.data);
       });
+
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/applicant/job`, 
+      {params: {jobSeekerId}}, 
+      {withCredentials: true}
+    )
+    .then((res) => {
+      console.log('res----', res)
+      setResultList(res.data.data);
+      setStatusList(res.data.applyStatus)
+    });
+
   }, [eventStatus, jobSeekerId]);
 
   return (
@@ -538,6 +553,59 @@ export default function JobSeekerMyPage() {
                 <CancelApplyModal CancelApply={CancelApply} jobId={job.id} />
               </tr>
             );
+          })}
+        </table>
+      )}
+      <br></br>
+      <h3>지원 결과</h3>
+      {resultList.length === 0 ? (
+        <div>지원 결과가 없습니다</div>
+      ) : (
+        <table>
+          <tr>
+            <th>회사명</th>
+            <th>주소</th>
+            <th>근무요일</th>
+            <th>근무시간</th>
+            <th>시급</th>
+            <th>예상 월급여</th>
+            <th>포지션</th>
+            <th>결과</th>
+            <th></th>
+          </tr>
+          {resultList.map((job, number) => {
+            if(statusList[number]) {
+              if(statusList[number].status==='rejected') {
+                return (
+                  <tr key={job.id}>
+                    <td>{job.companyName}</td>
+                    <td>{job.location}</td>
+                    <td>{job.day}</td>
+                    <td>{job.startTime}~{job.endTime} ({job.time}시간)</td>
+                    <td>{job.hourlyWage}</td>
+                    <td>{job.monthlyWage}</td>
+                    <td>{job.position}</td>
+                    <td>지원 거절</td>
+                    <CancelApplyModal CancelApply={CancelApply} jobId={job.id} />
+                  </tr>
+                );
+              } else if(statusList[number].status==='accepted') {
+                return (
+                  <tr key={job.id}>
+                    <td>{job.companyName}</td>
+                    <td>{job.location}</td>
+                    <td>{job.day}</td>
+                    <td>{job.startTime}~{job.endTime} ({job.time}시간)</td>
+                    <td>{job.hourlyWage}</td>
+                    <td>{job.monthlyWage}</td>
+                    <td>{job.position}</td>
+                    <td>지원 승인</td>
+                    <CancelApplyModal CancelApply={CancelApply} jobId={job.id} />
+                    <button>채팅창 열기</button>
+                  </tr>
+                );            
+              }
+            }
           })}
         </table>
       )}

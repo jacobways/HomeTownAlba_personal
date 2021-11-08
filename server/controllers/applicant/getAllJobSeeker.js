@@ -3,15 +3,19 @@ const { Applicant } = require('../../models')
 const { JobSeeker } = require('../../models')
 require("dotenv").config();
 
-// jobId로 jobSeekerId를 찾고, 그에 해당하는 jobSeeker 테이블의 정보들을 불러오기
+// Applicant에서 waiting/accepted 인 지원자에 대해 jobId로 jobSeekerId를 찾고, 그에 해당하는 jobSeeker 테이블의 정보들을 불러오기
 module.exports = async (req, res) => {
 
   const { jobId } = req.params
 
+  let applyStatus = await Applicant.findAll(
+    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}]}, attributes: ['status']},  
+  )
+  
   // Applicant 테이블에서 query params의 jobId에 해당하는 JobSeekerId를 모두 찾기
-  // 쿼리문 예시 : SELECT jobSeekerId AS id FROM Applicant WHERE jobId=1
+  // 쿼리문 예시 : SELECT jobSeekerId AS id FROM Applicant WHERE jobId=1 & status = waiting or accepted
   Applicant.findAll(
-    {where: {jobId}, attributes: [['jobSeekerId', 'id']]},  
+    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}]}, attributes: [['jobSeekerId', 'id']]},  
   )
   .then((data)=>{
 
@@ -25,7 +29,11 @@ module.exports = async (req, res) => {
     })
   })
   .then((data)=> {
-    res.status(200).json({message: 'ok', data: data.map(el=>el.dataValues)})
+    res.status(200).json(
+      {message: 'ok', 
+      data: data.map(el=>el.dataValues), 
+      applyStatus: applyStatus.map(el=>el.dataValues)
+    })
   })
   .catch((err)=> {
     console.log(err)

@@ -3,9 +3,11 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import DeleteJobModal from "../components/MyPageModal/Modal_DeleteJob";
 import RejectApplyModal from "../components/MyPageModal/Modal_RejectApply";
+import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply"
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import WithdrawCompanyModal from "../components/MyPageModal/Modal_WithdrawCompany";
 import DaumPostcode from "react-daum-postcode";
+const { kakao } = window;
 
 // 사업자 마이페이지
 export default function CompanyMyPage() {
@@ -21,7 +23,7 @@ export default function CompanyMyPage() {
 
   // 사업자위치 state
   const [isOpenCompanyPost, setIsOpenCompanyPost] = useState(false);
-  const [companyAddress, setCompanyAddress] = useState(""); // 주소
+  const [companyZipCode, setCompanyZipCode] = useState(""); // 회사 우편번호
 
   const [password, setPassword] = useState("");
   const [question, setQuestion] = useState("");
@@ -33,9 +35,11 @@ export default function CompanyMyPage() {
   const [passwordErrorMessage, setPasswordErrorMessage] = useState(""); // 비밀번호 입력 실패시 메세지
 
   // job 정보
-  const [jobLocation, setJobLocation] = useState("");
+  const [jobLocation, setJobLocation] = useState("");  // DB에 등록될 일자리 주소
   const [isOpenJobPost, setIsOpenJobPost] = useState(false);
-  const [jobAddress, setJobAddress] = useState(""); // 주소
+  const [jobZipCode, setJobZipCode] = useState(""); // 우편번호
+  const [latitude, setLatitude] = useState(0)    // 일자리의 위치의 위도
+  const [longitude, setLongitude] = useState(0)  // 일자리 위치의 경도
 
   const [day, setDay] = useState([]);
   const [mon, setMon] = useState([]);
@@ -62,6 +66,7 @@ export default function CompanyMyPage() {
   const [jobList, setJobList] = useState("");
   const [applicantList, setApplicantList] = useState({}); // 객체이며 key 는 idx 값
   const [showingApplicantList, setShowingApplicantList] = useState({});
+  const [applyStatusList, setApplyStatusList] = useState({});
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
 
@@ -98,8 +103,7 @@ export default function CompanyMyPage() {
       }
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
-
-    setCompanyAddress(data.zonecode);
+    setCompanyZipCode(data.zonecode);
     setCompanyLocation(fullAddr);
     setIsOpenCompanyPost(false);
   };
@@ -203,7 +207,7 @@ export default function CompanyMyPage() {
     setIsOpenJobPost(false);
   }
 
-  // 카카오 지도 API 활용하여 주소 선택 후 닫기
+  // 카카오 지도 API 활용하여 Job 주소 선택 후 닫기
   const CompleteJobPost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
@@ -219,10 +223,25 @@ export default function CompanyMyPage() {
       fullAddr += extraAddr !== "" ? ` (${extraAddr})` : "";
     }
 
-    setJobAddress(data.zonecode);
+    setJobZipCode(data.zonecode);
     setJobLocation(fullAddr);
     setIsOpenJobPost(false);
+    ChangeLocationToCoordinate(fullAddr)
   };
+
+  // 카카오 API를 통해 주소를 위도와 경도로 좌표로 저장하기
+  const ChangeLocationToCoordinate = (location) => {
+
+    // 주소-좌표 변환 객체를 생성합니다
+    let geocoder = new kakao.maps.services.Geocoder();
+      geocoder.addressSearch(location, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          
+          setLatitude(result[0].y)
+          setLongitude(result[0].x)
+        }
+      })
+  }
 
   // check된 요일을 day state에 모아주기
   const dayHandler = () => {
@@ -327,6 +346,8 @@ export default function CompanyMyPage() {
             companyId,
             companyName,
             location: jobLocation,
+            latitude,
+            longitude,
             day,
             startTime,
             endTime,
@@ -343,21 +364,25 @@ export default function CompanyMyPage() {
 
   // 일자리 삭제하기
   const DeleteJob = (jobId) => {
-    axios
+
+
+    // 일자리에 묶인 지원자들도 삭제하기 + 메일 보내기
+    axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { params: { jobId } },
+      { withCredentials: true }
+    )
+    .then((res)=>{ 
+      // 지원자에게 메일이 발송된 이후에 해당 Job을 삭제하기
+      axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
       .then((res) => {
         setEventStatus(!eventStatus);
       })
       .catch((err) => {
         console.log(err);
-      });
-
-    // 일자리에 묶인 지원자들도 삭제하기
-    axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/applicant`,
-      { params: { jobId } },
-      { withCredentials: true }
-    );
+      })
+    })
   };
 
   // 각 일자리별 지원자를 applicantList state에 저장
@@ -373,10 +398,13 @@ export default function CompanyMyPage() {
       })
       .then((res) => {
         // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
+        console.log('res.data.applyStatus----', res.data.applyStatus)
         if (res.data.data.length !== 0) {
           setApplicantList({ ...applicantList, [idx]: res.data.data });
+          setApplyStatusList({...applyStatusList, [idx]: res.data.applyStatus})
         } else {
           setApplicantList({ ...applicantList, [idx]: null });
+          setApplyStatusList({ ...applyStatusList, [idx]: null });
         }
       })
       .catch((err) => {
@@ -389,21 +417,34 @@ export default function CompanyMyPage() {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
 
-  // 자원자의 지원 거절
+  // 자원자에 대해 지원 거절
   const RejectApply = (idx, jobId, jobSeekerId) => {
     axios
-      .delete(
-        `${process.env.REACT_APP_SERVER_URL}/applicant`,
-        { params: { jobId, jobSeekerId } },
-        { withCredentials: true }
-      )
-      .then((res) => {
-        openApplicantList(idx, jobId);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    .patch(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { jobId, jobSeekerId },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
+
+  // 지원자에 대해 지원 승인
+  const AcceptApply = (idx, jobId, jobSeekerId) => {
+    axios.patch(`${process.env.REACT_APP_SERVER_URL}/applicant/status`,
+    { jobId, jobSeekerId },
+    { withCredentials: true })
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
 
   useEffect(() => {
 
@@ -654,21 +695,47 @@ export default function CompanyMyPage() {
                           <th></th>
                           <th></th>
                         </tr>
-                        {applicantList[idx].map((jobSeeker) => {
-                          return (
-                            <tr key={jobSeeker.id}>
-                              <td>{jobSeeker.name}</td>
-                              <td>{jobSeeker.age}</td>
-                              <td>{jobSeeker.gender}</td>
-                              <ApplicantInfoModal jobSeeker={jobSeeker} />
-                              <RejectApplyModal
-                                RejectApply={RejectApply}
-                                idx={idx}
-                                jobId={job.id}
-                                jobSeekerId={jobSeeker.id}
-                              />
-                            </tr>
-                          );
+                        {applicantList[idx].map((jobSeeker, number) => {
+                          if(applyStatusList[idx]) {
+                            if(applyStatusList[idx][number].status==="waiting") {
+                              return (
+                                <tr key={jobSeeker.id}>
+                                  <td>{jobSeeker.name}</td>
+                                  <td>{jobSeeker.age}</td>
+                                  <td>{jobSeeker.gender}</td>
+                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                  <RejectApplyModal
+                                    RejectApply={RejectApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                  <AcceptApplyModal
+                                    AcceptApply={AcceptApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                </tr>
+                              );
+                            } else if (applyStatusList[idx][number].status==="accepted") {
+                              return (
+                                <tr key={jobSeeker.id}>
+                                  <td>{jobSeeker.name}</td>
+                                  <td>{jobSeeker.age}</td>
+                                  <td>{jobSeeker.gender}</td>
+                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                  <RejectApplyModal
+                                    RejectApply={RejectApply}
+                                    idx={idx}
+                                    jobId={job.id}
+                                    jobSeekerId={jobSeeker.id}
+                                  />
+                                  <button>채팅창 열기</button>
+                                </tr>
+                              );
+                            }
+                          }
                         })}
                       </table>
                     )}

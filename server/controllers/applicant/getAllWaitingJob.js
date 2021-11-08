@@ -3,7 +3,7 @@ const { Applicant } = require('../../models')
 const { Job } = require('../../models')
 require("dotenv").config();
 
-// jobId로 jobSeekerId를 찾고, 그에 해당하는 jobSeeker 테이블의 정보들을 불러오기
+// status가 waiting인 지원자 중에서 jobSeekerId로 jobId를 찾고, 그에 해당하는 Job 테이블의 정보들을 불러오기
 module.exports = async (req, res) => {
 
   const { jobSeekerId } = req.params
@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   // Applicant 테이블에서 query params의 jobSeekerId에 해당하는 JobId를 모두 찾기
   // 쿼리문 예시 : SELECT jobId AS id FROM Applicant WHERE jobSeekerId=1
   Applicant.findAll(
-    {where: {jobSeekerId}, attributes: [['jobId', 'id']]},  
+    {where: {jobSeekerId, status: 'waiting'}, attributes: [['jobId', 'id']]},  
   )
   .then((data)=>{
 

@@ -17,6 +17,12 @@ module.exports = {
       location: {
         type: Sequelize.STRING,
       },
+      latitude: {
+        type: Sequelize.DECIMAL(15, 13),
+      },
+      longitude: {
+        type: Sequelize.DECIMAL(15, 12),
+      },
       day: {
         type: Sequelize.JSON,
       },
