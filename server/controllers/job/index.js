@@ -5,5 +5,4 @@ module.exports = {
   delete: require("./delete"),
   deleteAll: require("./deleteAll"),
   getAll: require("./getAll"),
-  worknettest: require("./worknettest"),
 };
