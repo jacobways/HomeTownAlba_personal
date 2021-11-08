@@ -22,8 +22,6 @@ function App() {
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/mypage" component={MyPage} />
-        {/* <Route exact path="/mypage/company" component={CompanyMyPage} /> */}
-        {/* <Route exact path="/mypage/jobseeker" component={JobSeekerMyPage} /> */}
         <Route exact path="/map" component={Map} />
         <Route exact path="/admin" component={AdminPage} />
         <Route exact path="/guest/mypage" component={GuestMyPage} />
