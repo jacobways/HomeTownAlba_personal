@@ -8,6 +8,8 @@ import { loginCompany, loginJobSeeker } from "../_actions/user_action";
 
 const { Kakao } = window;
 
+// Kakao.init(process.env.REACT_APP_APIKEY);
+
 function LoginPage(props) {
   const [LoginDisplay, setLoginDisplay] = useState(true);
   // true : 구직자 , false : 사업자
@@ -15,7 +17,7 @@ function LoginPage(props) {
   const [Password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`
+  const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
 
   const ChangeJobDisplay = () => {
     setLoginDisplay(true);
@@ -25,20 +27,20 @@ function LoginPage(props) {
     setLoginDisplay(false);
   };
 
-  const IdHandler = e => {
+  const IdHandler = (e) => {
     setId(e.target.value);
   };
-  const PasswordHandler = e => {
+  const PasswordHandler = (e) => {
     setPassword(e.target.value);
   };
-  const JobSeekrSubmitHandler = e => {
+  const JobSeekrSubmitHandler = (e) => {
     e.preventDefault();
     let submitData = {
       userId: Id,
       password: Password,
     };
     //   redux
-    dispatch(loginJobSeeker(submitData)).then(res => {
+    dispatch(loginJobSeeker(submitData)).then((res) => {
       if (res.payload.loginSuccess) {
         props.history.push("/");
       } else {
@@ -46,7 +48,7 @@ function LoginPage(props) {
       }
     });
   };
-  const CompanySubmitHandler = e => {
+  const CompanySubmitHandler = (e) => {
     console.log("사업자 로그인");
     // redux
     e.preventDefault();
@@ -55,7 +57,7 @@ function LoginPage(props) {
       password: Password,
     };
     //   redux
-    dispatch(loginCompany(submitData)).then(res => {
+    dispatch(loginCompany(submitData)).then((res) => {
       if (res.payload.loginSuccess) {
         props.history.push("/");
       } else {
@@ -105,7 +107,7 @@ function LoginPage(props) {
           withCredentials: true,
         }
       )
-      .then(res => {
+      .then((res) => {
         console.log("id", res.data);
         if (res.data.message) {
           history.push("/company/login");
@@ -130,7 +132,7 @@ function LoginPage(props) {
           <br />
           <br />
           <div className="loginSection">
-            <tbody onSubmit={JobSeekrSubmitHandler}>
+            <tbody>
               <tr>
                 <td>
                   <input
@@ -153,7 +155,11 @@ function LoginPage(props) {
               </tr>
             </tbody>
           </div>
-          <button className="bubbly-button" type="submit">
+          <button
+            className="bubbly-button"
+            type="button"
+            onClick={JobSeekrSubmitHandler}
+          >
             로그인
           </button>
           {/* <form
@@ -182,10 +188,17 @@ function LoginPage(props) {
           />
           <button type="submit">로그인</button> */}
           {/* 구글 Oauth */}
-          <a className="googleSns" href="http://localhost:5000/auth/google"></a>
+          <a
+            className="googleSns"
+            href={`${process.env.REACT_APP_SERVER_URL}/auth/google`}
+          ></a>
           {/* 구글 Oauth */}
           {/* KaKao Oauth */}
-          <button className="kakaoSns" onClick={loginWithKakao}></button>
+          <a
+            className="kakaoSns"
+            href={`${process.env.REACT_APP_SERVER_URL}/auth/kakao`}
+          ></a>
+          {/* <button className="kakaoSns" onClick={loginWithKakao}></button> */}
           {/* KaKao Oauth */}
 
           <Link to="/register">회원가입</Link>
@@ -210,7 +223,7 @@ function LoginPage(props) {
           <br />
           <br />
           <div className="loginSection">
-            <tbody onSubmit={JobSeekrSubmitHandler}>
+            <tbody>
               <tr>
                 <td>
                   <input
@@ -257,12 +270,15 @@ function LoginPage(props) {
             onChange={PasswordHandler}
             placeholder="비밀번호를 입력하세요"
           /> */}
-          <button className="bubbly-button" type="submit">
+          <button
+            className="bubbly-button"
+            type="button"
+            onClick={CompanySubmitHandler}
+          >
             로그인
           </button>
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
-          {/* </form> */}
         </div>
       </div>
     );
