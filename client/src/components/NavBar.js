@@ -43,11 +43,7 @@ function NavBar() {
       return res.data;
     });
 
-    // 명현님 카카오 로그아웃
-    if (Kakao.Auth.getAccessToken()) {
-      console.log(Kakao.Auth.getAccessToken());
-      Kakao.Auth.logout(console.log(Kakao.Auth.getAccessToken()));
-    }
+
   };
 
   if (jobSeeker === undefined) {
