@@ -12,7 +12,7 @@ function ChatPage() {
   // 로그인한 유저의 아이디 ,정보등을 받아서 name에 각각 넣어주기
   useEffect(() => {
     axios
-      .get("http://localhost:5000", { withCredentials: true })
+      .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
       .then((res) => {
         console.log(res.data);
         if (res.data.user && res.data.user.name) {
