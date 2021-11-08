@@ -84,6 +84,10 @@ export default function JobSeekerMyPage() {
         .then((res) => {
           console.log(res.data);
           setFilePath(`${BASE_URL}/img/${res.data.fileName}`);
+          // multsers3용 src가 새로 생김 -> setFilePath(res.data.v = v.location) , baseUrl을 지워줘야함 , 이미지 쪽 backurl 지우고 이렇게 바꿔줄것
+          // res.data.v => 이미지 리사이징 적용 res.data.v.src.replace(/\/thumb\//, '/original/')
+          // img src도 replace("thumb",original)
+
           if (FilePath) {
             axios
               .patch(

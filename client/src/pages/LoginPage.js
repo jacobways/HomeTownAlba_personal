@@ -145,7 +145,9 @@ function LoginPage(props) {
           <a href="http://localhost:5000/auth/google">Google</a>
           {/* 구글 Oauth */}
           {/* KaKao Oauth */}
-          <button onClick={loginWithKakao}>KaKao</button>
+          <a href="http://localhost:5000/auth/kakao">KaKao</a>
+
+          {/* <button onClick={loginWithKakao}>KaKao</button> */}
           {/* KaKao Oauth */}
 
           <Link to="/register">회원가입</Link>

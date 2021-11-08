@@ -1,6 +1,7 @@
 const passport = require("passport");
 const local = require("./localStrategy");
 const goggle = require("./goggleStrategy");
+const kakao = require("./kakaoStrategy");
 const { JobSeeker, Company } = require("../models");
 
 module.exports = () => {
@@ -13,8 +14,12 @@ module.exports = () => {
     // user의 특정 field로 분기 처리 -> user.~id이면 type : Goggle
     if (user.type === "company") {
       done(null, { type: "company", id: user.id });
-    } else {
-      done(null, { type: "jobseeker", id: user.id }); // 세션의 jobseeker 고유 id 만 저장
+    } else if (user.type === "job") {
+      done(null, { type: "job", id: user.id }); // 세션의 jobseeker 고유 id 만 저장
+    } else if (user.provider === "google") {
+      done(null, { type: "G", id: user.id });
+    } else if (user.dataValues.type === "K") {
+      done(null, { type: "K", id: user.dataValues.id });
     }
   });
 
@@ -31,26 +36,49 @@ module.exports = () => {
           done(null, user);
         })
         .catch((err) => done(err));
-    } else {
-      if (id < 100) {
-        JobSeeker.findOne({ where: { id } })
-          .then((user) => {
-            // console.log("kk", user);
-            done(null, user);
-          })
-          .catch((err) => done(err));
-      } else {
-        // console.log("구글로그인", id);
-        JobSeeker.findOne({ where: { userId: id } })
-          .then((user) => {
-            // console.log("구글로그인", user);
-            done(null, user);
-          })
-          .catch((err) => done(err));
-      }
+    } else if (type === "job") {
+      JobSeeker.findOne({ where: { id } })
+        .then((user) => {
+          // console.log("kk", user);
+          done(null, user);
+        })
+        .catch((err) => done(err));
+    } else if (type === "G") {
+      JobSeeker.findOne({ where: { userId: id } })
+        .then((user) => {
+          // console.log("kk", user);
+          done(null, user);
+        })
+        .catch((err) => done(err));
+    } else if (type === "K") {
+      JobSeeker.findOne({ where: { id } })
+        .then((user) => {
+          // console.log("kk", user);
+          done(null, user);
+        })
+        .catch((err) => done(err));
     }
+    // } else {
+    //   if (id < 100) {
+    //     JobSeeker.findOne({ where: { id } })
+    //       .then((user) => {
+    //         // console.log("kk", user);
+    //         done(null, user);
+    //       })
+    //       .catch((err) => done(err));
+    //   } else {
+    //     // console.log("구글로그인", id);
+    //     JobSeeker.findOne({ where: { userId: id } })
+    //       .then((user) => {
+    //         // console.log("구글로그인", user);
+    //         done(null, user);
+    //       })
+    //       .catch((err) => done(err));
+    //   }
+    // }
   });
 
   local();
   goggle();
+  kakao();
 };

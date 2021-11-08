@@ -15,7 +15,7 @@ function AdminPage(props) {
       .get("http://localhost:5000", { withCredentials: true })
       .then((res) => {
         // console.log(res.data.user.type, typeof res.data.user.type);
-        if (res.data.user.type) {
+        if (res.data.user && res.data.user.type) {
           setUserLoginType(res.data.user.type);
         } else {
           props.history.push("/");

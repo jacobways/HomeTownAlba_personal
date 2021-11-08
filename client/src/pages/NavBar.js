@@ -49,10 +49,10 @@ function NavBar(props) {
     });
 
     // 명현님 카카오 로그아웃
-    if (Kakao.Auth.getAccessToken()) {
-      console.log(Kakao.Auth.getAccessToken());
-      Kakao.Auth.logout(console.log(Kakao.Auth.getAccessToken()));
-    }
+    // if (Kakao.Auth.getAccessToken()) {
+    //   console.log(Kakao.Auth.getAccessToken());
+    //   Kakao.Auth.logout(console.log(Kakao.Auth.getAccessToken()));
+    // }
   };
 
   // console.log(jobSeeker.loginSuccess);
@@ -85,6 +85,7 @@ function NavBar(props) {
       <div>
         <button onClick={LogoutHandler}>로그아웃</button>
         <Link to="/mypage">MyPage</Link>
+        <Link to="/chat">채팅</Link>
 
         {/* <Link to="/mypage/jobseeker">구직자MyPage</Link> */}
         {/* <Link to="/mypage/company">사업자MyPage</Link> */}

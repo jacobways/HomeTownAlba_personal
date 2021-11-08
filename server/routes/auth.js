@@ -8,8 +8,6 @@ authRouter.get(
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-authRouter.get("/failed", (req, res) => res.send("로그인 실패"));
-
 authRouter.get(
   "/google/callback",
   passport.authenticate("google", { failureRedirect: "/failed" }),
@@ -23,6 +21,16 @@ authRouter.get(
     // res.status(200).json({
     //   googleId: req.session.passport.user,
     // });
+  }
+);
+
+authRouter.get("/kakao", passport.authenticate("kakao"));
+
+authRouter.get(
+  "/kakao/callback",
+  passport.authenticate("kakao", { failureRedirect: "/failed" }),
+  (req, res) => {
+    res.redirect("http://localhost:3000");
   }
 );
 
