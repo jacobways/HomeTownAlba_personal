@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Map from "./Map";
 import "./LandingPage_CSS/LandingPage.css";
 import NavBar from "../components/NavBar.js";

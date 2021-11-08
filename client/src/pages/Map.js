@@ -461,25 +461,71 @@ export default function Map() {
                   if (applicant.data.data) {
                     // 이미 지원 한 일자리의 경우 마커 생성
 
-                    let imageSrc =
-                      "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+                    if (applicant.data.data.status === "waiting") {
+                      let imageSrc =
+                        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
 
-                    let imageSize = new kakao.maps.Size(24, 35);
+                      let imageSize = new kakao.maps.Size(24, 35);
 
-                    let markerImage = new kakao.maps.MarkerImage(
-                      imageSrc,
-                      imageSize
-                    );
+                      let markerImage = new kakao.maps.MarkerImage(
+                        imageSrc,
+                        imageSize
+                      );
 
-                    // 결과값으로 받은 위치를 마커로 표시합니다
-                    let marker = new kakao.maps.Marker({
-                      map: map,
-                      position: coords,
-                      clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                      image: markerImage, // 마커 이미지
-                    });
+                      // 결과값으로 받은 위치를 마커로 표시합니다
+                      let marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                        image: markerImage, // 마커 이미지
+                      });
 
-                    MakeMarkerEvent(marker, "지원 취소하기", CancelApply);
+                      MakeMarkerEvent(marker, "지원 취소하기", CancelApply);
+                    } else if (applicant.data.data.status === "rejected") {
+                      let imageSrc =
+                        "https://cdn.pixabay.com/photo/2016/12/18/11/04/pointer-1915456_1280.png";
+
+                      let imageSize = new kakao.maps.Size(24, 35);
+
+                      let markerImage = new kakao.maps.MarkerImage(
+                        imageSrc,
+                        imageSize
+                      );
+
+                      // 결과값으로 받은 위치를 마커로 표시합니다
+                      let marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                        image: markerImage, // 마커 이미지
+                      });
+
+                      MakeMarkerEvent(
+                        marker,
+                        "지원 거절됨(삭제하기)",
+                        CancelApply
+                      );
+                    } else if (applicant.data.data.status === "accepted") {
+                      let imageSrc =
+                        "https://cdn.pixabay.com/photo/2014/04/02/10/45/location-304467_1280.png";
+
+                      let imageSize = new kakao.maps.Size(24, 35);
+
+                      let markerImage = new kakao.maps.MarkerImage(
+                        imageSrc,
+                        imageSize
+                      );
+
+                      // 결과값으로 받은 위치를 마커로 표시합니다
+                      let marker = new kakao.maps.Marker({
+                        map: map,
+                        position: coords,
+                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                        image: markerImage, // 마커 이미지
+                      });
+
+                      MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
+                    }
                   } else {
                     // 지원하지 않은 일자리의 경우 마커 생성
 
