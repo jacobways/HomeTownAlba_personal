@@ -15,7 +15,7 @@ function LoginPage(props) {
   const [Password, setPassword] = useState("");
   const dispatch = useDispatch();
 
-  const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
+  const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`
 
   const ChangeJobDisplay = () => {
     setLoginDisplay(true);
@@ -25,20 +25,20 @@ function LoginPage(props) {
     setLoginDisplay(false);
   };
 
-  const IdHandler = (e) => {
+  const IdHandler = e => {
     setId(e.target.value);
   };
-  const PasswordHandler = (e) => {
+  const PasswordHandler = e => {
     setPassword(e.target.value);
   };
-  const JobSeekrSubmitHandler = (e) => {
+  const JobSeekrSubmitHandler = e => {
     e.preventDefault();
     let submitData = {
       userId: Id,
       password: Password,
     };
     //   redux
-    dispatch(loginJobSeeker(submitData)).then((res) => {
+    dispatch(loginJobSeeker(submitData)).then(res => {
       if (res.payload.loginSuccess) {
         props.history.push("/");
       } else {
@@ -46,7 +46,7 @@ function LoginPage(props) {
       }
     });
   };
-  const CompanySubmitHandler = (e) => {
+  const CompanySubmitHandler = e => {
     console.log("사업자 로그인");
     // redux
     e.preventDefault();
@@ -55,7 +55,7 @@ function LoginPage(props) {
       password: Password,
     };
     //   redux
-    dispatch(loginCompany(submitData)).then((res) => {
+    dispatch(loginCompany(submitData)).then(res => {
       if (res.payload.loginSuccess) {
         props.history.push("/");
       } else {
@@ -105,7 +105,7 @@ function LoginPage(props) {
           withCredentials: true,
         }
       )
-      .then((res) => {
+      .then(res => {
         console.log("id", res.data);
         if (res.data.message) {
           history.push("/company/login");
