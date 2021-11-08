@@ -1,7 +1,6 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import NavBar from "./components/NavBar";
 import RegisterPage from "./pages/RegisterPage";
 import CompanyMyPage from "./pages/CompanyMyPage";
 import JobSeekerMyPage from "./pages/JobSeekerMyPage";
@@ -18,7 +17,6 @@ import ChatPage from "./components/ChatPage";
 function App() {
   return (
     <>
-      <NavBar />
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/mypage" component={MyPage} />
