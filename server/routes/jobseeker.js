@@ -90,50 +90,6 @@ jobSeekerRouter.post("/login", isNotLoggedIn, (req, res, next) => {
       });
     });
   })(req, res, next);
-
-  // console.log(req.cookies);
-  // 1.username으로 먼저 찾기
-  // let jobSeekrInfo1 = await JobSeeker.findOne({
-  //   where: { userId: req.body.userId },
-  // });
-
-  // if (!jobSeekrInfo1) {
-  //   return res
-  //     .status(404)
-  //     .json({ message: "요청하신 구직자를 찾을수 없습니다." });
-  // } else {
-  //   //   2. 있는 경우 password까지 같은것 찾기
-  //   // console.log(jobSeekrInfo1.dataValues.password);
-  //   // res.send("로그인 테스트");
-
-  //   bcrypt.compare(
-  //     req.body.password,
-  //     jobSeekrInfo1.dataValues.password,
-  //     function (err) {
-  //       // 비밀번호가 틀린 경우
-  //       if (err)
-  //         return res.status(400).json({ message: "로그인에 실패하였습니다." });
-  //       // 비밀번호 맞는 경우 토큰 생성
-  //       let uuid = jobSeekrInfo1.dataValues.id;
-
-  //       const token = jwt.sign(uuid, process.env.ACCESS_SECRET);
-  //       return res
-  //         .status(200)
-  //         .cookie("token", token, {
-  //           expires: new Date(Date.now() + 900000),
-  //           domain: "localhost",
-  //           path: "/",
-  //           secure: false,
-  //           httpOnly: true,
-  //         })
-  //         .json({
-  //           data: { token },
-  //           loginSuccess: true,
-  //           message: "로그인에 성공하셨습니다.",
-  //         });
-  //     }
-  //   );
-  // }
 });
 
 jobSeekerRouter.get("/logout", isLoggedIn, (req, res) => {

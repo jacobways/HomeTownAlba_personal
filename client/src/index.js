@@ -20,8 +20,8 @@ import persistedReducer from "./_reducers";
 const store = createStore(
   persistedReducer,
   compose(
-    applyMiddleware(promiseMiddleware, ReduxThunk),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    applyMiddleware(promiseMiddleware, ReduxThunk)
+    // window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__() : devtool 제거해야 없는 사람 error 안남
   )
 );
 
