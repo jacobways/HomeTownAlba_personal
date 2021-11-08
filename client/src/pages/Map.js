@@ -2,6 +2,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import "./Map.css";
+import NavBar from "../components/NavBar";
 
 const { kakao } = window;
 export default function Map() {
@@ -519,93 +520,109 @@ export default function Map() {
   }, [jobSeekerId, mapLocation, mapLevel, startTimeFilter, endTimeFilter, minWageFilter, maxWageFilter]);
   return (
     <>
-      {isOpenList ?  
-        (
-        <form
-        className="inputForm"
-        onSubmit={placeSubmitHandler}
-        style={{ zIndex: 2 }}
-        >
-          <input
-            placeholder="검색어를 입력하세요"
-            onChange={searchPlaceHandler}
-            value={searchPlace}
-            style={{ width: "40%", height: "30px", textAlign: "center" }}
-          />
-          <button type="submit">검색</button>
-          <button onClick={openListHandler}>목록 닫기</button>
-          <div id="result-list">
-            {filteredData.map((job, i) => (
-              <div key={i} style={{ marginTop: "20px" }}>
-                <span>{i + 1}</span>
-                <div>
-                  <h5>{job.companyName}</h5>
-                  <u></u>
-                </div>
-                <button onClick={()=>{clickPlaceOnList(job.latitude, job.longitude)}}>이동</button>
+      <NavBar />
+      <div className="search-filter-container">
+        {isOpenList ? (
+          <>
+            <form className="inputForm" onSubmit={placeSubmitHandler}>
+              <div id="result-list">
+                {filteredData.map((job, i) => (
+                  <div key={i} style={{ marginTop: "20px" }}>
+                    <span>{i + 1}</span>
+                    <div>
+                      <h5>{job.companyName}</h5>
+                      <u></u>
+                    </div>
+                    <button
+                      onClick={() => {
+                        clickPlaceOnList(job.latitude, job.longitude);
+                      }}
+                    >
+                      이동
+                    </button>
+                  </div>
+                ))}
               </div>
-            ))}
-            <div id="pagination"></div>
-          </div>
-        </form>
-        ) :
-        (
-        <form
-        onSubmit={placeSubmitHandler}
-        style={{ zIndex: 2 }}
-        >
-          <input
-            placeholder="검색어를 입력하세요"
-            onChange={searchPlaceHandler}
-            value={searchPlace}
-            style={{ width: "40%", height: "30px", textAlign: "center" }}
-          />
-          <button type="submit">검색</button>
-          <button onClick={openListHandler}>목록 열기</button>
-        </form>
-        )
-      }
-      <div
-        id="map"
-        style={{
-          width: "80%",
-          height: "80%",
-        }}
-      ></div>
-      <div>
-        <h2>검색 필터 기능</h2>
-        <label>최소 월급 : </label>
+            </form>
+            <form className="search-wrapper" onSubmit={placeSubmitHandler}>
+              <i className="fas fa-search"></i>
+              <input
+                className="search-input"
+                placeholder="주변 동네를 검색하세요"
+                onChange={searchPlaceHandler}
+                value={searchPlace}
+              />
+              <button className="search-btn" type="submit">
+                검색
+              </button>
+              <button className="search-btn" onClick={openListHandler}>
+                목록
+              </button>
+            </form>
+          </>
+        ) : (
+          <>
+            <form className="search-wrapper" onSubmit={placeSubmitHandler}>
+              <i className="fas fa-search"></i>
+              <input
+                className="search-input"
+                placeholder="주변 동네를 검색하세요"
+                onChange={searchPlaceHandler}
+                value={searchPlace}
+              />
+              <button className="search-btn" type="submit">
+                검색
+              </button>
+              <button className="search-btn" onClick={openListHandler}>
+                목록
+              </button>
+            </form>
+          </>
+        )}
+        <label className="filter-list">
           <select onChange={minWageFilterHandler}>
-            <option value="">--선택하지 않기--</option>
+            <option value="">최소 월급</option>
             <option value="300000">300,000원</option>
             <option value="600000">600,000원</option>
             <option value="900000">900,000원</option>
             <option value="1200000">1,200,000원</option>
           </select>
-        <label>최대 월급 : </label>
-        <select onChange={maxWageFilterHandler}>
-          <option value="">--선택하지 않기--</option>
-          <option value="300000">300,000원</option>
-          <option value="600000">600,000원</option>
-          <option value="900000">900,000원</option>
-          <option value="1200000">1,200,000원</option>
-          <option value="1500000">1,500,000원</option>
-        </select>
-        <label>시작 시간 : </label>
-        <input
-          name="startTime"
-          type="time"
-          list="startTime"
-          onChange={startTimeFilterHandler}
-        />
-        <label>끝 시간 : </label>
-        <input
-          name="startTime"
-          type="time"
-          list="startTime"
-          onChange={endTimeFilterHandler}
-        />
+        </label>
+        <label className="filter-list">
+          <select onChange={maxWageFilterHandler}>
+            <option value="">최대 월급</option>
+            <option value="300000">300,000원</option>
+            <option value="600000">600,000원</option>
+            <option value="900000">900,000원</option>
+            <option value="1200000">1,200,000원</option>
+            <option value="1500000">1,500,000원</option>
+          </select>
+        </label>
+        <label className="filter-list">
+          <input
+            name="startTime"
+            type="time"
+            list="startTime"
+            onChange={startTimeFilterHandler}
+          />
+        </label>
+        <label className="filter-list">
+          <input
+            name="startTime"
+            type="time"
+            list="startTime"
+            onChange={endTimeFilterHandler}
+          />
+        </label>
       </div>
+
+      <div
+        id="map"
+        style={{
+          width: "100%",
+          height: "80%",
+        }}
+      ></div>
     </>
   );
 }
