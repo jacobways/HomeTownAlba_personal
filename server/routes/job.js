@@ -9,6 +9,5 @@ router.delete("/:id", jobController.delete);
 router.delete("/", jobController.deleteAll);
 router.get("/", jobController.getAll);
 // job에다가 initinal state를 부여하면 어떨지
-router.post("/test", jobController.worknettest);
 
 module.exports = router;
