@@ -553,7 +553,7 @@ export default function Map() {
     maxWageFilter,
   ]);
   return (
-    <>
+    <div className="map-container">
       <NavBar />
       <div className="search-filter-container">
         {isOpenList ? (
@@ -654,10 +654,9 @@ export default function Map() {
         id="map"
         style={{
           width: "100%",
-          height: "80%",
-          overflow: "visible",
+          height: "100%",
         }}
       ></div>
-    </>
+    </div>
   );
 }
