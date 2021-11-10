@@ -73,10 +73,10 @@ if (process.env.NODE_ENV === "production") {
   });
   sessionOPtion.proxy = true;
   sessionOPtion.cookie.secure = true;
-  sessionOPtion.store = sessionOPtion.domain = new RedisStore({
+  sessionOPtion.store =  new RedisStore({
     client: redisClient,
   });
-  process.env.NODE_ENV === "production" && ".hometownalba.com";
+  sessionOPtion.domain = process.env.NODE_ENV === "production" && ".hometownalba.com";
 }
 
 app.use(session(sessionOPtion));
@@ -85,7 +85,7 @@ app.use(passport.initialize());
 app.use(passport.session()); //id를 알아내고 그 id를 des로 넘겨줌
 
 passportConfig();
-app.set("port", process.env.PORT || 5000);
+//app.set("port", process.env.PORT || 5000);
 // 멀터 테스트
 
 // localhost multer test
@@ -179,43 +179,22 @@ app.get("/", (req, res) => {
   });
 });
 
-// 워크넷 테스트
-const axios = require("axios");
 
-const currentPut = async () => {
-  let response;
-  const key = "WNKVIRK64YDJCQFRALWAC2VR1HK";
-  try {
-    response = await axios.get(
-      `http://openapi.work.go.kr/opi/opi/opia/wantedApi.do?authKey=WNKVIRK64YDJCQFRALWAC2VR1HK&callTp=L&returnType=XML&startPage=1&display=10`
-    );
-  } catch (e) {
-    console.log(e);
-  }
-  return response;
-};
-
-app.get("/worknet", (req, res) => {
-  currentPut().then((response) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json(response.data);
-  });
-}); //node서버에서 프론트서버로 데이터를 보내기 위한 코드
 
 // 소켓io test
-const { createServer } = require("http");
-const { Server } = require("socket.io");
-const expressServer = require("http").createServer(app);
-const io = new Server(expressServer, { cors: { origin: "*" } });
+//const { createServer } = require("http");
+//const { Server } = require("socket.io");
+//const expressServer = require("http").createServer(app);
+//const io = new Server(expressServer, { cors: { origin: "*" } });
 
-io.on("connection", (socket) => {
-  socket.on("message", ({ name, message }) => {
-    io.emit("message", { name, message });
-  });
-});
+//io.on("connection", (socket) => {
+//  socket.on("message", ({ name, message }) => {
+//    io.emit("message", { name, message });
+//  });
+//});
 
-expressServer.listen(5001, () => {
-  console.log("소켓 테스트");
-});
+//expressServer.listen(5001, () => {
+//  console.log("소켓 테스트");
+//});
 
 module.exports = app;
