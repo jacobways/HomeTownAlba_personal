@@ -66,16 +66,16 @@ const sessionOPtion = {
   },
 };
 if (process.env.NODE_ENV === "production") {
-  const RedisStore = require("connect-redis")(session);
-  const redisClient = redis.createClient({
-    url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
-    password: process.env.REDIS_PASSWORD,
-  });
+  //const RedisStore = require("connect-redis")(session);
+  //const redisClient = redis.createClient({
+  //  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
+  //  password: process.env.REDIS_PASSWORD,
+  //});
   sessionOPtion.proxy = true;
   sessionOPtion.cookie.secure = true;
-  sessionOPtion.store =  new RedisStore({
-    client: redisClient,
-  });
+  //sessionOPtion.store =  new RedisStore({
+  //  client: redisClient,
+  //});
   sessionOPtion.domain = process.env.NODE_ENV === "production" && ".hometownalba.com";
 }
 
