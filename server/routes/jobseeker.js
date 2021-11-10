@@ -44,7 +44,7 @@ jobSeekerRouter.post("/", isNotLoggedIn, async (req, res) => {
           password: hashPassword,
           name: req.body.name,
           age: req.body.age,
-          gender: req.body.gender,
+          //gender: req.body.gender,
           question: req.body.question,
           image: req.body.image,
         };
