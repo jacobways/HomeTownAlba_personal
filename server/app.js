@@ -29,7 +29,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(
     cors({
-      origin: ["https://hometownalba.com"],
+      origin: ["https://hometownalba.com","https://www.hometownalba.com"],
       credentials: true,
       methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE"],
     })
