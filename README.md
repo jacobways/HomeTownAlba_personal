@@ -6,5 +6,5 @@
 - 사업자는 구직자의 사진, 경력, 개인정보를 미리 확인할 수 있습니다.
 - 구직자와 사업자는 상호 평가가 가능하며, 사전 평판을 조회할 수 있습니다.
 - 링크 : https://www.hometownalba.com/
-- [text-to-highlight](https://www.hometownalba.com/) {:target="\_blank"}
+- [text-to-highlight](https://www.hometownalba.com/" target="_blank)
 - <a href="https://www.hometownalba.com/">Hello, world!</a>
