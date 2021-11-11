@@ -363,7 +363,11 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                       })
                       .catch();
                   }
-
+                
+                  const ChangeGuestApplyStatus = () => {
+                    guestApplyStatusHandler();
+                  }
+                
                   // 지원을 요청하는 핸들러 제작
                   function ApplyJob() {
                     axios
