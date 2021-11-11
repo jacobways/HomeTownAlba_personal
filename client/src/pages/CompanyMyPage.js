@@ -10,7 +10,7 @@ import DaumPostcode from "react-daum-postcode";
 const { kakao } = window;
 
 // 사업자 마이페이지
-export default function CompanyMyPage() {
+export default function CompanyMyPage(props) {
   const history = useHistory();
 
   // company 회원 정보
@@ -21,8 +21,8 @@ export default function CompanyMyPage() {
   const [companyLocation, setCompanyLocation] = useState("");
   const [businessNumber, setBusinessNumber] = useState("");
   const [Logo, setLogo] = useState("");
-  
-    // 이미지 수정을 위한 변수 선언
+
+  // 이미지 수정을 위한 변수 선언
   const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
@@ -78,14 +78,14 @@ export default function CompanyMyPage() {
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
   // company 회원 정보 수정용
-  const companyNameHandler = event => {
+  const companyNameHandler = (event) => {
     setCompanyName(event.target.value);
   };
 
-  const businessNumberHandler = event => {
+  const businessNumberHandler = (event) => {
     setBusinessNumber(event.target.value);
   };
-  
+
   const imageHandler = (event) => {
     setContent(event.target.files[0]);
     setImgUploadBtn(true);
@@ -101,7 +101,7 @@ export default function CompanyMyPage() {
   };
 
   // 카카오 지도 API 활용하여 주소 선택 후 닫기
-  const CompleteCompanyPost = data => {
+  const CompleteCompanyPost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -135,7 +135,7 @@ export default function CompanyMyPage() {
     setCompanyInfoUpdating(!companyInfoUpdating);
   };
 
-    // company 업데이트 하기
+  // company 업데이트 하기
   // 이미지 업로드용 핸들러 따로 만들기
   const upoadImage = () => {
     const formData = new FormData();
@@ -177,18 +177,17 @@ export default function CompanyMyPage() {
         console.error(error);
       });
   };
- 
 
   // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
   const OpenPasswordUpdate = () => {
     setPasswordUpdating(!passwordUpdating);
   };
 
-  const passwordHandler = event => {
+  const passwordHandler = (event) => {
     setPassword(event.target.value);
   };
 
-  const questionHandler = event => {
+  const questionHandler = (event) => {
     setQuestion(event.target.value);
   };
 
@@ -203,13 +202,13 @@ export default function CompanyMyPage() {
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setPasswordUpdating(!passwordUpdating);
         setPassword("");
         setQuestion("");
         setPasswordErrorMessage("");
       })
-      .catch(err => {
+      .catch((err) => {
         setPasswordErrorMessage("질문의 답이 올바르지 않습니다");
       });
   };
@@ -247,7 +246,7 @@ export default function CompanyMyPage() {
   };
 
   // 카카오 지도 API 활용하여 Job 주소 선택 후 닫기
-  const CompleteJobPost = data => {
+  const CompleteJobPost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -269,7 +268,7 @@ export default function CompanyMyPage() {
   };
 
   // 카카오 API를 통해 주소를 위도와 경도로 좌표로 저장하기
-  const ChangeLocationToCoordinate = location => {
+  const ChangeLocationToCoordinate = (location) => {
     // 주소-좌표 변환 객체를 생성합니다
     let geocoder = new kakao.maps.services.Geocoder();
     geocoder.addressSearch(location, function (result, status) {
@@ -348,19 +347,19 @@ export default function CompanyMyPage() {
     setSunChecked(!sunChecked);
   };
 
-  const startTimeHandler = event => {
+  const startTimeHandler = (event) => {
     setStartTime(event.target.value);
   };
 
-  const endTimeHandler = event => {
+  const endTimeHandler = (event) => {
     setEndTime(event.target.value);
   };
 
-  const positionHandler = event => {
+  const positionHandler = (event) => {
     setPosition(event.target.value);
   };
 
-  const hourlyWageHandler = event => {
+  const hourlyWageHandler = (event) => {
     setHourlyWage(event.target.value);
   };
 
@@ -393,7 +392,7 @@ export default function CompanyMyPage() {
           },
           { withCredentials: true }
         )
-        .then(res => {
+        .then((res) => {
           setEventStatus(!eventStatus);
         });
     }
@@ -401,36 +400,40 @@ export default function CompanyMyPage() {
 
   // 일자리 삭제하기
   const DeleteJob = (jobId) => {
-
     // 일자리에 묶인 지원자들도 삭제하기 + 메일 보내기
-    axios.delete(
-      `${process.env.REACT_APP_SERVER_URL}/applicant`,
-      { params: { jobId } },
-      { withCredentials: true }
-    )
-    .then((res)=>{
-      // Applicant를 삭제 후 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
-      axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
+    axios
+      .delete(
+        `${process.env.REACT_APP_SERVER_URL}/applicant`,
+        { params: { jobId } },
+        { withCredentials: true }
+      )
       .then((res) => {
-        setEventStatus(!eventStatus);
+        // Applicant를 삭제 후 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
+        axios
+          .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            setEventStatus(!eventStatus);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((err) => {
         console.log(err);
-      })
-    })
-    .catch((err)=>{
-      console.log(err)
-      // 삭제할 applicant가 없을 때 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
-      axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
-      .then((res) => {
-        setEventStatus(!eventStatus);
-      })
-      .catch((err) => {
-        console.log(err);
-      })
-    })
+        // 삭제할 applicant가 없을 때 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
+        axios
+          .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
+            withCredentials: true,
+          })
+          .then((res) => {
+            setEventStatus(!eventStatus);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      });
   };
 
   // 각 일자리별 지원자를 applicantList state에 저장
@@ -444,7 +447,7 @@ export default function CompanyMyPage() {
       .get(`${process.env.REACT_APP_SERVER_URL}/applicant/jobseeker/${jobId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
         console.log("res.data.applyStatus----", res.data.applyStatus);
         if (res.data.data.length !== 0) {
@@ -458,13 +461,13 @@ export default function CompanyMyPage() {
           setApplyStatusList({ ...applyStatusList, [idx]: null });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   // applicantList 닫는 핸들러
-  const closeApplicantList = idx => {
+  const closeApplicantList = (idx) => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
 
@@ -476,10 +479,10 @@ export default function CompanyMyPage() {
         { jobId, jobSeekerId },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         openApplicantList(idx, jobId);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -492,10 +495,10 @@ export default function CompanyMyPage() {
         { jobId, jobSeekerId },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         openApplicantList(idx, jobId);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -504,16 +507,15 @@ export default function CompanyMyPage() {
     // company 정보 불러오기
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then(res => {
+      .then((res) => {
         let companyInfo = res.data.user;
         setCompanyId(companyInfo.id);
         setCompanyName(companyInfo.companyName);
         setCompanyLocation(companyInfo.location);
         setBusinessNumber(companyInfo.businessNumber);
         setLogo(companyInfo.logo);
-
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -522,10 +524,10 @@ export default function CompanyMyPage() {
       .get(`${process.env.REACT_APP_SERVER_URL}/job/${companyId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setJobList(res.data.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   }, [companyId, eventStatus]);
@@ -536,8 +538,8 @@ export default function CompanyMyPage() {
   }, [mon, tue, wed, thu, fri, sat, sun]);
 
   // 구인내역 클릭하면 지원자 현황 표시됨
-  
-    // 리다이렉트 테스트
+
+  // 리다이렉트 테스트
 
   const [UserLoginType, setUserLoginType] = useState("");
 
@@ -574,7 +576,7 @@ export default function CompanyMyPage() {
             <th scope="row">사업자등록번호</th>
             <td>{businessNumber}</td>
           </tr>
-           <tr>
+          <tr>
             <th scope="row">로고</th>
             <td>
               <img src={Logo} alt="logo" />

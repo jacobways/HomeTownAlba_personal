@@ -112,7 +112,6 @@ app.get("/", (req, res) => {
   });
 });
 
-
 // multer s3를 위한 설정
 try {
   fs.accessSync("uploads");
