@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Route, Switch } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -16,26 +16,32 @@ import MyPage from "./pages/MyPage";
 import ChatPage from "./components/ChatPage";
 
 function App() {
-  
-  const [guestApplyStatus, setGuestApplyStatus] = useState(false)
+  const [guestApplyStatus, setGuestApplyStatus] = useState(false);
 
   const guestApplyStatusHandler = () => {
-    setGuestApplyStatus(!guestApplyStatus)
-  }
-  
+    setGuestApplyStatus(!guestApplyStatus);
+  };
+
   return (
     <>
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/mypage" component={MyPage} />
-        <Route exact path="/map" 
-         render={()=><Map guestApplyStatus={guestApplyStatus} 
-         guestApplyStatusHandler={guestApplyStatusHandler}/>}
+        <Route
+          exact
+          path="/map"
+          render={() => (
+            <Map
+              guestApplyStatus={guestApplyStatus}
+              guestApplyStatusHandler={guestApplyStatusHandler}
+            />
+          )}
         />
         <Route exact path="/admin" component={AdminPage} />
-        <Route exact path="/guest/mypage" 
-         render={()=><GuestMyPage 
-         guestApplyStatus={guestApplyStatus}/>} 
+        <Route
+          exact
+          path="/guest/mypage"
+          render={() => <GuestMyPage guestApplyStatus={guestApplyStatus} />}
         />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />

@@ -7,7 +7,7 @@ import WithdrawJobSeekerModal from "../components/MyPageModal/Modal_WithdrawJobs
 import NavBar from "../components/NavBar";
 
 // 구직자 마이페이지
-export default function JobSeekerMyPage() {
+export default function JobSeekerMyPage(props) {
   const history = useHistory();
 
   // JobSeeker 테이블의 id이자, Career 테이블의 jobSeekerId
@@ -57,22 +57,21 @@ export default function JobSeekerMyPage() {
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
 
   // jobSeeker 정보 수정용
-  const nameHandler = event => {
+  const nameHandler = (event) => {
     setName(event.target.value);
   };
 
-  const ageHandler = event => {
+  const ageHandler = (event) => {
     setAge(event.target.value);
   };
 
-  const genderHandler = event => {
+  const genderHandler = (event) => {
     setGender(event.target.value);
   };
 
-  const imageHandler = event => {
+  const imageHandler = (event) => {
     setContent(event.target.files[0]);
     setImgUploadBtn(true);
-
   };
   //메인페이지 이동
   const home = () => {
@@ -137,11 +136,11 @@ export default function JobSeekerMyPage() {
     setPasswordUpdating(!passwordUpdating);
   };
 
-  const passwordHandler = event => {
+  const passwordHandler = (event) => {
     setPassword(event.target.value);
   };
 
-  const questionHandler = event => {
+  const questionHandler = (event) => {
     setQuestion(event.target.value);
   };
 
@@ -156,13 +155,13 @@ export default function JobSeekerMyPage() {
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setPasswordUpdating(!passwordUpdating);
         setPassword("");
         setQuestion("");
         setPasswordErrorMessage("");
       })
-      .catch(err => {
+      .catch((err) => {
         setPasswordErrorMessage("질문의 답이 올바르지 않습니다");
       });
   };
@@ -195,15 +194,15 @@ export default function JobSeekerMyPage() {
   };
 
   // 경력 정보 생성 및 수정 핸들러
-  const companyHandler = event => {
+  const companyHandler = (event) => {
     setCompany(event.target.value);
   };
 
-  const periodHandler = event => {
+  const periodHandler = (event) => {
     setPeriod(event.target.value);
   };
 
-  const positionHandler = event => {
+  const positionHandler = (event) => {
     setPosition(event.target.value);
   };
 
@@ -220,10 +219,10 @@ export default function JobSeekerMyPage() {
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -240,14 +239,14 @@ export default function JobSeekerMyPage() {
         { params: { id } },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         let careerInfo = res.data.data; // 객체로 불러옴
         setCareerId(careerInfo.id);
         setCompany(careerInfo.company);
         setPeriod(careerInfo.period);
         setPosition(careerInfo.position);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -269,36 +268,36 @@ export default function JobSeekerMyPage() {
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
-  const deleteCareer = id => {
+  const deleteCareer = (id) => {
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/career/${id}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   // 지원 목록에서 지원을 취소하는 핸들러
-  const CancelApply = jobId => {
+  const CancelApply = (jobId) => {
     axios
       .delete(
         `${process.env.REACT_APP_SERVER_URL}/applicant`,
         { params: { jobId, jobSeekerId: jobSeekerId } },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       });
   };
@@ -307,7 +306,7 @@ export default function JobSeekerMyPage() {
     // JobSeeker 정보 받기 (동혁님 전달 코드)
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then(res => {
+      .then((res) => {
         let jobSeekerInfo = res.data.user;
         setJobSeekerId(jobSeekerInfo.id);
 
@@ -318,7 +317,7 @@ export default function JobSeekerMyPage() {
 
         console.log(res.data.user);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -327,10 +326,10 @@ export default function JobSeekerMyPage() {
       .get(`${process.env.REACT_APP_SERVER_URL}/career/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setCareerList(res.data.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -339,7 +338,7 @@ export default function JobSeekerMyPage() {
       .get(`${process.env.REACT_APP_SERVER_URL}/applicant/job/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setApplyList(res.data.data);
       });
 
@@ -349,12 +348,28 @@ export default function JobSeekerMyPage() {
         { params: { jobSeekerId } },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         console.log("res----", res);
         setResultList(res.data.data);
         setStatusList(res.data.applyStatus);
       });
   }, [eventStatus, jobSeekerId]);
+
+  const [UserLoginType, setUserLoginType] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_serverURL}`, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data.user.type, typeof res.data.user.type);
+        setUserLoginType(res.data.user.type);
+        if (res.data.user && res.data.user.type) {
+          console.log("로그인 된 상태");
+        } else {
+          props.history.push("/");
+        }
+      });
+  }, [UserLoginType]);
 
   return (
     <div>
@@ -471,22 +486,22 @@ export default function JobSeekerMyPage() {
               </tr>
               <tr>
                 <th scope="row">성별</th>
-             <select onChange={genderHandler} className="jobFlow">
-              <option value="">--성별을 선택해주세요--</option>
-              <option value="남자">남자</option>
-              <option value="여자">여자</option>
-            </select>
-          </tr>
-          <tr>
-            <th scope="row">사진</th>
-            <input name="image" type="file" onChange={imageHandler} />
-          </tr>
-          {ImgUploadBtn ? (
-            <button onClick={upoadImage}>이미지 업로드</button>
-          ) : null}
-                  수정 완료
-                </button>
+                <select onChange={genderHandler} className="jobFlow">
+                  <option value="">--성별을 선택해주세요--</option>
+                  <option value="남자">남자</option>
+                  <option value="여자">여자</option>
+                </select>
               </tr>
+              <tr>
+                <th scope="row">사진</th>
+                <input name="image" type="file" onChange={imageHandler} />
+              </tr>
+              <tr>
+                {ImgUploadBtn ? (
+                  <button onClick={upoadImage}>이미지 업로드</button>
+                ) : null}
+              </tr>
+              <button onClick={UpdateJobSeeker}>수정 완료</button>
             </tbody>
           </div>
         )}
@@ -628,7 +643,7 @@ export default function JobSeekerMyPage() {
                   <th>포지션</th>
                   <th></th>
                 </tr>
-                {applyList.map(job => {
+                {applyList.map((job) => {
                   return (
                     <tr key={job.id}>
                       <td>{job.companyName}</td>

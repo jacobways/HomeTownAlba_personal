@@ -7,7 +7,7 @@ import DaumPostcode from "react-daum-postcode";
 import KakaoR from "../components/jobRegister";
 import LoadingModal from "../components/LoadingModal";
 import NavBar from "../components/NavBar";
-import "./RegisterPage.css";
+import "./RegistarPage.css";
 
 function RegisterPage(props) {
   const [RegisterDisplay, setRegisterDisplay] = useState("jobseeker");
@@ -24,7 +24,7 @@ function RegisterPage(props) {
     setIsOpenPost(!isOpenPost);
   };
 
-  const onCompletePost = data => {
+  const onCompletePost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -87,7 +87,7 @@ function RegisterPage(props) {
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
 
-  const ImgUploadHandler = e => {
+  const ImgUploadHandler = (e) => {
     // console.log(e.target.files);
     setContent(e.target.files[0]);
   };
@@ -107,54 +107,54 @@ function RegisterPage(props) {
     setRegisterDisplay("kakao");
   };
 
-  const IdHandler = e => {
+  const IdHandler = (e) => {
     setId(e.target.value);
   };
-  const PasswordHandler = e => {
+  const PasswordHandler = (e) => {
     setPassword(e.target.value);
   };
-  const ConfirmPasswordHandler = e => {
+  const ConfirmPasswordHandler = (e) => {
     setConfirmPassword(e.target.value);
   };
-  const NameHandler = e => {
+  const NameHandler = (e) => {
     setName(e.target.value);
   };
-  const EmailHandler = e => {
+  const EmailHandler = (e) => {
     setEmail(e.target.value);
   };
 
-  const CompanyEmailHandler = e => {
+  const CompanyEmailHandler = (e) => {
     setCompanyEmail(e.target.value);
   };
-  const AgeHandler = e => {
+  const AgeHandler = (e) => {
     setAge(e.target.value);
   };
-  const genderHandler = e => {
+  const genderHandler = (e) => {
     // console.log(e.target.value);
     setGender(e.target.value);
   };
-  const QuestionHandler = e => {
+  const QuestionHandler = (e) => {
     setQuestion(e.target.value);
   };
-  const CompanyNameHandler = e => {
+  const CompanyNameHandler = (e) => {
     setCompanyName(e.target.value);
   };
 
-  const BusinessNumberHandler = e => {
+  const BusinessNumberHandler = (e) => {
     setBusinessNumber(e.target.value);
   };
 
   // 인증번호 입력란
-  const InputHandler = e => {
+  const InputHandler = (e) => {
     setJobSeekerInputAuthCode(e.target.value);
   };
 
-  const CompanyInputHandler = e => {
+  const CompanyInputHandler = (e) => {
     setCompanyInputAuthCode(e.target.value);
   };
   // 구직자 회원가입 처리 로직 : 이메일 인증 -> 최종 회원가입
 
-  const JobSeekrSubmitHandler = e => {
+  const JobSeekrSubmitHandler = (e) => {
     e.preventDefault();
     setLoadingStatus(true);
 
@@ -168,11 +168,11 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
-      .then(res => {
+      .then((res) => {
         console.log(res.data);
         setFilePath(`${BASE_URL}/img/${res.data.fileName}`);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error(error);
       });
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -187,7 +187,7 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         // console.log(res.data);
         setLoadingStatus(false);
         setJobSeekerEmailInput(true);
@@ -195,7 +195,7 @@ function RegisterPage(props) {
       });
   };
 
-  const finalJobSeekerSubmitHandler = e => {
+  const finalJobSeekerSubmitHandler = (e) => {
     e.preventDefault();
 
     let submitData = {
@@ -215,7 +215,7 @@ function RegisterPage(props) {
       console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
     } else {
       if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
-        dispatch(registerJobSeeker(submitData)).then(res => {
+        dispatch(registerJobSeeker(submitData)).then((res) => {
           // console.log(res.payload);
           if (res.payload.registersuccess) {
             props.history.push("/login");
@@ -231,7 +231,7 @@ function RegisterPage(props) {
 
   // 사업자 회원가입 처리 로직 : 이메일 인증 -> 최종 회원가입
 
-  const CompanySubmitHandler = e => {
+  const CompanySubmitHandler = (e) => {
     e.preventDefault();
     // 회원가입할때 Db에 type이라는 field를 한개 추가
     setLoadingStatus(true);
@@ -245,7 +245,7 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         // console.log(res.data);
         setLoadingStatus(false);
 
@@ -254,7 +254,7 @@ function RegisterPage(props) {
       });
   };
 
-  const finalCompanySubmitHandler = e => {
+  const finalCompanySubmitHandler = (e) => {
     e.preventDefault();
 
     let submitData = {
@@ -271,7 +271,7 @@ function RegisterPage(props) {
       console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
     } else {
       if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
-        dispatch(registerCompany(submitData)).then(res => {
+        dispatch(registerCompany(submitData)).then((res) => {
           // console.log(res.payload);
           if (res.payload.registersuccess) {
             props.history.push("/login");

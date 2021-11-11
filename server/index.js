@@ -112,7 +112,6 @@ app.get("/", (req, res) => {
   });
 });
 
-
 // multer s3를 위한 설정
 try {
   fs.accessSync("uploads");
@@ -136,7 +135,7 @@ const uploadS3 = multer({
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
-
+});
 
 //-------------소켓io test
 const { createServer } = require("http");
@@ -147,9 +146,8 @@ const io = new Server(expressServer, { cors: { origin: "*" } });
 io.on("connection", (socket) => {
   socket.on("message", ({ name, message }) => {
     io.emit("message", { name, message });
-    console.log('name과 message',name, message)
+    console.log("name과 message", name, message);
   });
-
 });
 
 // 라우터 예시
@@ -159,7 +157,6 @@ app.post("/uploads3", uploadS3.single("image"), (req, res, next) => {
     fileName: req.file.location,
   });
 });
-
 
 app.listen(port, () => {
   console.log("yaho1");
