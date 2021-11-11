@@ -85,6 +85,11 @@ export default function CompanyMyPage() {
   const businessNumberHandler = event => {
     setBusinessNumber(event.target.value);
   };
+  
+    const imageHandler = (event) => {
+    setContent(event.target.files[0]);
+    setImgUploadBtn(true);
+  };
 
   // company 사업자 위치 수정창 오픈
   const OpenCompanyPost = () => {
