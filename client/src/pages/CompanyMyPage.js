@@ -86,7 +86,7 @@ export default function CompanyMyPage() {
     setBusinessNumber(event.target.value);
   };
   
-    const imageHandler = (event) => {
+  const imageHandler = (event) => {
     setContent(event.target.files[0]);
     setImgUploadBtn(true);
   };
@@ -400,27 +400,37 @@ export default function CompanyMyPage() {
   };
 
   // 일자리 삭제하기
-  const DeleteJob = jobId => {
+  const DeleteJob = (jobId) => {
+
     // 일자리에 묶인 지원자들도 삭제하기 + 메일 보내기
-    axios
-      .delete(
-        `${process.env.REACT_APP_SERVER_URL}/applicant`,
-        { params: { jobId } },
-        { withCredentials: true }
-      )
-      .then(res => {
-        // 지원자에게 메일이 발송된 이후에 해당 Job을 삭제하기
-        axios
-          .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
-            withCredentials: true,
-          })
-          .then(res => {
-            setEventStatus(!eventStatus);
-          })
-          .catch(err => {
-            console.log(err);
-          });
-      });
+    axios.delete(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { params: { jobId } },
+      { withCredentials: true }
+    )
+    .then((res)=>{
+      // Applicant를 삭제 후 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
+      axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
+      .then((res) => {
+        setEventStatus(!eventStatus);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
+    .catch((err)=>{
+      console.log(err)
+      // 삭제할 applicant가 없을 때 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
+      axios
+      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
+      .then((res) => {
+        setEventStatus(!eventStatus);
+      })
+      .catch((err) => {
+        console.log(err);
+      })
+    })
   };
 
   // 각 일자리별 지원자를 applicantList state에 저장
