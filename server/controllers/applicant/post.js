@@ -14,8 +14,8 @@ module.exports = async (req, res) => {
       res.status(400).send("이미 지원하셨습니다.")
     } else {
       Applicant.create({jobId, jobSeekerId})
-      .then((date) => {
-        res.status(201).send("지원이 완료되었습니다.")
+      .then((data) => {
+        res.status(201).json({message: "지원이 완료되었습니다", id: data.dataValues.id})
       })
       .catch((err)=> {
         console.log(err);

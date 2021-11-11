@@ -1,4 +1,5 @@
 const { Job } = require('../../models')
+const { Applicant } = require('../../models')
 
 // id 값에 따라 job 목록 1개 삭제하는 메소드
 module.exports = (req, res) => {
@@ -15,6 +16,7 @@ module.exports = (req, res) => {
       if(!data) {
         res.status(404).send('일치하는 일자리 목록이 없습니다')
       } else {
+        Applicant.destroy({where: {jobId: id}})
         res.status(202).send('deleted')
       }
     })
