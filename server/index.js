@@ -109,6 +109,7 @@ app.get("/", (req, res) => {
   });
 });
 
+
 //-------------소켓io test
 const { createServer } = require("http");
 const { Server } = require("socket.io");
@@ -126,6 +127,7 @@ expressServer.listen(5001, () => {
   console.log("소켓 테스트");
 });
 //-------------
+
 
 app.listen(port, () => {
   console.log("yaho1");
