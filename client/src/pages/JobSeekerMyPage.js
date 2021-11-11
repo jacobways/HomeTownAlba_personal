@@ -54,6 +54,7 @@ export default function JobSeekerMyPage() {
   console.log("statusList", statusList);
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
+  const [ImgUploadBtn, setImgUploadBtn] = useState(false);
 
   // jobSeeker 정보 수정용
   const nameHandler = event => {
@@ -70,6 +71,8 @@ export default function JobSeekerMyPage() {
 
   const imageHandler = event => {
     setContent(event.target.files[0]);
+    setImgUploadBtn(true);
+
   };
   //메인페이지 이동
   const home = () => {
@@ -85,50 +88,26 @@ export default function JobSeekerMyPage() {
   };
 
   // jobSeeker 업데이트 하기
-
-  const UpdateJobSeeker = () => {
+  // 이미지 업로드 구분
+  const upoadImage = () => {
     const formData = new FormData();
     formData.append("image", Content);
     console.log(formData);
 
-    if (formData) {
-      axios
-        .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
-          header: { "content-type": "multipart/form-data" },
-        })
-        .then(res => {
-          console.log(res.data);
-          setFilePath(`${BASE_URL}/img/${res.data.fileName}`);
-          // multsers3용 src가 새로 생김 -> setFilePath(res.data.v = v.location) , baseUrl을 지워줘야함 , 이미지 쪽 backurl 지우고 이렇게 바꿔줄것
-          // res.data.v => 이미지 리사이징 적용 res.data.v.src.replace(/\/thumb\//, '/original/')
-          // img src도 replace("thumb",original)
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
+        header: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFilePath(res.data.fileName);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
-          if (FilePath) {
-            axios
-              .patch(
-                `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
-                {
-                  id: jobSeekerId,
-                  image: FilePath,
-                },
-                { withCredentials: true }
-              )
-              .then(res => {
-                console.log(res.data);
-                console.log(FilePath);
-                setEventStatus(!eventStatus);
-              });
-          }
-
-          setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
-        })
-        .catch(error => {
-          console.error(error);
-        });
-      // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
-    }
-    // 분기처리 안된 이유 : 비동기(axios 2개가 동시에 실행이 되어, 콜백처리 및 분기처리 진행)
-
+  const UpdateJobSeeker = () => {
     axios
       .patch(
         `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
@@ -137,13 +116,20 @@ export default function JobSeekerMyPage() {
           name,
           age,
           gender,
+          image: FilePath,
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
+        setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
+        setImgUploadBtn(false);
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
+    // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
+    // 분기처리 안된 이유 : 비동기(axios 2개가 동시에 실행이 되어, 콜백처리 및 분기처리 진행)
   };
 
   // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
@@ -485,29 +471,19 @@ export default function JobSeekerMyPage() {
               </tr>
               <tr>
                 <th scope="row">성별</th>
-                <input
-                  className="jobFlow"
-                  name="gender"
-                  type="text"
-                  onChange={genderHandler}
-                  value={gender}
-                />
-              </tr>
-              <tr>
-                <th scope="row">사진</th>
-                <input
-                  className="jobFlow"
-                  name="image"
-                  type="file"
-                  onChange={imageHandler}
-                />
-              </tr>
-              <tr className="fixButton">
-                <button
-                  id="fixed"
-                  className="bubbly-button"
-                  onClick={UpdateJobSeeker}
-                >
+             <select onChange={genderHandler} className="jobFlow">
+              <option value="">--성별을 선택해주세요--</option>
+              <option value="남자">남자</option>
+              <option value="여자">여자</option>
+            </select>
+          </tr>
+          <tr>
+            <th scope="row">사진</th>
+            <input name="image" type="file" onChange={imageHandler} />
+          </tr>
+          {ImgUploadBtn ? (
+            <button onClick={upoadImage}>이미지 업로드</button>
+          ) : null}
                   수정 완료
                 </button>
               </tr>
