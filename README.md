@@ -7,4 +7,4 @@
 - 구직자와 사업자는 상호 평가가 가능하며, 사전 평판을 조회할 수 있습니다.
 - 링크 : https://www.hometownalba.com/
 - [text-to-highlight](https://www.hometownalba.com/){:target="\_blank"}
-<a href="https://www.hometownalba.com/">Hello, world!</a>
+- <a href="https://www.hometownalba.com/">Hello, world!</a>
