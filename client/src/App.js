@@ -6,6 +6,7 @@ import CompanyMyPage from "./pages/CompanyMyPage";
 import JobSeekerMyPage from "./pages/JobSeekerMyPage";
 import LandingPage from "./pages/LandingPage.js";
 
+import Loading from "./components/Loading/Loading";
 import Map from "./pages/Map";
 import AdminPage from "./components/AdminPage";
 

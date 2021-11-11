@@ -46,16 +46,16 @@ function Service() {
   return (
     <div className="service-container">
       <div className="service-wrapper">
-        <h1 className="service-title">
-          알바를 찾는 시간도 우리에겐 소중하니까
-        </h1>
+        <p>지도에서 쉽게 찾는</p>
+        <p>" 우리 동네 "</p>
+        <p>알바 구하기</p>
         <div className="typing-wrapper">
           <span>
             <p id="typing" className="typing-text"></p>
           </span>
         </div>
         <h1 className="service-scroll">
-          <div>scroll</div>
+          <i className="fas fa-angle-double-down"></i>
         </h1>
       </div>
     </div>

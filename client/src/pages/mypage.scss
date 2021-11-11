@@ -22,7 +22,7 @@ body {
   height: 100%;
   display: flex;
   flex-direction: column;
-  margin: 5% 20% 10% 20%;
+  margin: 15% 30% 10% 30%;
   align-items: center;
 
   &-line {
@@ -62,7 +62,7 @@ $baby-blue: #f8faff;
   font-family: "Helvetica", "Arial", sans-serif;
   display: inline-block;
   font-size: 1em;
-  padding: 1em 2em;
+  padding: 1em 0em;
   margin-top: 10px;
   margin-bottom: 20px;
   -webkit-appearance: none;
@@ -201,6 +201,7 @@ $baby-blue: #f8faff;
 .line {
   float: left;
   text-align: center;
+
   tbody {
     display: inline-block;
     vertical-align: middle;
@@ -212,6 +213,17 @@ $baby-blue: #f8faff;
       display: inline-flex;
       width: 100%;
       th {
+        display: table-cell;
+        width: 140px;
+        font-size: 16px;
+        color: #494949;
+        font-weight: 700;
+        text-align: left;
+        line-height: 32px;
+        vertical-align: top;
+        letter-spacing: -1px;
+      }
+      td {
         display: table-cell;
         width: 140px;
         font-size: 16px;
@@ -270,6 +282,7 @@ $baby-blue: #f8faff;
 }
 #left {
   margin-right: 10px;
+  margin-left: 10px;
 }
 .companyJob {
   display: block;
@@ -302,6 +315,59 @@ $baby-blue: #f8faff;
   }
 }
 
+.jobFlow {
+  width: 100%;
+  font-size: 14px;
+  color: #494949;
+  height: 46px;
+  border: 1px solid;
+  border-color: #fff #fff #e5e7ea;
+  outline: none;
+}
+
+.user {
+  float: left;
+  text-align: center;
+  display: flex;
+  border-top: ridge;
+  border-bottom: inset;
+  width: 100%;
+  tbody {
+    display: inline-block;
+    vertical-align: middle;
+    border-color: inherit;
+    width: 100%;
+    align-items: center;
+    tr {
+      justify-content: center;
+      display: inline-flex;
+      float: left;
+      th {
+        display: table-cell;
+        width: 140px;
+        font-size: 16px;
+        color: #494949;
+        font-weight: 700;
+        text-align: left;
+        line-height: 32px;
+        vertical-align: top;
+        letter-spacing: -1px;
+      }
+      td {
+        display: table-cell;
+        width: 140px;
+        font-size: 16px;
+        color: #494949;
+        font-weight: 700;
+        text-align: left;
+        line-height: 32px;
+        vertical-align: top;
+        letter-spacing: -1px;
+      }
+    }
+  }
+}
+
 .kakaoSns {
   background: url(../images/kakao.jpeg);
   background-size: cover;
@@ -320,4 +386,125 @@ $baby-blue: #f8faff;
   height: 40px;
   border-radius: 10px;
   border: 1px;
+}
+
+#profile {
+  border-radius: 4px;
+  max-width: 115px;
+  max-height: 150px;
+  position: relative;
+  width: 115px;
+  height: 150px;
+  margin: 9px 0 0 15px;
+  border: 1px solid #ddd;
+  aspect-ratio: auto 140 / 180;
+}
+.header2 {
+  margin: 0px 75% 0px 0px;
+}
+
+.password {
+  border-bottom: inset;
+  width: 100%;
+  button {
+  }
+}
+
+.home {
+  text-align: center;
+}
+
+.job {
+  padding: 20px 0px 20px 0px;
+  text-align: center;
+
+  border-bottom: inset;
+  width: 100%;
+  .careerDiv {
+    tbody {
+      float: left;
+      width: 100%;
+      border-right: 4px;
+      text-align: center;
+      border-top: double;
+      padding: 10px 0px 0px 0px;
+      margin-top: 10px;
+      tr {
+        float: left;
+        border-right: 4px;
+      }
+      div {
+        float: left;
+        text-align: center;
+      }
+      .workCom {
+        width: 30%;
+      }
+      .position {
+        width: 30%;
+      }
+      .month {
+        width: 10%;
+      }
+    }
+  }
+}
+.career {
+  width: 100%;
+  tr {
+    width: 100%;
+    display: flex;
+    border-top: outset;
+    padding-top: 7px;
+    td {
+      float: left;
+      height: 15px;
+    }
+    .workCom {
+      width: 30%;
+      border-right: inset;
+    }
+    .position {
+      width: 30%;
+      border-right: inset;
+    }
+    .month {
+      width: 10%;
+      border-right: inset;
+    }
+  }
+}
+
+.pinkButton {
+  font-family: "Helvetica", "Arial", sans-serif;
+  display: inline-block;
+  font-size: 1em;
+  padding: 3px 3px 3px 3px;
+  // margin-top: 10px;
+  margin-bottom: 20px;
+  -webkit-appearance: none;
+  appearance: none;
+  background-color: $button-bg;
+  color: $button-text-color;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  transition: transform ease-in 0.1s, box-shadow ease-in 0.25s;
+  box-shadow: 0 2px 25px rgba(255, 0, 130, 0.5);
+  width: 20%;
+}
+
+.careerSection {
+  border-top: ridge;
+  padding: 20px 0px 0px 0px;
+  border-bottom: inherit;
+}
+
+#fixed {
+  width: 100%;
+}
+
+.fixButton {
+  width: 100%;
 }

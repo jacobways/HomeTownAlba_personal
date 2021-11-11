@@ -11,9 +11,14 @@ function NavBar() {
   //   Get요청을 위한 Mysql - Id 불러오는 요청 -> jobseeker는 /jobseeker , company는 /company
   const [Login, setLogin] = useState(false);
   const [UserId, setUserId] = useState(null); //GET요청에 사용되는 id , 해당 내용 업데이트
+  const [isOpenHamburger, setIsOpenHamburger] = useState(false);
+
+  const toggleHamburger = () => {
+    setIsOpenHamburger(!isOpenHamburger);
+  };
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true }).then(res => {
+    axios.get("http://localhost:5000", { withCredentials: true }).then(res => {
       console.log(res.data);
       if (res.data.user) {
         setUserId(res.data.user.id); //GET요청시에 사용하면 되는 id : mysql에서 생성해주는 id
@@ -42,8 +47,6 @@ function NavBar() {
     dispatch(logoutJobSeeker()).then(res => {
       return res.data;
     });
-
-
   };
 
   if (jobSeeker === undefined) {
@@ -57,36 +60,40 @@ function NavBar() {
         </div>
         <ul className="navbar-header-menu">
           <li>
+            <Link to="/guest/mypage">마이페이지</Link>
+          </li>
+          <li>
             <Link to="/login">로그인</Link>
           </li>
           <li>
             <Link to="/register">회원가입</Link>
           </li>
-          <li>
-            <Link to="/guest/mypage">게스트MyPage</Link>
-          </li>
-          <li type="button" aria-label="로그인" className="login-icon">
-            <i className="fa-sign-in-alt"></i>
-          </li>
-          <li type="button" aria-label="회원가입" className="signup-icon">
-            <i className="fa-sign-up-alt"></i>
-          </li>
         </ul>
-        <aside className="hamburgerBar">
+        <div className="hamburger-Btn" onClick={toggleHamburger}>
+          <i className="fas fa-bars"></i>
+        </div>
+        <aside
+          className={
+            isOpenHamburger ? "show-hamburgerBar" : "hide-hamburgerBar"
+          }
+        >
           <div className="hamburgerBar_menu">
-            <div className="hamburgerBar_exitBtn">
-              <i className="hamburgerBar_exit_icon"></i>
+            <div className="hamburgerBar_exitBtn" onClick={toggleHamburger}>
+              <i className="fas fa-times"></i>
             </div>
-            <div className="hamburgerBar_logo-container">
-              <div className="hamburgerBar-header-logo">
-                <Link to="/">logo</Link>
-              </div>
-            </div>
-            <div className="hamburgerBar-login">로그인</div>
             <ul className="hamburgerBar-menu">
-              <li className="hamburgerBar-list">동네알바</li>
-              <li className="hamburgerBar-list">알바목록</li>
-              <li className="hamburgerBar-list">마이페이지</li>
+              <li className="hamburgerBar-list">
+                <Link to="/login">로그인</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/map">알바 찾기</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/guest/mypage">마이페이지(게스트)</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/register">회원가입</Link>
+              </li>
             </ul>
           </div>
         </aside>
@@ -114,29 +121,31 @@ function NavBar() {
               로그아웃
             </Link>
           </li>
-          <li type="button" aria-label="로그인" className="login-icon">
-            <i className="fas sign-in"></i>
-          </li>
-          <li type="button" aria-label="회원가입" className="signup-icon">
-            <i className="fas fa-sign-up-alt"></i>
-          </li>
         </ul>
-
-        <aside className="hamburgerBar">
+        <div className="hamburger-Btn" onClick={toggleHamburger}>
+          <i className="fas fa-bars"></i>
+        </div>
+        <aside
+          className={
+            isOpenHamburger ? "show-hamburgerBar" : "hide-hamburgerBar"
+          }
+        >
           <div className="hamburgerBar_menu">
-            <div className="hamburgerBar_exitBtn">
-              <i className="hamburgerBar_exit_icon"></i>
+            <div className="hamburgerBar_exitBtn" onClick={toggleHamburger}>
+              <i className="fas fa-times"></i>
             </div>
-            <div className="hamburgerBar_logo-container">
-              <div className="hamburgerBar-header-logo">
-                <Link to="/">logo</Link>
-              </div>
-            </div>
-            <div className="hamburgerBar-login">로그인</div>
             <ul className="hamburgerBar-menu">
-              <li className="hamburgerBar-list">동네알바</li>
-              <li className="hamburgerBar-list">알바목록</li>
-              <li className="hamburgerBar-list">마이페이지</li>
+              <li className="hamburgerBar-list">
+                <Link to="/map">알바 찾기</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/mypage">마이페이지</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/" onClick={LogoutHandler}>
+                  로그아웃
+                </Link>
+              </li>
             </ul>
           </div>
         </aside>
@@ -147,9 +156,6 @@ function NavBar() {
       <header className="navbar-header-container">
         <div className="navbar-header-logo">
           <Link to="/">logo</Link>
-        </div>
-        <div className="menuBar-container">
-          <div className="menuBar-icon"></div>
         </div>
         <ul className="navbar-header-menu">
           <li>
@@ -165,21 +171,31 @@ function NavBar() {
             <Link to="/register">회원가입</Link>
           </li>
         </ul>
-        <aside className="hamburgerBar">
+        <div className="hamburger-Btn" onClick={toggleHamburger}>
+          <i className="fas fa-bars"></i>
+        </div>
+        <aside
+          className={
+            isOpenHamburger ? "show-hamburgerBar" : "hide-hamburgerBar"
+          }
+        >
           <div className="hamburgerBar_menu">
-            <div className="hamburgerBar_exitBtn">
-              <i className="hamburgerBar_exit_icon"></i>
+            <div className="hamburgerBar_exitBtn" onClick={toggleHamburger}>
+              <i className="fas fa-times"></i>
             </div>
-            <div className="hamburgerBar_logo-container">
-              <div className="hamburgerBar-header-logo">
-                <Link to="/">logo</Link>
-              </div>
-            </div>
-            <div className="hamburgerBar-login">로그인</div>
             <ul className="hamburgerBar-menu">
-              <li className="hamburgerBar-list">동네알바</li>
-              <li className="hamburgerBar-list">알바목록</li>
-              <li className="hamburgerBar-list">마이페이지</li>
+              <li className="hamburgerBar-list">
+                <Link to="/login">로그인</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/map">알바 찾기</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/guest/mypage">마이페이지(게스트)</Link>
+              </li>
+              <li className="hamburgerBar-list">
+                <Link to="/register">회원가입</Link>
+              </li>
             </ul>
           </div>
         </aside>
