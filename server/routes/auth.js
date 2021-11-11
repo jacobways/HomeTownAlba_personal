@@ -15,7 +15,7 @@ authRouter.get(
     // Successful authentication, redirect home.
     // console.log(req.user);
     req.session.save(function (err) {
-      res.redirect("http://localhost:3000");
+      res.redirect("https://www.hometownalba.com");
     });
     // console.log(req.session.passport);
     // res.status(200).json({
@@ -30,7 +30,7 @@ authRouter.get(
   "/kakao/callback",
   passport.authenticate("kakao", { failureRedirect: "/failed" }),
   (req, res) => {
-    res.redirect("http://localhost:3000");
+    res.redirect("https://www.hometownalba.com");
   }
 );
 

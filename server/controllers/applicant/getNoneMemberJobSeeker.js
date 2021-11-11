@@ -9,13 +9,13 @@ module.exports = async (req, res) => {
   const { jobId } = req.params
 
   let applyStatus = await Applicant.findAll(
-    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}], JobSeekerId: {[Op.not]: 0}}, attributes: ['status']},  
+    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}]}, attributes: ['status']},  
   )
   
   // Applicant 테이블에서 query params의 jobId에 해당하는 JobSeekerId를 모두 찾기
   // 쿼리문 예시 : SELECT jobSeekerId AS id FROM Applicant WHERE jobId=1 & status = waiting or accepted
   Applicant.findAll(
-    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}], JobSeekerId: {[Op.not]: 0}}, attributes: [['jobSeekerId', 'id']]},  
+    {where: {jobId, [Op.or]: [{status: 'waiting'}, {status: 'accepted'}]}, attributes: [['jobSeekerId', 'id']]},  
   )
   .then((data)=>{
 

@@ -12,6 +12,9 @@ const passportConfig = require("./passport");
 const multer = require("multer");
 const cookieParser = require("cookie-parser");
 
+const multerS3 = require("multer-s3");
+const AWS = require("aws-sdk");
+
 sequelize
   .sync({ force: false })
   .then(() => {
@@ -109,21 +112,54 @@ app.get("/", (req, res) => {
   });
 });
 
-// 소켓io test
+
+// multer s3를 위한 설정
+try {
+  fs.accessSync("uploads");
+} catch (error) {
+  console.log("uploads 폴더가 없으므로 생성합니다.");
+  fs.mkdirSync("uploads");
+}
+AWS.config.update({
+  accessKeyId: process.env.S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+  region: "ap-northeast-2",
+});
+// AWS에서 s3로 저장하는 권한 얻는 코드
+
+const uploadS3 = multer({
+  storage: multerS3({
+    s3: new AWS.S3(),
+    bucket: "hometownalbaimage", //s3에서 설정한 BucketName으로 넣어야함
+    key(req, file, cb) {
+      cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
+    },
+  }),
+  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+
+
+//-------------소켓io test
 const { createServer } = require("http");
 const { Server } = require("socket.io");
-const expressServer = require("http").createServer(app);
+const expressServer = createServer(app);
 const io = new Server(expressServer, { cors: { origin: "*" } });
 
 io.on("connection", (socket) => {
   socket.on("message", ({ name, message }) => {
     io.emit("message", { name, message });
+    console.log('name과 message',name, message)
+  });
+
+});
+
+// 라우터 예시
+app.post("/uploads3", uploadS3.single("image"), (req, res, next) => {
+  console.log("저장한 이미지", req.file);
+  res.json({
+    fileName: req.file.location,
   });
 });
 
-expressServer.listen(5001, () => {
-  console.log("소켓 테스트");
-});
 
 app.listen(port, () => {
   console.log("yaho1");

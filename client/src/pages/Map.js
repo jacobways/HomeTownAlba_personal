@@ -711,7 +711,9 @@ export default function Map() {
         </aside>
       </div>
 
+
       <div id="map"></div>
+
     </div>
   );
 }

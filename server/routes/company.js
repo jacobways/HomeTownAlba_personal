@@ -18,6 +18,17 @@ companyRouter.get("/", isLoggedIn, (req, res) => {
   });
 });
 
+// 사업자 회원가입시 체크를 위한 id 불러오기
+companyRouter.get("/getall", async (req, res) => {
+  let companyId = await Company.findAll({ attributes: ["userId"] });
+  if (companyId) {
+    return res.status(200).json({
+      userId: companyId,
+      message: "중복된 아이디 확인을 위한 유저 아이디 정보입니다",
+    });
+  }
+});
+
 // 구직자 회원가입 요청
 
 companyRouter.get("/test", (req, res) => {
@@ -45,6 +56,7 @@ companyRouter.post("/", isNotLoggedIn, async (req, res) => {
           location: req.body.location,
           businessNumber: req.body.businessNumber,
           question: req.body.question,
+          logo: req.body.logo,
         };
         Company.create(registerInfo);
         return res.status(200).json({
@@ -207,7 +219,7 @@ companyRouter.patch("/password", isLoggedIn, async (req, res) => {
 companyRouter.patch("/", isLoggedIn, async (req, res) => {
   // auth로 id 가져와서 처리하면 됨
   // id 가져와서 찾고, req.body에 있는 내용으로 업데이트
-  const { name, age, location, businessNumber } = req.body;
+  const { name, location, businessNumber, logo } = req.body;
 
   // password 수정
 
@@ -220,7 +232,7 @@ companyRouter.patch("/", isLoggedIn, async (req, res) => {
     res.status(404).json({ message: "사업자 정보가 없습니다" });
   } else {
     Company.update(
-      { name, age, location, businessNumber },
+      { name, location, businessNumber, logo },
       { where: { id: companyId } }
     )
       .then((data) => {
