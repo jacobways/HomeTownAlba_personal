@@ -26,33 +26,39 @@ export default function Map() {
   const [filteredData, setFilteredData] = useState([]); // 현재 지도 위치에 따라 필터링 된 데이터 state
   const [isOpenList, setIsOpenList] = useState(false);
 
+  const [isOpenFilterBar, setIsOpenFilterBar] = useState(false);
+
+  const toggleFilterBar = () => {
+    setIsOpenFilterBar(!isOpenFilterBar);
+  };
+
   // 필터에서 시작 시간 입력
-  const startTimeFilterHandler = (event) => {
+  const startTimeFilterHandler = event => {
     setStartTimeFilter(event.target.value);
   };
 
   // 필터에서 끝 시간 입력
-  const endTimeFilterHandler = (event) => {
+  const endTimeFilterHandler = event => {
     setEndTimeFilter(event.target.value);
   };
 
   // 필터에서 최소 월급 입력
-  const minWageFilterHandler = (event) => {
+  const minWageFilterHandler = event => {
     setMinWageFilter(event.target.value);
   };
 
   // 필터에서 최대 월급 입력
-  const maxWageFilterHandler = (event) => {
+  const maxWageFilterHandler = event => {
     setMaxWageFilter(event.target.value);
   };
 
   // 검색할 장소를 입력하는 핸들러
-  const searchPlaceHandler = (event) => {
+  const searchPlaceHandler = event => {
     setSearchPlace(event.target.value);
   };
 
   // 검색 키워드 입력 후 검색을 시작하는 핸들러
-  const placeSubmitHandler = (event) => {
+  const placeSubmitHandler = event => {
     event.preventDefault();
     setSearchLocation(searchPlace);
     // setSearchPlace(""); 검색 기록을 남기지 않으려면 이 주석을 해제
@@ -61,7 +67,7 @@ export default function Map() {
   };
 
   // 검색된 장소의 위치가 mapLocation State에 저장되도록 하는 핸들러
-  const mapLocationBySearch = (location) => {
+  const mapLocationBySearch = location => {
     // 카카오맵의 키워드 검색 API
     const ps = new kakao.maps.services.Places();
     ps.keywordSearch(location, placesSearchCB);
@@ -105,7 +111,7 @@ export default function Map() {
       .get(`${process.env.REACT_APP_SERVER_URL}/jobSeeker`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         if (res.data.user) {
           setJobSeekerId(res.data.user.id);
           setLogin(true);
@@ -119,9 +125,9 @@ export default function Map() {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/job`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         if (mapLevel <= 4) {
-          return res.data.data.filter((job) => {
+          return res.data.data.filter(job => {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.01125 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.01125 &&
@@ -130,7 +136,7 @@ export default function Map() {
             );
           });
         } else if (mapLevel === 5) {
-          return res.data.data.filter((job) => {
+          return res.data.data.filter(job => {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.0225 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.0225 &&
@@ -139,7 +145,7 @@ export default function Map() {
             );
           });
         } else if (mapLevel === 6) {
-          return res.data.data.filter((job) => {
+          return res.data.data.filter(job => {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.045 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.045 &&
@@ -148,7 +154,7 @@ export default function Map() {
             );
           });
         } else if (mapLevel >= 7) {
-          return res.data.data.filter((job) => {
+          return res.data.data.filter(job => {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.09 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.09 &&
@@ -158,48 +164,48 @@ export default function Map() {
           });
         }
       })
-      .then((res) => {
+      .then(res => {
         // 시간 관련 필터기능 입력
         if (startTimeFilter && endTimeFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return (
               job.startTime >= startTimeFilter && job.endTime <= endTimeFilter
             );
           });
         } else if (startTimeFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return job.startTime >= startTimeFilter;
           });
         } else if (endTimeFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return job.endTime <= endTimeFilter;
           });
         } else {
           return res;
         }
       })
-      .then((res) => {
+      .then(res => {
         // 월급 관련 필터기능 입력
         if (minWageFilter && maxWageFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return (
               minWageFilter <= job.monthlyWage &&
               job.monthlyWage <= maxWageFilter
             );
           });
         } else if (minWageFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return minWageFilter <= job.monthlyWage;
           });
         } else if (maxWageFilter) {
-          return res.filter((job) => {
+          return res.filter(job => {
             return maxWageFilter >= job.monthlyWage;
           });
         } else {
           return res;
         }
       })
-      .then((data) => {
+      .then(data => {
         setFilteredData(data);
         //-------------------- 지도 생성 (필수)
 
@@ -324,7 +330,7 @@ export default function Map() {
                 .get(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
                   params: { jobId: data[i].id, jobSeekerId },
                 })
-                .then((applicant) => {
+                .then(applicant => {
                   // 지원을 취소하는 핸들러 제작
                   function CancelApply() {
                     axios
@@ -335,7 +341,7 @@ export default function Map() {
                         },
                         { withCredentials: true }
                       )
-                      .then((res) => {
+                      .then(res => {
                         setApplyLocation([
                           parseFloat(result[0].y),
                           parseFloat(result[0].x),
@@ -356,7 +362,7 @@ export default function Map() {
                         jobId: data[i].id,
                         jobSeekerId,
                       })
-                      .then((res) => {
+                      .then(res => {
                         setApplyLocation([
                           parseFloat(result[0].y),
                           parseFloat(result[0].x),
@@ -398,9 +404,9 @@ export default function Map() {
 
                     // 마커에 Hover 이벤트 등록 : 인포윈도우에 정보 제공
                     let infowindowHover = new kakao.maps.InfoWindow({
-                      content: `<div style="width:230px;text-align:center;padding:6px 0;">
+                      content: `<div style="width:300px;text-align:center;padding:6px 0;line-height:30px;font-size:20px">
                     <div>근무요일 : ${JSON.parse(data[i].day)}</div>
-                    <div>하루 근무시간 : ${simplifyTime(
+                    <div>근무시간 : ${simplifyTime(
                       data[i].startTime
                     )}~${simplifyTime(data[i].endTime)}</div>
                     <div>월급여 : ${numberWithCommas(
@@ -413,7 +419,7 @@ export default function Map() {
                     // 마커에 click 이벤트 등록 : 인포윈도우에 정보 제공 및 일자리 지원 가능
                     let contentClick = document.createElement("div");
                     contentClick.style.cssText =
-                      "width: 230px; text-align:center; padding:6px 0; 1px 0;";
+                      "width: 300px; text-align:center; padding:6px 0; 1px 0; line-height:30px;font-size:20px;";
                     let companyName = document.createElement("div");
                     companyName.textContent = `회사명 : ${data[i].companyName}`;
                     let day = document.createElement("div");
@@ -432,8 +438,9 @@ export default function Map() {
                     )}원`;
                     let position = document.createElement("div");
                     position.textContent = `포지션 : ${data[i].position}`;
-
                     let btn = document.createElement("button");
+                    btn.style.cssText =
+                      "border:none; width:50px; height:50px ;font-size:20px; border-radius:5px; background-color: rgb(50, 108, 249); color:#fff;";
                     btn.textContent = buttonContent;
                     btn.onclick = applyHandler;
 
@@ -536,7 +543,7 @@ export default function Map() {
                       clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
                     });
 
-                    MakeMarkerEvent(marker, "지원하기", ApplyJob);
+                    MakeMarkerEvent(marker, "지원", ApplyJob);
                   }
                 });
             }
@@ -553,30 +560,38 @@ export default function Map() {
     maxWageFilter,
   ]);
   return (
-    <>
+    <div className="map-container">
       <NavBar />
       <div className="search-filter-container">
         {isOpenList ? (
           <>
             <form className="inputForm" onSubmit={placeSubmitHandler}>
-              <div id="result-list">
-                {filteredData.map((job, i) => (
-                  <div key={i} style={{ marginTop: "20px" }}>
-                    <span>{i + 1}</span>
-                    <div>
-                      <h5>{job.companyName}</h5>
-                      <u></u>
-                    </div>
-                    <button
-                      onClick={() => {
-                        clickPlaceOnList(job.latitude, job.longitude);
-                      }}
-                    >
-                      이동
-                    </button>
+              {filteredData.map((job, i) => (
+                <div className="list-container" key={i}>
+                  <div className="list-image">
+                    <p>이미지가 없습니다</p>
                   </div>
-                ))}
-              </div>
+                  <div className="list-info">
+                    <h1>{job.companyName}</h1>
+                    <p className="list-location">{job.location}</p>
+                    <p className="list-monthlyWage">
+                      예상 월급 : {job.monthlyWage}원
+                    </p>
+                    <p>근무 요일 : {JSON.parse(job.day)}</p>
+                    <p className="list-created">
+                      등록일 : {job.createdAt.slice(0, 10)}
+                    </p>
+                  </div>
+                  <button
+                    className="list-btn"
+                    onClick={() => {
+                      clickPlaceOnList(job.latitude, job.longitude);
+                    }}
+                  >
+                    <i className="fas fa-chevron-circle-right"></i>
+                  </button>
+                </div>
+              ))}
             </form>
             <form className="search-wrapper" onSubmit={placeSubmitHandler}>
               <i className="fas fa-search"></i>
@@ -595,69 +610,108 @@ export default function Map() {
             </form>
           </>
         ) : (
-          <>
-            <form className="search-wrapper" onSubmit={placeSubmitHandler}>
-              <i className="fas fa-search"></i>
-              <input
-                className="search-input"
-                placeholder="주변 동네를 검색하세요"
-                onChange={searchPlaceHandler}
-                value={searchPlace}
-              />
-              <button className="search-btn" type="submit">
-                검색
-              </button>
-              <button className="search-btn" onClick={openListHandler}>
-                목록
-              </button>
-            </form>
-          </>
+          <form className="search-wrapper" onSubmit={placeSubmitHandler}>
+            <i className="fas fa-search"></i>
+            <input
+              className="search-input"
+              placeholder="주변 동네를 검색하세요"
+              onChange={searchPlaceHandler}
+              value={searchPlace}
+            />
+            <button className="search-btn" type="submit">
+              검색
+            </button>
+            <button className="search-btn" onClick={openListHandler}>
+              목록
+            </button>
+          </form>
         )}
-        <label className="filter-list">
-          <select onChange={minWageFilterHandler}>
-            <option value="">최소 월급</option>
-            <option value="300000">300,000원</option>
-            <option value="600000">600,000원</option>
-            <option value="900000">900,000원</option>
-            <option value="1200000">1,200,000원</option>
-          </select>
-        </label>
-        <label className="filter-list">
-          <select onChange={maxWageFilterHandler}>
-            <option value="">최대 월급</option>
-            <option value="300000">300,000원</option>
-            <option value="600000">600,000원</option>
-            <option value="900000">900,000원</option>
-            <option value="1200000">1,200,000원</option>
-            <option value="1500000">1,500,000원</option>
-          </select>
-        </label>
-        <label className="filter-list">
-          <input
-            name="startTime"
-            type="time"
-            list="startTime"
-            onChange={startTimeFilterHandler}
-          />
-        </label>
-        <label className="filter-list">
-          <input
-            name="startTime"
-            type="time"
-            list="startTime"
-            onChange={endTimeFilterHandler}
-          />
-        </label>
+        <div className="filter-container">
+          <label className="filter-item">
+            <select onChange={minWageFilterHandler}>
+              <option value="">최소 월급</option>
+              <option value="300000">300,000원</option>
+              <option value="600000">600,000원</option>
+              <option value="900000">900,000원</option>
+              <option value="1200000">1,200,000원</option>
+            </select>
+          </label>
+          <label className="filter-item">
+            <select onChange={maxWageFilterHandler}>
+              <option value="">최대 월급</option>
+              <option value="300000">300,000원</option>
+              <option value="600000">600,000원</option>
+              <option value="900000">900,000원</option>
+              <option value="1200000">1,200,000원</option>
+              <option value="1500000">1,500,000원</option>
+            </select>
+          </label>
+          <label className="filter-item">
+            <input
+              id="timepicker"
+              type="time"
+              onChange={startTimeFilterHandler}
+            />
+          </label>
+          <label className="filter-item">
+            <input
+              id="timepicker"
+              type="time"
+              onChange={endTimeFilterHandler}
+            />
+          </label>
+        </div>
+
+        <aside
+          className={isOpenFilterBar ? "show-filter-item" : "hide-filter-item"}
+        >
+          <label className="filter-item">
+            <select onChange={minWageFilterHandler}>
+              <option value="">최소 월급</option>
+              <option value="300000">300,000원</option>
+              <option value="600000">600,000원</option>
+              <option value="900000">900,000원</option>
+              <option value="1200000">1,200,000원</option>
+            </select>
+          </label>
+          <label className="filter-item">
+            <select onChange={maxWageFilterHandler}>
+              <option value="">최대 월급</option>
+              <option value="300000">300,000원</option>
+              <option value="600000">600,000원</option>
+              <option value="900000">900,000원</option>
+              <option value="1200000">1,200,000원</option>
+              <option value="1500000">1,500,000원</option>
+            </select>
+          </label>
+          <label className="filter-item">
+            <input
+              id="timepicker"
+              type="time"
+              onChange={startTimeFilterHandler}
+            />
+          </label>
+          <label className="filter-item">
+            <input
+              id="timepicker"
+              type="time"
+              onChange={endTimeFilterHandler}
+            />
+          </label>
+        </aside>
+        <aside className="btn-container">
+          <button
+            className="filterBar-btn"
+            onClick={() => {
+              toggleFilterBar();
+            }}
+          >
+            <i className="fas fa-ellipsis-h"></i>
+          </button>
+        </aside>
       </div>
 
-      <div
-        id="map"
-        style={{
-          width: "100%",
-          height: "80%",
-          overflow: "visible",
-        }}
-      ></div>
-    </>
+      <div id="map"></div>
+    </div>
   );
 }

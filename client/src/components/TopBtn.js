@@ -40,7 +40,7 @@ function TopBtn() {
         className={btnStatus ? "topBtn active" : "topBtn"} // 버튼 노출 여부
         onClick={topBtnHandler} // 버튼 클릭시 함수 호출
       >
-        TOP
+        <i className="fas fa-angle-double-up"></i>
       </button>
     </>
   );

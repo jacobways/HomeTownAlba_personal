@@ -29,19 +29,30 @@
 }
 
 .service-wrapper {
-  margin-top: 10vh;
-  line-height: 10vh;
-  width: 60%;
-}
-
-.service-title {
-  font-size: 3.5vw;
-  /* text-shadow: blue 2px 2px 50px; */
+  margin-top: 100px;
+  min-width: 60%;
   animation: showText 0.5s;
   animation-fill-mode: both;
 }
-.service-title:nth-child(1) {
-  animation-delay: 0.1s;
+
+.service-wrapper > p:nth-child(1) {
+  font-size: 2.5rem;
+  color: rgb(63, 71, 82);
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+.service-wrapper > p:nth-child(2) {
+  font-size: 3rem;
+  padding: 30px;
+  color: rgb(128, 132, 137);
+  font-weight: 600;
+}
+
+.service-wrapper > p:nth-child(3) {
+  font-size: 2.5rem;
+  color: rgb(63, 71, 82);
+  font-weight: 600;
 }
 
 @keyframes showText {
@@ -56,12 +67,12 @@
 }
 
 .service-scroll {
-  position: relative;
-  text-shadow: #adb8c5 0 0 4px;
-  font-size: 2em;
+  position: absolute;
+  top: 88%;
+  left: 50%;
+  font-size: 3rem;
   color: #fff;
-  margin-top: 180px;
-  animation: showText 0.5s;
+  animation: showText 1s;
   animation: scroll 1.5s infinite;
   animation-fill-mode: both;
 }
@@ -82,6 +93,7 @@
   display: flex;
   justify-content: center;
   background-color: #fff;
+  padding: 40px 0px;
   margin-top: 50px;
   border-radius: 20px;
   box-shadow: 0px 12px 18px -6px rgba(0, 0, 0, 0.4);
@@ -89,7 +101,7 @@
 }
 
 .typing-text {
-  font-size: 2vw;
+  font-size: 2rem;
 }
 
 #typing {
@@ -117,5 +129,56 @@
   to {
     transform: translateY(0px);
     opacity: 1;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .typing-text {
+    font-size: 1.7rem;
+  }
+  .service-wrapper > p:nth-child(1) {
+    font-size: 2rem;
+    color: rgb(63, 71, 82);
+    font-weight: 600;
+    margin-top: 30px;
+  }
+
+  .service-wrapper > p:nth-child(2) {
+    font-size: 2.5rem;
+    padding: 30px;
+    color: rgb(124, 129, 136);
+    font-weight: 600;
+  }
+
+  .service-wrapper > p:nth-child(3) {
+    font-size: 2rem;
+    color: rgb(63, 71, 82);
+    font-weight: 600;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .typing-text {
+    font-size: 1.3rem;
+  }
+
+  .service-wrapper > p:nth-child(1) {
+    font-size: 1.5rem;
+    color: rgb(63, 71, 82);
+    font-weight: 600;
+    margin-top: 30px;
+  }
+
+  .service-wrapper > p:nth-child(2) {
+    font-size: 2rem;
+    padding: 30px;
+    color: rgb(124, 129, 136);
+    font-weight: 600;
+  }
+
+  .service-wrapper > p:nth-child(3) {
+    font-size: 1.5rem;
+    color: rgb(63, 71, 82);
+    font-weight: 600;
   }
 }

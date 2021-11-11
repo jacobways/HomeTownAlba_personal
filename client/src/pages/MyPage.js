@@ -13,7 +13,7 @@ function AdminPage(props) {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         // console.log(res.data.user.type, typeof res.data.user.type);
         if (res.data.user && res.data.user.type) {
           setUserLoginType(res.data.user.type);
@@ -30,7 +30,6 @@ function AdminPage(props) {
   ) {
     return (
       <>
-        <div>구직자 MyPage - 소셜 로그인 포함</div>
         <JobSeekerMyPage />
       </>
     );

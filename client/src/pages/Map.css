@@ -1,7 +1,18 @@
+.map-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+}
+
+#map {
+  width: 100%;
+  height: calc(100% - 220px);
+}
+
 .search-filter-container {
   background-color: #fff;
   border-bottom: 1px solid rgb(205, 205, 205);
-  position: relative;
   padding-top: 150px;
   display: flex;
   height: 220px;
@@ -9,17 +20,42 @@
 
 .search-wrapper {
   width: 400px;
+  flex-shrink: 0;
   display: flex;
   border-right: 1px solid rgb(231, 231, 231);
   padding: 10px;
 }
 
-.search-input {
-  flex: 3;
+.filter-container {
+  flex: 1;
   display: flex;
-  justify-content: center;
-  flex-direction: column;
+  justify-content: space-between;
+}
+
+.filter-item {
+  display: flex;
+  width: 100%;
+  padding: 10px;
+}
+
+.filter-item > select,
+.filter-item > input {
+  width: 100%;
+  border: 1px solid rgb(205, 205, 205);
+  border-radius: 5px;
+  outline: none;
+  font-size: 1em;
+}
+
+.btn-container {
+  display: none;
+}
+
+.search-input {
+  display: flex;
+  align-self: center;
   border: none;
+  flex: 1;
   outline: none;
   background-color: transparent;
   margin-left: 20px;
@@ -29,42 +65,17 @@
 .search-input::placeholder {
   font-size: 18px;
   color: rgb(195, 195, 195);
-  flex: 1;
 }
 
 .search-btn {
-  flex: 1;
+  width: 50px;
   border: none;
   border-radius: 4px;
   background-color: rgb(50, 108, 249);
   color: #fff;
-  margin-right: 5px;
+  margin-left: 5px;
   font-size: 1em;
-}
-
-.filter-list {
-  flex: 1 1 0;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  padding: 10px 20px 10px 20px;
-}
-
-.filter-list > select,
-input {
-  height: 100%;
-}
-
-.filter-list > select {
-  font-size: 18px;
-  border-radius: 4px;
-  border: 1px solid rgb(223, 223, 223);
-}
-
-.filter-list > input {
-  font-size: 18px;
-  border-radius: 4px;
-  border: 1px solid rgb(223, 223, 223);
+  cursor: pointer;
 }
 
 .fa-search {
@@ -81,5 +92,265 @@ input {
   height: 100%;
   overflow-y: hidden;
   border-right: 1px solid rgb(231, 231, 231);
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 2;
+}
+
+.list-container {
+  display: flex;
+  justify-content: space-between;
+  width: 400px;
+  padding: 20px 10px;
+  border-bottom: 1px solid rgb(205, 205, 205);
+}
+
+.list-image {
+  background-color: rgb(205, 205, 205);
+  font-size: 10px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  width: 100px;
+  height: 100px;
+}
+
+.list-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 200px;
+  margin-left: 5px;
+}
+
+.list-info > h1 {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.list-location {
+  font-weight: 400;
+}
+.list-created {
+  font-weight: 100;
+}
+
+.list-btn {
+  width: 50px;
+  height: 50px;
+  border: none;
+  background-color: rgb(50, 108, 249);
+  color: #fff;
+  border-radius: 4px;
+  align-self: center;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.hide-filter-item {
+  display: none;
+}
+
+.show-filter-item {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .search-wrapper {
+    width: 300px;
+  }
+
+  .search-input {
+    font-size: 18px;
+    width: 150px;
+  }
+
+  .search-input::placeholder {
+    font-size: 16px;
+    color: rgb(48, 45, 45);
+  }
+
+  .search-btn {
+    width: 40px;
+    height: 40px;
+    align-self: center;
+    font-size: 0.9em;
+  }
+
+  .filter-container {
+    display: none;
+  }
+
+  .hide-filter-item {
+    display: none;
+  }
+
+  .show-filter-item {
+    position: absolute;
+    left: 300px;
+    top: 220px;
+    z-index: 2;
+    width: calc(100% - 300px);
+    height: 155px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .filter-item {
+    justify-content: center;
+    padding: 0px;
+    /* height: 100%; */
+  }
+
+  .filter-item > select,
+  .filter-item > input {
+    width: 70%;
+    margin: 10px;
+    height: 100%;
+    font-size: 1em;
+    font-weight: 400;
+    outline: none;
+  }
+
+  .inputForm {
+    width: 300px;
+  }
+
+  .list-container {
+    width: 300px;
+  }
+
+  .list-image {
+    display: none;
+  }
+
+  .list-info {
+    flex: 2;
+    font-size: 15px;
+  }
+
+  .list-location {
+    font-weight: 400;
+    font-size: 1.2em;
+  }
+  .list-created {
+    font-weight: 100;
+    font-size: 1.2em;
+  }
+
+  .list-btn {
+    width: 40px;
+    height: 40px;
+    margin: 0 0 0 5px;
+  }
+
+  .btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .filterBar-btn {
+    border: none;
+    border-radius: 5px;
+    height: 40px;
+    width: 40px;
+    font-size: 20px;
+    color: #fff;
+    background-color: rgb(50, 108, 249);
+  }
+}
+
+.wrap {
+  position: absolute;
+  left: 0;
+  bottom: 40px;
+  width: 288px;
+  height: 132px;
+  margin-left: -144px;
+  text-align: left;
+  overflow: hidden;
+  font-size: 12px;
+  font-family: "Malgun Gothic", dotum, "돋움", sans-serif;
+  line-height: 1.5;
+}
+.wrap * {
+  padding: 0;
+  margin: 0;
+}
+.wrap .info {
+  width: 286px;
+  height: 120px;
+  border-radius: 5px;
+  border-bottom: 2px solid #ccc;
+  border-right: 1px solid #ccc;
+  overflow: hidden;
+  background: #fff;
+}
+.wrap .info:nth-child(1) {
+  border: 0;
+  box-shadow: 0px 1px 2px #888;
+}
+.info .title {
+  padding: 5px 0 0 10px;
+  height: 30px;
+  background: #eee;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+  font-weight: bold;
+}
+.info .close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: #888;
+  width: 17px;
+  height: 17px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/overlay_close.png");
+}
+.info .close:hover {
+  cursor: pointer;
+}
+.info .body {
+  position: relative;
+  overflow: hidden;
+}
+.info .desc {
+  position: relative;
+  margin: 13px 0 0 90px;
+  height: 75px;
+}
+.desc .ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.desc .jibun {
+  font-size: 11px;
+  color: #888;
+  margin-top: -2px;
+}
+.info .img {
+  position: absolute;
+  top: 6px;
+  left: 5px;
+  width: 73px;
+  height: 71px;
+  border: 1px solid #ddd;
+  color: #888;
+  overflow: hidden;
+}
+.info:after {
+  content: "";
+  position: absolute;
+  margin-left: -12px;
+  left: 50%;
+  bottom: 0;
+  width: 22px;
+  height: 12px;
+  background: url("https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/vertex_white.png");
+}
+.info .link {
+  color: #5085bb;
 }
