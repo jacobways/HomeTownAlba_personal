@@ -59,12 +59,16 @@ function RegisterPage(props) {
   const [JobSeekerEmailInput, setJobSeekerEmailInput] = useState(false);
   const [JobSeekerAuthCode, setJobSeekerAuthCode] = useState(null);
   const [JobSeekerInputAuthCode, setJobSeekerInputAuthCode] = useState(null);
+    const [JobSeekerIdCheck, setJobSeekerIdCheck] = useState([]);
+  const [JobIdSame, setJobIdSame] = useState(false);
 
   // 사업자
 
   const [CompanyEmailInput, setCompanyEmailInput] = useState(false);
   const [CompanyAuthCode, setCompanyAuthCode] = useState(null);
   const [CompanyInputAuthCode, setCompanyInputAuthCode] = useState(null);
+    const [CompanyIdCheck, setCompanyIdCheck] = useState([]);
+  const [CompanyIdSame, setCompanyIdSame] = useState(false);
 
   // 회원가입 입력정보
   const [Id, setId] = useState("");
@@ -88,6 +92,14 @@ function RegisterPage(props) {
   const ImgUploadHandler = (e) => {
     // console.log(e.target.files);
     setContent(e.target.files[0]);
+  };
+  
+    const [Logo, setLogo] = useState("");
+  const [LogoPath, setLogoPath] = useState("");
+
+  const logoUploadHandler = (e) => {
+    // console.log(e.target.files);
+    setLogo(e.target.files[0]);
   };
 
   // 이미지 업로드 테스트
@@ -161,14 +173,14 @@ function RegisterPage(props) {
     const formData = new FormData();
     formData.append("image", Content);
     console.log(formData);
-
+    // 로컬 s3 테스트
     axios
-      .post(`${process.env.REACT_APP_SERVER_URL}/upload`, formData, {
+      .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
       .then((res) => {
         console.log(res.data);
-        setFilePath(`${BASE_URL}/img/${res.data.fileName}`);
+        setFilePath(res.data.fileName);
       })
       .catch((error) => {
         console.error(error);
@@ -210,17 +222,23 @@ function RegisterPage(props) {
     // console.log("AuthCode", typeof AuthCode, AuthCode);
     // console.log("InputAuthCode", typeof InputAuthCode, InputAuthCode);
     if (Password !== ConfirmPassword) {
-      console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
+      // console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
+      setPasswordWarn(true);
     } else {
+      setPasswordWarn(false);
+
       if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
-        dispatch(registerJobSeeker(submitData)).then((res) => {
-          // console.log(res.payload);
-          if (res.payload.registersuccess) {
-            props.history.push("/login");
-          } else {
-            alert("회원가입에 실패하였습니다.");
-          }
-        });
+        dispatch(registerJobSeeker(submitData))
+          .then((res) => {
+            // console.log(res.payload);
+            if (res.payload.registersuccess) {
+              setJobIdSame(false);
+              props.history.push("/login");
+            }
+          })
+          .catch((err) => {
+            setJobIdSame(true);
+          });
       } else {
         console.log("인증번호가 다릅니다");
       }
@@ -233,6 +251,26 @@ function RegisterPage(props) {
     e.preventDefault();
     // 회원가입할때 Db에 type이라는 field를 한개 추가
     setLoadingStatus(true);
+    
+        const formData = new FormData();
+    formData.append("image", Logo);
+    console.log(formData);
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
+        header: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setLogoPath(res.data.fileName);
+        // 이부분도 수정
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+    // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
+    
+    
 
     let authEmailData = {
       email: CompanyEmail,
@@ -262,24 +300,54 @@ function RegisterPage(props) {
       companyName: CompanyName,
       location: addressDetail,
       businessNumber: BusinessNumber,
+      logo: LogoPath,
       question: Question,
     };
     //   redux
-    if (Password !== ConfirmPassword) {
+   if (Password !== ConfirmPassword) {
       console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
+      setPasswordWarn(true);
     } else {
+      setPasswordWarn(false);
       if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
-        dispatch(registerCompany(submitData)).then((res) => {
-          // console.log(res.payload);
-          if (res.payload.registersuccess) {
-            props.history.push("/login");
-          } else {
-            alert("회원가입에 실패하였습니다.");
-          }
-        });
+        dispatch(registerCompany(submitData))
+          .then((res) => {
+            // console.log(res.payload);
+            if (res.payload.registersuccess) {
+              setCompanyIdSame(false);
+              props.history.push("/login");
+            }
+          })
+          .catch((err) => {
+            setCompanyIdSame(true);
+          });
       }
     }
   };
+    useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/jobseeker/getall`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data && res.data.userId) {
+          setJobSeekerIdCheck(res.data.userId);
+        }
+      });
+  }, []);
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_SERVER_URL}/company/getall`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        // console.log(res.data);
+        if (res.data && res.data.userId) {
+          setCompanyIdCheck(res.data.userId);
+        }
+      });
+  }, []);
 
   if (RegisterDisplay === "jobseeker") {
     return (
@@ -322,6 +390,9 @@ function RegisterPage(props) {
             onChange={ConfirmPasswordHandler}
             placeholder="비밀번호를 한번 더 입력하세요"
           />
+          {PasswordWarn ? (
+            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
+          ) : null}
           <label>이름</label>
 
           <input
@@ -395,6 +466,7 @@ function RegisterPage(props) {
                 value={JobSeekerInputAuthCode}
                 onChange={InputHandler}
               />
+              // checkbox 추가해서 checkbox status = false이면 submit 안되도록    
               <button type="submit">회원가입</button>
             </div>
           ) : null}
@@ -440,6 +512,9 @@ function RegisterPage(props) {
             onChange={ConfirmPasswordHandler}
             placeholder="비밀번호를 한번 더 입력하세요"
           />
+                   {PasswordWarn ? (
+            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
+          ) : null}
 
           <label>이메일</label>
 
@@ -485,6 +560,15 @@ function RegisterPage(props) {
             value={CompanyName}
             onChange={CompanyNameHandler}
             placeholder="사업자명을 입력하세요"
+          />
+              
+                  <label>회사 로고</label>
+          <input
+            required
+            name="image"
+            type="file"
+            placeholder="회사 사진을 등록하세요"
+            onChange={logoUploadHandler}
           />
           <label>
             자사 상품의 핵심 상품을 적어주세요(비밀번호 수정을 위해 사용됩니다.)
