@@ -20,6 +20,13 @@ export default function CompanyMyPage() {
   const [companyName, setCompanyName] = useState("");
   const [companyLocation, setCompanyLocation] = useState("");
   const [businessNumber, setBusinessNumber] = useState("");
+  const [Logo, setLogo] = useState("");
+  
+    // 이미지 수정을 위한 변수 선언
+  const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
+  const [Content, setContent] = useState("");
+  const [FilePath, setFilePath] = useState("");
+  // 이미지 수정을 위한 변수 선언
 
   // 사업자위치 state
   const [isOpenCompanyPost, setIsOpenCompanyPost] = useState(false);
@@ -123,7 +130,26 @@ export default function CompanyMyPage() {
     setCompanyInfoUpdating(!companyInfoUpdating);
   };
 
-  // company 업데이트 하기
+    // company 업데이트 하기
+  // 이미지 업로드용 핸들러 따로 만들기
+  const upoadImage = () => {
+    const formData = new FormData();
+    formData.append("image", Content);
+    console.log(formData);
+
+    axios
+      .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
+        header: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setFilePath(res.data.fileName);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const updateCompany = () => {
     axios
       .patch(
@@ -133,14 +159,20 @@ export default function CompanyMyPage() {
           name: companyName,
           location: companyLocation,
           businessNumber,
+          logo: FilePath,
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
+        setCompanyInfoUpdating(!companyInfoUpdating);
+        setImgUploadBtn(false);
+      })
+      .catch((error) => {
+        console.error(error);
       });
-    setCompanyInfoUpdating(!companyInfoUpdating);
   };
+ 
 
   // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
   const OpenPasswordUpdate = () => {
@@ -463,6 +495,8 @@ export default function CompanyMyPage() {
         setCompanyName(companyInfo.companyName);
         setCompanyLocation(companyInfo.location);
         setBusinessNumber(companyInfo.businessNumber);
+        setLogo(companyInfo.logo);
+
       })
       .catch(err => {
         console.log(err);
@@ -487,6 +521,24 @@ export default function CompanyMyPage() {
   }, [mon, tue, wed, thu, fri, sat, sun]);
 
   // 구인내역 클릭하면 지원자 현황 표시됨
+  
+    // 리다이렉트 테스트
+
+  const [UserLoginType, setUserLoginType] = useState("");
+
+  useEffect(() => {
+    axios
+      .get(`${process.env.REACT_APP_serverURL}`, { withCredentials: true })
+      .then((res) => {
+        console.log(res.data.user.type, typeof res.data.user.type);
+        setUserLoginType(res.data.user.type);
+        if (res.data.user && res.data.user.type) {
+          console.log("로그인 된 상태");
+        } else {
+          props.history.push("/");
+        }
+      });
+  }, [UserLoginType]);
 
   return (
     <>
@@ -506,6 +558,12 @@ export default function CompanyMyPage() {
           <tr>
             <th scope="row">사업자등록번호</th>
             <td>{businessNumber}</td>
+          </tr>
+           <tr>
+            <th scope="row">로고</th>
+            <td>
+              <img src={Logo} alt="logo" />
+            </td>
           </tr>
           <tr>
             <button onClick={companyHandler}>회원 정보 수정</button>
@@ -548,6 +606,13 @@ export default function CompanyMyPage() {
               value={businessNumber}
             />
           </tr>
+          <tr>
+            <th scope="row">사진</th>
+            <input name="image" type="file" onChange={imageHandler} />
+          </tr>
+          {ImgUploadBtn ? (
+            <button onClick={upoadImage}>이미지 업로드</button>
+          ) : null}
           <button onClick={updateCompany}>수정 완료</button>
         </table>
       )}
