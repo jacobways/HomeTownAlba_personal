@@ -132,7 +132,7 @@ AWS.config.update({
 const uploadS3 = multer({
   storage: multerS3({
     s3: new AWS.S3(),
-    bucket: "HomeTownAlba", //s3에서 설정한 BucketName으로 넣어야함
+    bucket: "hometownalbaimage", //s3에서 설정한 BucketName으로 넣어야함
     key(req, file, cb) {
       cb(null, `original/${Date.now()}_${path.basename(file.originalname)}`);
     },
@@ -141,9 +141,12 @@ const uploadS3 = multer({
 });
 
 // 라우터 예시
-app.post("/uploadtest", uploadS3.array("image"), (req, res, next) => {
-  console.log(req.files);
-  res.json(req.files.map((v) => v.location.replace(/\/original\//, "/thumb/"))); //original 폴더가 있으면 리사이징된 thumb로 교체 -> 업로드 끝나면 다시 original로 업데이트됨
+app.post("/uploads3", uploadS3.single("image"), (req, res, next) => {
+  console.log("저장한 이미지", req.file);
+  res.json({
+    fileName: req.file.location.replace(/\/original\//, "/thumb/"),
+  });
+  //original 폴더가 있으면 리사이징된 thumb로 교체 -> 업로드 끝나면 다시 original로 업데이트됨
 });
 // 프론트엔드
 // uploadS3를 미들웨어로 장착하면 ok
