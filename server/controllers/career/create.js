@@ -9,8 +9,8 @@ module.exports = (req, res) => {
     res.status(400).send("정보를 모두 입력하세요")
   } else{
     Career.create({jobSeekerId, company, period, position})
-    .then((date) => {
-      res.status(201).send("경력이 생성 되었습니다")
+    .then((data) => {
+      res.status(201).json({message: "경력이 생성 되었습니다", id: data.dataValues.id})
     })
     .catch((err)=> {
       console.log(err);

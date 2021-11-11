@@ -32,7 +32,7 @@ module.exports = (req, res) => {
       hourlyWage, 
       monthlyWage})
     .then((data)=> {
-      res.status(200).send('Updated')
+      res.status(200).json({message: 'Updated', id: data.dataValues.id})
     })
     .catch((err)=> {
       console.log(err)
