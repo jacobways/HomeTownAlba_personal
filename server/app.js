@@ -29,6 +29,7 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(
     cors({
+
       origin: ["https://hometownalba.com","https://www.hometownalba.com"],
       credentials: true,
       methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE"],
@@ -66,16 +67,8 @@ const sessionOPtion = {
   },
 };
 if (process.env.NODE_ENV === "production") {
-  //const RedisStore = require("connect-redis")(session);
-  //const redisClient = redis.createClient({
-  //  url: `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`,
-  //  password: process.env.REDIS_PASSWORD,
-  //});
   sessionOPtion.proxy = true;
   sessionOPtion.cookie.secure = true;
-  //sessionOPtion.store =  new RedisStore({
-  //  client: redisClient,
-  //});
   sessionOPtion.domain = process.env.NODE_ENV === "production" && ".hometownalba.com";
 }
 
@@ -102,14 +95,10 @@ const upload = multer({
   limits: { fileSize: 10000000 },
 });
 
-// app.get("/upload",(req,res)=>{
-//   res.sendFile(path.join(__dirname,"multipart.html"))
-// })
-// upload 객체를 라우터에 장착
 app.post("/upload", upload.single("image"), (req, res) => {
   console.log("저장한 이미지", req.file);
   res.json({
-    fileName: req.file.filename,
+    fileName: req.file,
   });
 });
 // 멀터 테스트
@@ -171,9 +160,6 @@ app.use("/auth", authRouter);
 app.use("/mail", mailRouter);
 
 app.get("/", (req, res) => {
-  // console.log("로그인했니", req.user);
-  // console.log("로그인했니?", req.sessionID);
-  // console.log(req.session);
   console.log(req.isAuthenticated());
   console.log(req.user);
   res.status(200).json({
@@ -182,22 +168,5 @@ app.get("/", (req, res) => {
   });
 });
 
-
-
-// 소켓io test
-//const { createServer } = require("http");
-//const { Server } = require("socket.io");
-//const expressServer = require("http").createServer(app);
-//const io = new Server(expressServer, { cors: { origin: "*" } });
-
-//io.on("connection", (socket) => {
-//  socket.on("message", ({ name, message }) => {
-//    io.emit("message", { name, message });
-//  });
-//});
-
-//expressServer.listen(5001, () => {
-//  console.log("소켓 테스트");
-//});
 
 module.exports = app;

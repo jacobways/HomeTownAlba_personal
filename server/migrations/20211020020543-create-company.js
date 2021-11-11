@@ -23,6 +23,9 @@ module.exports = {
       companyName: {
         type: Sequelize.STRING,
       },
+      logo: {
+        type: Sequelize.STRING,
+      },
       location: {
         type: Sequelize.STRING,
       },
