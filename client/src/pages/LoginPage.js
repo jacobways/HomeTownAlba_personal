@@ -16,6 +16,7 @@ function LoginPage(props) {
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
   const dispatch = useDispatch();
+   const [LoginError, setLoginError] = useState(false);
 
   const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
 
@@ -46,7 +47,9 @@ function LoginPage(props) {
       } else {
         alert("로그인에 실패하였습니다.");
       }
-    });
+    }).catch((err) => {
+        setLoginError(true);
+      });
   };
   const CompanySubmitHandler = (e) => {
     console.log("사업자 로그인");
@@ -63,7 +66,9 @@ function LoginPage(props) {
       } else {
         alert("로그인에 실패하였습니다.");
       }
-    });
+    }).catch((err) => {
+        setLoginError(true);
+      });
   };
 
   // Google Oauth
@@ -277,6 +282,11 @@ function LoginPage(props) {
           >
             로그인
           </button>
+                {LoginError ? (
+            <div style={{ color: "red" }}>
+              아이디나 비밀번호를 한번 더 확인해주세요
+            </div>
+          ) : null}
           <Link to="/register">회원가입</Link>
           <Link to="#">아이디/비밀번호 찾기</Link>
         </div>
