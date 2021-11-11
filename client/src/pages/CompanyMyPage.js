@@ -76,7 +76,7 @@ export default function CompanyMyPage() {
   const [applyStatusList, setApplyStatusList] = useState({});
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
-
+  const [ImgUploadBtn, setImgUploadBtn] = useState(false);
   // company 회원 정보 수정용
   const companyNameHandler = event => {
     setCompanyName(event.target.value);
