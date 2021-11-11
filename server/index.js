@@ -112,6 +112,7 @@ app.get("/", (req, res) => {
   });
 });
 
+
 // multer s3를 위한 설정
 try {
   fs.accessSync("uploads");
@@ -135,6 +136,20 @@ const uploadS3 = multer({
     },
   }),
   limits: { fileSize: 20 * 1024 * 1024 }, // 20MB
+
+
+//-------------소켓io test
+const { createServer } = require("http");
+const { Server } = require("socket.io");
+const expressServer = createServer(app);
+const io = new Server(expressServer, { cors: { origin: "*" } });
+
+io.on("connection", (socket) => {
+  socket.on("message", ({ name, message }) => {
+    io.emit("message", { name, message });
+    console.log('name과 message',name, message)
+  });
+
 });
 
 // 라우터 예시
@@ -143,12 +158,8 @@ app.post("/uploads3", uploadS3.single("image"), (req, res, next) => {
   res.json({
     fileName: req.file.location,
   });
-  //original 폴더가 있으면 리사이징된 thumb로 교체 -> 업로드 끝나면 다시 original로 업데이트됨
 });
-// 프론트엔드
-// uploadS3를 미들웨어로 장착하면 ok
-// option : Array()
-// multer s3를 위한 설정
+
 
 app.listen(port, () => {
   console.log("yaho1");

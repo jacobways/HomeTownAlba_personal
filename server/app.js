@@ -29,7 +29,8 @@ if (process.env.NODE_ENV === "production") {
 
   app.use(
     cors({
-      origin: ["https://hometownalba.com", "https://www.hometownalba.com"],
+
+      origin: ["https://hometownalba.com","https://www.hometownalba.com"],
       credentials: true,
       methods: ["GET", "POST", "OPTIONS", "PATCH", "DELETE"],
     })
@@ -68,7 +69,7 @@ const sessionOPtion = {
 if (process.env.NODE_ENV === "production") {
   sessionOPtion.proxy = true;
   sessionOPtion.cookie.secure = true;
-  process.env.NODE_ENV === "production" && ".hometownalba.com";
+  sessionOPtion.domain = process.env.NODE_ENV === "production" && ".hometownalba.com";
 }
 
 app.use(session(sessionOPtion));
@@ -77,7 +78,7 @@ app.use(passport.initialize());
 app.use(passport.session()); //id를 알아내고 그 id를 des로 넘겨줌
 
 passportConfig();
-app.set("port", process.env.PORT || 5000);
+//app.set("port", process.env.PORT || 5000);
 // 멀터 테스트
 
 // localhost multer test
@@ -166,5 +167,6 @@ app.get("/", (req, res) => {
     message: "test 성공1",
   });
 });
+
 
 module.exports = app;
