@@ -18,6 +18,17 @@ jobSeekerRouter.get("/", isLoggedIn, (req, res) => {
   });
 });
 
+// 구직자 회원가입시 체크를 위한 id 불러오기
+jobSeekerRouter.get("/getall", async (req, res) => {
+  let jobSeekerId = await JobSeeker.findAll({ attributes: ["userId"] });
+  if (jobSeekerId) {
+    return res.status(200).json({
+      userId: jobSeekerId,
+      message: "중복된 아이디 확인을 위한 유저 아이디 정보입니다",
+    });
+  }
+});
+
 // 구직자 회원가입 요청
 
 jobSeekerRouter.get("/test", (req, res) => {
