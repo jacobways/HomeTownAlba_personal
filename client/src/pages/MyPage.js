@@ -36,7 +36,7 @@ function AdminPage(props) {
   } else {
     return (
       <>
-        <div>사업자 MyPage </div>
+       
         <CompanyMyPage />
       </>
     );
