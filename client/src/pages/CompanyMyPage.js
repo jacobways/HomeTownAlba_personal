@@ -7,6 +7,8 @@ import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply";
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import WithdrawCompanyModal from "../components/MyPageModal/Modal_WithdrawCompany";
 import DaumPostcode from "react-daum-postcode";
+import NavBar from "../components/NavBar";
+
 const { kakao } = window;
 
 // 사업자 마이페이지
@@ -592,6 +594,7 @@ export default function CompanyMyPage(props) {
 
   return (
     <>
+    <NavBar />
       <div className="mypage">
         <h1>사업자 마이페이지</h1>
         <h2 className="header2">회사 정보</h2>
