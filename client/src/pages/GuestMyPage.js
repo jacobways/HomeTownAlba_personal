@@ -615,6 +615,7 @@ function GuestMyPage({ guestApplyStatus }) {
                                     </td>
                                     <td className="month">{career.period}</td>
                                     <button
+                                        className='bubbly-button' id='left'
                                       onClick={() => {
                                         careerHandler(idx, career.id);
                                       }}
@@ -657,6 +658,7 @@ function GuestMyPage({ guestApplyStatus }) {
                                     />
                                   </td>
                                   <button
+                                     className='bubbly-button'
                                     onClick={() => {
                                       updateCareer(idx, career.id);
                                     }}
@@ -712,106 +714,112 @@ function GuestMyPage({ guestApplyStatus }) {
               </div>
               {/* </form> */}
 
-              {/* 아래와 같이 지원현황 및 지원결과 확인 코드 추가 */}
-              <h3>지원 현황</h3>
-              {applyList.length === 0 ? (
-                <div>지원 내역이 없습니다</div>
-              ) : (
-                <table>
-                  <tr>
-                    <th>회사명</th>
-                    <th>주소</th>
-                    <th>근무요일</th>
-                    <th>근무시간</th>
-                    <th>시급</th>
-                    <th>예상 월급여</th>
-                    <th>포지션</th>
-                    <th></th>
-                  </tr>
-                  {applyList.map(job => {
-                    return (
-                      <tr key={job.id}>
-                        <td>{job.companyName}</td>
-                        <td>{job.location}</td>
-                        <td>{job.day}</td>
-                        <td>
-                          {job.startTime}~{job.endTime} ({job.time}시간)
-                        </td>
-                        <td>{job.hourlyWage}</td>
-                        <td>{job.monthlyWage}</td>
-                        <td>{job.position}</td>
-                        <CancelApplyModal
-                          CancelApply={CancelApply}
-                          jobId={job.id}
-                        />
-                      </tr>
-                    );
-                  })}
-                </table>
-              )}
               <br></br>
-              <h3>지원 결과</h3>
-              {resultList.length === 0 ? (
-                <div>지원 결과가 없습니다</div>
-              ) : (
-                <table>
-                  <tr>
-                    <th>회사명</th>
-                    <th>주소</th>
-                    <th>근무요일</th>
-                    <th>근무시간</th>
-                    <th>시급</th>
-                    <th>예상 월급여</th>
-                    <th>포지션</th>
-                    <th>결과</th>
-                    <th></th>
-                  </tr>
-                  {resultList.map((job, number) => {
-                    if (statusList[number]) {
-                      if (statusList[number].status === "rejected") {
-                        return (
-                          <tr key={job.id}>
-                            <td>{job.companyName}</td>
-                            <td>{job.location}</td>
-                            <td>{job.day}</td>
-                            <td>
-                              {job.startTime}~{job.endTime} ({job.time}시간)
-                            </td>
-                            <td>{job.hourlyWage}</td>
-                            <td>{job.monthlyWage}</td>
-                            <td>{job.position}</td>
-                            <td>지원 거절</td>
-                            <CancelApplyModal
-                              CancelApply={CancelApply}
-                              jobId={job.id}
-                            />
-                          </tr>
-                        );
-                      } else if (statusList[number].status === "accepted") {
-                        return (
-                          <tr key={job.id}>
-                            <td>{job.companyName}</td>
-                            <td>{job.location}</td>
-                            <td>{job.day}</td>
-                            <td>
-                              {job.startTime}~{job.endTime} ({job.time}시간)
-                            </td>
-                            <td>{job.hourlyWage}</td>
-                            <td>{job.monthlyWage}</td>
-                            <td>{job.position}</td>
-                            <td>지원 승인</td>
-                            <CancelApplyModal
-                              CancelApply={CancelApply}
-                              jobId={job.id}
-                            />
-                            <button>채팅창 열기</button>
-                          </tr>
-                        );
-                      }
-                    }
-                  })}
-                </table>
-              )}
+                <div className="job-list-title-wrapper">
+                <h1 className="job-list-title">등록 일자리 목록</h1>
+
+                {/* 아래처럼 등록된 일자리 및 지원자를 확인하는 코드 추가 */}
+                {jobList.length === 0 ? (
+                  <div className="careerSection">
+                  <h3>일자리 정보를 등록해주세요</h3>
+                  </div>
+                ) : (
+                  <>
+                    {jobList.map((job, idx) => {
+                      return (
+                        
+                        <div key={idx}>
+                          <h4>
+                            주소 : {job.location}
+                            포지션 : {job.position}
+                            시급 : {job.hourlyWage}
+                            요일 : {JSON.parse(job.day)}
+                            시간 : {job.startTime}~{job.endTime}
+                            <DeleteJobModal DeleteJob={DeleteJob} id={job.id} />
+                          </h4>
+
+                          {!showingApplicantList[idx] ? (
+                            <button
+                              onClick={() => {
+                                openApplicantList(idx, job.id);
+                              }}
+                            >
+                              지원자 보기
+                            </button>
+                          ) : (
+                            <>
+                              <button
+                                onClick={() => {
+                                  closeApplicantList(idx);
+                                }}
+                              >
+                                지원자 숨기기
+                              </button>
+                              {!applicantList[idx] ? (
+                                <h5>아직 지원자가 없습니다</h5>
+                              ) : (
+                                <table>
+                                  <tr>
+                                    <th>이름</th>
+                                    <th>나이</th>
+                                    <th>성별</th>
+                                    <th></th>
+                                    <th></th>
+                                  </tr>
+                                  {applicantList[idx].map((jobSeeker, number) => {
+                                    if(applyStatusList[idx]) {
+                                      if(applyStatusList[idx][number].status==="waiting") {
+                                        return (
+                                          <tr key={jobSeeker.id}>
+                                            <td>{jobSeeker.name}</td>
+                                            <td>{jobSeeker.age}</td>
+                                            <td>{jobSeeker.gender}</td>
+                                            <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                            <RejectApplyModal
+                                              RejectApply={RejectApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                            <AcceptApplyModal
+                                              AcceptApply={AcceptApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                          </tr>
+                                        );
+                                      } else if (applyStatusList[idx][number].status==="accepted") {
+                                        return (
+                                          <tr key={jobSeeker.id}>
+                                            <td>{jobSeeker.name}</td>
+                                            <td>{jobSeeker.age}</td>
+                                            <td>{jobSeeker.gender}</td>
+                                            <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                            <RejectApplyModal
+                                              RejectApply={RejectApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                            <button className='bubbly-button'>채팅창 열기</button>
+                                          </tr>
+                                        );
+                                      }
+                                    }
+                                  })}
+                                </table>
+                              )}
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+              </div>
+                
+                <br></br>
 
               {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
               <br />
