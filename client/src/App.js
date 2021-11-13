@@ -42,7 +42,12 @@ function App() {
         <Route
           exact
           path="/guest/mypage"
-          render={() => <GuestMyPage guestApplyStatus={guestApplyStatus} />}
+          render={() => 
+            <GuestMyPage 
+              guestApplyStatus={guestApplyStatus} 
+              guestApplyStatusHandler={guestApplyStatusHandler}
+            />
+          }
         />
         <Route exact path="/login" component={LoginPage} />
         <Route exact path="/register" component={RegisterPage} />
