@@ -30,10 +30,6 @@
   font-weight: 700;
 }
 
-.hover {
-  background-color: blue;
-}
-
 .jobseeker-wrapper > button:nth-child(2),
 .company-wrapper > button:nth-child(2) {
   border-left: 1px solid rgb(205, 205, 205);
@@ -90,7 +86,7 @@ select {
 select::placeholder,
 .company-register-wrapper input::placeholder,
 select::placeholder {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: rgb(173, 173, 173);
 }
 
