@@ -602,6 +602,7 @@ function GuestMyPage({guestApplyStatus, guestApplyStatusHandler}) {
                             <td className="position">{career.position}</td>
                             <td className="month">{career.period}</td>
                             <button
+                                className='bubbly-button'
                               onClick={() => {
                                 careerHandler(idx, career.id);
                               }}
@@ -644,6 +645,7 @@ function GuestMyPage({guestApplyStatus, guestApplyStatusHandler}) {
                               />
                             </td>
                             <button
+                                className='bubbly-button'
                               onClick={() => {
                                 updateCareer(idx, career.id);
                               }}
@@ -1107,7 +1109,7 @@ function GuestMyPage({guestApplyStatus, guestApplyStatusHandler}) {
                                               jobId={job.id}
                                               jobSeekerId={jobSeeker.id}
                                             />
-                                            <button>채팅창 열기</button>
+                                            <button className='bubbly-button'>채팅창 열기</button>
                                           </tr>
                                         );
                                       }
