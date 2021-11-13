@@ -433,6 +433,9 @@ function RegisterPage(props) {
                     onChange={IdHandler}
                     placeholder="아이디"
                   />
+                         {JobIdSame ? (
+            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
+          ) : null}
                 </div>
                 <div className="jobseeker-register-wrapper">
                   <div>비밀번호</div>
@@ -453,6 +456,9 @@ function RegisterPage(props) {
                     onChange={ConfirmPasswordHandler}
                     placeholder="비밀번호 확인"
                   />
+                         {PasswordWarn ? (
+            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
+          ) : null}
                 </div>
                 <div className="jobseeker-register-wrapper">
                   <div>이름</div>
@@ -544,6 +550,20 @@ function RegisterPage(props) {
                         value={JobSeekerInputAuthCode}
                         onChange={InputHandler}
                       />
+                          <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: "0.5rem" }}>
+                  이용약관에 동의하시면 클릭해주세요
+                </div>
+                <input type="checkbox" onChange={checkBoxHandler} />
+              </div>
+              {AutchCodeWarn ? (
+                <div style={{ color: "red" }}>
+                  입력하신 인증번호가 올바르지 않습니다.
+                </div>
+              ) : null}
+              {CheckBoxWarn ? (
+                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
+              ) : null}
                       <button type="submit">회원가입</button>
                     </div>
                   ) : null}
@@ -580,6 +600,9 @@ function RegisterPage(props) {
                     onChange={IdHandler}
                     placeholder="아이디"
                   />
+                          {CompanyIdSame ? (
+            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
+          ) : null}
                 </div>
                 <div className="company-register-wrapper">
                   <div>비밀번호</div>
@@ -600,6 +623,9 @@ function RegisterPage(props) {
                     onChange={ConfirmPasswordHandler}
                     placeholder="비밀번호 확인"
                   />
+                      {PasswordWarn ? (
+            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
+          ) : null}
                 </div>
 
                 <div className="company-register-wrapper">
@@ -683,6 +709,20 @@ function RegisterPage(props) {
                         value={CompanyInputAuthCode}
                         onChange={CompanyInputHandler}
                       />
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: "0.5rem" }}>
+                  이용약관에 동의하시면 클릭해주세요
+                </div>
+                <input type="checkbox" onChange={checkBoxHandler} />
+              </div>
+              {AutchCodeWarn ? (
+                <div style={{ color: "red" }}>
+                  입력하신 인증번호가 올바르지 않습니다.
+                </div>
+              ) : null}
+              {CheckBoxWarn ? (
+                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
+              ) : null}
                       <button type="submit">회원가입</button>
                     </div>
                   ) : null}
