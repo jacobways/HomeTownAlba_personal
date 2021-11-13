@@ -33,7 +33,7 @@ function RejectApplyModal({ idx, jobId, jobSeekerId, RejectApply }) {
 
   return (
     <>
-      <button classname='bubbly-button' className="bubbly-button" onClick={openModalHandler}>
+      <button  className="bubbly-button" onClick={openModalHandler}>
         {isOpen === false ? "지원거절" : "지원거절중"}
       </button>
       {isOpen === true ? (
