@@ -1000,29 +1000,44 @@ function GuestMyPage({guestApplyStatus}) {
                 <br></br>
                 <div className="job-list-title-wrapper">
                 <h1 className="job-list-title">등록 일자리 목록</h1>
-
+            </div>
                 {/* 아래처럼 등록된 일자리 및 지원자를 확인하는 코드 추가 */}
                 {jobList.length === 0 ? (
-                  <div className="careerSection">
+                   <div className="careerSection">
                   <h3>일자리 정보를 등록해주세요</h3>
                   </div>
                 ) : (
                   <>
                     {jobList.map((job, idx) => {
                       return (
-                        
                         <div key={idx}>
-                          <h4>
-                            주소 : {job.location}
-                            포지션 : {job.position}
-                            시급 : {job.hourlyWage}
-                            요일 : {JSON.parse(job.day)}
-                            시간 : {job.startTime}~{job.endTime}
-                            <DeleteJobModal DeleteJob={DeleteJob} id={job.id} />
-                          </h4>
+                          <div className="job-list-table-container">
+                         <table>
+                    <thead>
+                      <tr>
+                        <th>구인 위치</th>
+                        <th>포지션</th>
+                        <th>시급</th>
+                        <th>요일</th>
+                        <th>시간</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className='last'>
+                        <td>{job.location}</td>
+                        <td>{job.position}</td>
+                        <td>{job.hourlyWage}</td>
+                        <td>{JSON.parse(job.day)}</td>
+                        <td>
+                          {job.startTime.slice(0, 5)}~{job.endTime.slice(0, 5)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
 
                           {!showingApplicantList[idx] ? (
                             <button
+                            className='bubbly-button'
                               onClick={() => {
                                 openApplicantList(idx, job.id);
                               }}
@@ -1032,6 +1047,7 @@ function GuestMyPage({guestApplyStatus}) {
                           ) : (
                             <>
                               <button
+                              className='bubbly-button'
                                 onClick={() => {
                                   closeApplicantList(idx);
                                 }}
@@ -1085,7 +1101,7 @@ function GuestMyPage({guestApplyStatus}) {
                                               jobId={job.id}
                                               jobSeekerId={jobSeeker.id}
                                             />
-                                            <button className='bubbly-button'>채팅창 열기</button>
+                                            <button>채팅창 열기</button>
                                           </tr>
                                         );
                                       }
@@ -1096,11 +1112,12 @@ function GuestMyPage({guestApplyStatus}) {
                             </>
                           )}
                         </div>
+                        </div>
                       );
                     })}
                   </>
                 )}
-              </div>
+
                 
                 <br></br>
 
