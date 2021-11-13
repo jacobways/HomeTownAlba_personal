@@ -514,7 +514,7 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
                     image: markerImage, // 마커 이미지
                   });
 
-                  MakeMarkerEvent(marker, "지원 취소하기", CancelApply);
+                  MakeMarkerEvent(marker, "지원 취소", CancelApply);
                 } else if (applicant.data.data.status === "rejected") {
                   let imageSrc =
                     "https://cdn.pixabay.com/photo/2016/12/18/11/04/pointer-1915456_1280.png";
@@ -559,9 +559,9 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
                   });
 
                   if (jobSeekerId === 0) {
-                    MakeMarkerEvent(marker, "지원 승인됨(회원만 채팅가능)");
+                    MakeMarkerEvent(marker, "승인 완료");
                   } else {
-                    MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
+                    MakeMarkerEvent(marker, "승인 완료");
                   }
                 }
               } else {
@@ -574,7 +574,7 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
                   clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
                 });
 
-                MakeMarkerEvent(marker, "지원", ApplyJob);
+                MakeMarkerEvent(marker, "지원 ", ApplyJob);
               }
             });
 
