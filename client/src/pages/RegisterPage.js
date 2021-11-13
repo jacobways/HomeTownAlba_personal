@@ -403,7 +403,7 @@ function RegisterPage(props) {
       });
   }, []);
 
-  if (RegisterDisplay === "jobseeker") {
+ if (RegisterDisplay === "jobseeker") {
     return (
       <>
         <NavBar />
@@ -554,7 +554,13 @@ function RegisterPage(props) {
                         margin: "0px",
                       }}
                     >
-                      <div style={{ fontSize: "0.9rem" }}>
+                      <div
+                        style={{
+                          fontSize: "1rem",
+                          marginBottom: "0px",
+                          fontWeight: 900,
+                        }}
+                      >
                         회원 가입을 위한 인증번호 입니다.
                       </div>
                       <div style={{ fontSize: "0.9rem" }}>
@@ -573,18 +579,24 @@ function RegisterPage(props) {
                           이용약관에 동의하시면 클릭해주세요
                         </div>
                         <input
-                          style={{ flex: 1, fontSize: "0.9rem" }}
+                          style={{ flex: 1 }}
                           type="checkbox"
                           onChange={checkBoxHandler}
                         />
                       </div>
                       {AutchCodeWarn ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", fontSize: "0.9rem" }}>
                           입력하신 인증번호가 올바르지 않습니다.
                         </div>
                       ) : null}
                       {CheckBoxWarn ? (
-                        <div style={{ color: "red" }}>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "0.9rem",
+                            margin: "0px",
+                          }}
+                        >
                           이용약관에 동의해주세요.
                         </div>
                       ) : null}
@@ -737,7 +749,13 @@ function RegisterPage(props) {
                         margin: "0px",
                       }}
                     >
-                      <div style={{ fontSize: "0.9rem" }}>
+                      <div
+                        style={{
+                          fontSize: "1rem",
+                          marginBottom: "0px",
+                          fontWeight: 900,
+                        }}
+                      >
                         회원 가입을 위한 인증번호 입니다.
                       </div>
                       <div style={{ fontSize: "0.9rem" }}>
@@ -758,18 +776,24 @@ function RegisterPage(props) {
                           이용약관에 동의하시면 클릭해주세요
                         </div>
                         <input
-                          style={{ flex: 1, fontSize: "0.9rem" }}
+                          style={{ flex: 1 }}
                           type="checkbox"
                           onChange={checkBoxHandler}
                         />
                       </div>
                       {AutchCodeWarn ? (
-                        <div style={{ color: "red" }}>
+                        <div style={{ color: "red", fontSize: "0.9rem" }}>
                           입력하신 인증번호가 올바르지 않습니다.
                         </div>
                       ) : null}
                       {CheckBoxWarn ? (
-                        <div style={{ color: "red" }}>
+                        <div
+                          style={{
+                            color: "red",
+                            fontSize: "0.9rem",
+                            margin: "0px",
+                          }}
+                        >
                           이용약관에 동의해주세요.
                         </div>
                       ) : null}
