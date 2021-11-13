@@ -433,9 +433,11 @@ function RegisterPage(props) {
                     onChange={JobIdHandler}
                     placeholder="아이디"
                   />
-                         {JobIdSame ? (
-            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
-          ) : null}
+                  {JobIdSame ? (
+                    <div style={{ color: "red" }}>
+                      중복된 아이디가 있습니다.
+                    </div>
+                  ) : null}
                 </div>
                 <div className="jobseeker-register-wrapper">
                   <div>비밀번호</div>
@@ -456,9 +458,11 @@ function RegisterPage(props) {
                     onChange={ConfirmPasswordHandler}
                     placeholder="비밀번호 확인"
                   />
-                         {PasswordWarn ? (
-            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
-          ) : null}
+                  {PasswordWarn ? (
+                    <div style={{ color: "red" }}>
+                      비밀번호가 서로 다릅니다.
+                    </div>
+                  ) : null}
                 </div>
                 <div className="jobseeker-register-wrapper">
                   <div>이름</div>
@@ -540,30 +544,50 @@ function RegisterPage(props) {
 
                   {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
                   {JobSeekerEmailInput ? (
-                    <div>
-                      <h4>회원 가입을 위한 인증번호 입니다.</h4>
-                      <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
+                    <div
+                      className="email-wrapper"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        width: "100%",
+                        margin: "0px",
+                      }}
+                    >
+                      <div style={{ fontSize: "0.9rem" }}>
+                        회원 가입을 위한 인증번호 입니다.
+                      </div>
+                      <div style={{ fontSize: "0.9rem" }}>
+                        아래 인증 번호를 입력하여 인증을 완료해주세요.
+                      </div>
                       <input
                         required
                         type="text"
                         placeholder="인증번호를 입력하세요"
+                        style={{ width: "250px" }}
                         value={JobSeekerInputAuthCode}
                         onChange={InputHandler}
                       />
-                          <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ marginRight: "0.5rem" }}>
-                  이용약관에 동의하시면 클릭해주세요
-                </div>
-                <input type="checkbox" onChange={checkBoxHandler} />
-              </div>
-              {AutchCodeWarn ? (
-                <div style={{ color: "red" }}>
-                  입력하신 인증번호가 올바르지 않습니다.
-                </div>
-              ) : null}
-              {CheckBoxWarn ? (
-                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
-              ) : null}
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div style={{ flex: 2, fontSize: "0.9rem" }}>
+                          이용약관에 동의하시면 클릭해주세요
+                        </div>
+                        <input
+                          style={{ flex: 1, fontSize: "0.9rem" }}
+                          type="checkbox"
+                          onChange={checkBoxHandler}
+                        />
+                      </div>
+                      {AutchCodeWarn ? (
+                        <div style={{ color: "red" }}>
+                          입력하신 인증번호가 올바르지 않습니다.
+                        </div>
+                      ) : null}
+                      {CheckBoxWarn ? (
+                        <div style={{ color: "red" }}>
+                          이용약관에 동의해주세요.
+                        </div>
+                      ) : null}
                       <button type="submit">회원가입</button>
                     </div>
                   ) : null}
@@ -600,9 +624,11 @@ function RegisterPage(props) {
                     onChange={CompanyIdHandler}
                     placeholder="아이디"
                   />
-                          {CompanyIdSame ? (
-            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
-          ) : null}
+                  {CompanyIdSame ? (
+                    <div style={{ color: "red" }}>
+                      중복된 아이디가 있습니다.
+                    </div>
+                  ) : null}
                 </div>
                 <div className="company-register-wrapper">
                   <div>비밀번호</div>
@@ -623,9 +649,11 @@ function RegisterPage(props) {
                     onChange={ConfirmPasswordHandler}
                     placeholder="비밀번호 확인"
                   />
-                      {PasswordWarn ? (
-            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
-          ) : null}
+                  {PasswordWarn ? (
+                    <div style={{ color: "red" }}>
+                      비밀번호가 서로 다릅니다.
+                    </div>
+                  ) : null}
                 </div>
 
                 <div className="company-register-wrapper">
@@ -696,33 +724,55 @@ function RegisterPage(props) {
                   {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
                   {LoadingStatus && <LoadingModal />}
                   {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-
                   <button onClick={CompanySubmitHandler}>인증하기</button>
                   {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
                   {CompanyEmailInput ? (
-                    <div>
-                      <h4>회원 가입을 위한 인증번호 입니다.</h4>
-                      <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
+                    <div
+                      className="email-wrapper"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        width: "100%",
+                        margin: "0px",
+                      }}
+                    >
+                      <div style={{ fontSize: "0.9rem" }}>
+                        회원 가입을 위한 인증번호 입니다.
+                      </div>
+                      <div style={{ fontSize: "0.9rem" }}>
+                        아래 인증 번호를 입력하여 인증을 완료해주세요.
+                      </div>
                       <input
                         type="text"
                         placeholder="인증번호를 입력하세요"
+                        style={{ width: "250px" }}
                         value={CompanyInputAuthCode}
                         onChange={CompanyInputHandler}
                       />
-                            <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ marginRight: "0.5rem" }}>
-                  이용약관에 동의하시면 클릭해주세요
-                </div>
-                <input type="checkbox" onChange={checkBoxHandler} />
-              </div>
-              {AutchCodeWarn ? (
-                <div style={{ color: "red" }}>
-                  입력하신 인증번호가 올바르지 않습니다.
-                </div>
-              ) : null}
-              {CheckBoxWarn ? (
-                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
-              ) : null}
+                      <div style={{ display: "flex", alignItems: "center" }}>
+                        <div
+                          className="email-auth-text"
+                          style={{ flex: 2, fontSize: "0.9rem" }}
+                        >
+                          이용약관에 동의하시면 클릭해주세요
+                        </div>
+                        <input
+                          style={{ flex: 1, fontSize: "0.9rem" }}
+                          type="checkbox"
+                          onChange={checkBoxHandler}
+                        />
+                      </div>
+                      {AutchCodeWarn ? (
+                        <div style={{ color: "red" }}>
+                          입력하신 인증번호가 올바르지 않습니다.
+                        </div>
+                      ) : null}
+                      {CheckBoxWarn ? (
+                        <div style={{ color: "red" }}>
+                          이용약관에 동의해주세요.
+                        </div>
+                      ) : null}
                       <button type="submit">회원가입</button>
                     </div>
                   ) : null}
