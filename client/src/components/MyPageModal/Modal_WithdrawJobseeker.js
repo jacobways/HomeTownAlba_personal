@@ -39,8 +39,8 @@ function WithdrawJobSeeker({ WithdrawJobseeker }) {
       {isOpen === true ? (
         <ModalBackdrop>
           <span>정말 탈퇴하시겠습니까?</span>
-          <button onClick={CloseModalHandler}>아니요</button>
-          <button onClick={CloseAndDeleteHandler}>탈퇴하기</button>
+          <button id="left" className="bubbly-button" onClick={CloseModalHandler}>아니요</button>
+          <button className="bubbly-button" onClick={CloseAndDeleteHandler}>탈퇴하기</button>
         </ModalBackdrop>
       ) : null}
     </>
