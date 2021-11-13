@@ -11,7 +11,7 @@ export const ModalBackdrop = styled.div`
   bottom: 1;
   right: 1;
   background-color: rgba(0, 0, 0, 0.4);
-  display: grid;
+  display: -webkit-flex;
   place-items: center;
 `;
 
