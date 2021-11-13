@@ -133,10 +133,10 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
         if (mapLevel <= 4) {
           return res.data.data.filter(job => {
             return (
-              parseFloat(job.latitude) >= mapLocation[0] - 0.01125 &&
-              parseFloat(job.latitude) <= mapLocation[0] + 0.01125 &&
-              parseFloat(job.longitude) >= mapLocation[1] - 0.01625 &&
-              parseFloat(job.longitude) <= mapLocation[1] + 0.01625
+              parseFloat(job.latitude) >= mapLocation[0] - 0.009 &&
+              parseFloat(job.latitude) <= mapLocation[0] + 0.009 &&
+              parseFloat(job.longitude) >= mapLocation[1] - 0.011 &&
+              parseFloat(job.longitude) <= mapLocation[1] + 0.011
             );
           });
         } else if (mapLevel === 5) {
@@ -144,8 +144,8 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.0225 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.0225 &&
-              parseFloat(job.longitude) >= mapLocation[1] - 0.0325 &&
-              parseFloat(job.longitude) <= mapLocation[1] + 0.0325
+              parseFloat(job.longitude) >= mapLocation[1] - 0.0275 &&
+              parseFloat(job.longitude) <= mapLocation[1] + 0.0275
             );
           });
         } else if (mapLevel === 6) {
@@ -153,8 +153,8 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.045 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.045 &&
-              parseFloat(job.longitude) >= mapLocation[1] - 0.065 &&
-              parseFloat(job.longitude) <= mapLocation[1] + 0.065
+              parseFloat(job.longitude) >= mapLocation[1] - 0.055 &&
+              parseFloat(job.longitude) <= mapLocation[1] + 0.055
             );
           });
         } else if (mapLevel >= 7) {
@@ -162,8 +162,8 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
             return (
               parseFloat(job.latitude) >= mapLocation[0] - 0.09 &&
               parseFloat(job.latitude) <= mapLocation[0] + 0.09 &&
-              parseFloat(job.longitude) >= mapLocation[1] - 0.13 &&
-              parseFloat(job.longitude) <= mapLocation[1] + 0.13
+              parseFloat(job.longitude) >= mapLocation[1] - 0.11 &&
+              parseFloat(job.longitude) <= mapLocation[1] + 0.11
             );
           });
         }
@@ -327,264 +327,257 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
 
         //---------------------주소를 좌표로 변환 후 마커를 뛰우고 마커에 이벤트 등록하기
 
-        // 주소-좌표 변환 객체를 생성합니다
-        let geocoder = new kakao.maps.services.Geocoder();
-
         // 주소로 좌표를 검색합니다
         for (let i = 0; i < data.length; i++) {
-          geocoder.addressSearch(data[i].location, function (result, status) {
-            if (status === kakao.maps.services.Status.OK) {
-              // 정상적으로 검색이 완료됐으면
 
-              let coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+          let coords = new kakao.maps.LatLng(data[i].latitude, data[i].longitude);
 
-              // 지원 여부에 따라 마커 및 클릭 infowindow를 다르게 표시하기 위해, 지원자에 대한 axios 요청
-              axios
-                .get(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
-                  params: { jobId: data[i].id, jobSeekerId },
-                })
-                .then(applicant => {
-                  // 지원을 취소하는 핸들러 제작
-                  function CancelApply() {
-                    axios
-                      .delete(
-                        `${process.env.REACT_APP_SERVER_URL}/applicant`,
-                        {
-                          params: { jobId: data[i].id, jobSeekerId },
-                        },
-                        { withCredentials: true }
-                      )
-                      .then(res => {
-                        setApplyLocation([
-                          parseFloat(result[0].y),
-                          parseFloat(result[0].x),
-                        ]);
-                        setSearchLocation("");
-                        setMapLocation([
-                          parseFloat(result[0].y),
-                          parseFloat(result[0].x),
-                        ]);
-                      })
-                      .catch();
-                  }
+          // 지원 여부에 따라 마커 및 클릭 infowindow를 다르게 표시하기 위해, 지원자에 대한 axios 요청
+          axios
+            .get(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
+              params: { jobId: data[i].id, jobSeekerId },
+            })
+            .then(applicant => {
+              // 지원을 취소하는 핸들러 제작
+              function CancelApply() {
+                axios
+                  .delete(
+                    `${process.env.REACT_APP_SERVER_URL}/applicant`,
+                    {
+                      params: { jobId: data[i].id, jobSeekerId },
+                    },
+                    { withCredentials: true }
+                  )
+                  .then(res => {
+                    setApplyLocation([
+                      parseFloat(data[i].latitude),
+                      parseFloat(data[i].longitude),
+                    ]);
+                    setSearchLocation("");
+                    setMapLocation([
+                      parseFloat(data[i].latitude),
+                      parseFloat(data[i].longitude),
+                    ]);
+                  })
+                  .catch();
+              }
 
-                  const ChangeGuestApplyStatus = () => {
-                    guestApplyStatusHandler();
-                  };
+              const ChangeGuestApplyStatus = () => {
+                guestApplyStatusHandler();
+              };
 
-                  // 지원을 요청하는 핸들러 제작
-                  function ApplyJob() {
-                    axios
-                      .post(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
-                        jobId: data[i].id,
-                        jobSeekerId,
-                      })
-                      .then(res => {
-                        setApplyLocation([
-                          parseFloat(result[0].y),
-                          parseFloat(result[0].x),
-                        ]);
-                        setSearchLocation("");
-                        setMapLocation([
-                          parseFloat(result[0].y),
-                          parseFloat(result[0].x),
-                        ]);
-                        return res;
-                      })
-                      .then(res => {
-                        if (jobSeekerId === 0) {
-                          setTimeout(() => {
-                            console.log("res.data.id", res.data.id);
-                            axios
-                              .delete(
-                                `${process.env.REACT_APP_SERVER_URL}/applicant/${res.data.id}`,
-                                { withCredentials: true }
-                              )
-                              .then(res => {
-                                ChangeGuestApplyStatus();
-                              });
-                          }, 300000);
-                        }
-                      })
-                      .catch();
-                  }
-
-                  // 마커에 이벤트를 등록하는 핸들러 제작
-                  function MakeMarkerEvent(
-                    marker,
-                    buttonContent,
-                    applyHandler
-                  ) {
-                    // 마커에 마우스오버 이벤트를 등록합니다
-                    kakao.maps.event.addListener(
-                      marker,
-                      "mouseover",
-                      function () {
-                        // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
-                        infowindowHover.open(map, marker);
-                      }
-                    );
-
-                    // 마커에 마우스아웃 이벤트를 등록합니다
-                    kakao.maps.event.addListener(
-                      marker,
-                      "mouseout",
-                      function () {
-                        // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
-                        infowindowHover.close();
-                      }
-                    );
-
-                    // 마커에 Hover 이벤트 등록 : 인포윈도우에 정보 제공
-                    let infowindowHover = new kakao.maps.InfoWindow({
-                      content: `<div style="width:300px;text-align:center;padding:6px 0;line-height:30px;font-size:20px">
-                    <div>근무요일 : ${JSON.parse(data[i].day)}</div>
-                    <div>근무시간 : ${simplifyTime(
-                      data[i].startTime
-                    )}~${simplifyTime(data[i].endTime)}</div>
-                    <div>월급여 : ${numberWithCommas(
-                      data[i].monthlyWage
-                    )}원</div>
-                    <div>포지션 : ${data[i].position}</div>
-                  </div>`,
-                    });
-
-                    // 마커에 click 이벤트 등록 : 인포윈도우에 정보 제공 및 일자리 지원 가능
-                    let contentClick = document.createElement("div");
-                    contentClick.style.cssText =
-                      "width: 300px; text-align:center; padding:6px 0; 1px 0; line-height:30px;font-size:20px;";
-                    let companyName = document.createElement("div");
-                    companyName.textContent = `회사명 : ${data[i].companyName}`;
-                    let day = document.createElement("div");
-                    day.textContent = `근무요일 : ${JSON.parse(data[i].day)}`;
-                    let time = document.createElement("div");
-                    time.textContent = `근무시간 : ${simplifyTime(
-                      data[i].startTime
-                    )}~${simplifyTime(data[i].endTime)}(${data[i].time}시간)`;
-                    let hourlyWage = document.createElement("div");
-                    hourlyWage.textContent = `시급 : ${numberWithCommas(
-                      data[i].hourlyWage
-                    )}원`;
-                    let monthlyWage = document.createElement("div");
-                    monthlyWage.textContent = `예상 월급여 : ${numberWithCommas(
-                      data[i].monthlyWage
-                    )}원`;
-                    let position = document.createElement("div");
-                    position.textContent = `포지션 : ${data[i].position}`;
-                    let btn = document.createElement("button");
-                    btn.style.cssText =
-                      "border:none; width:50px; height:50px ;font-size:20px; border-radius:5px; background-color: rgb(50, 108, 249); color:#fff;";
-                    btn.textContent = buttonContent;
-                    btn.onclick = applyHandler;
-
-                    contentClick.append(
-                      companyName,
-                      day,
-                      time,
-                      hourlyWage,
-                      monthlyWage,
-                      position,
-                      btn
-                    );
-
-                    let infowindowClick = new kakao.maps.InfoWindow({
-                      content: contentClick,
-                      removable: true,
-                    });
-                    // 마커에 클릭이벤트를 등록합니다
-                    kakao.maps.event.addListener(marker, "click", function () {
-                      // 마커 위에 인포윈도우를 표시합니다
-                      infowindowClick.open(map, marker);
-                    });
-                  }
-
-                  if (applicant.data.data) {
-                    // 이미 지원 한 일자리의 경우 마커 생성
-
-                    if (applicant.data.data.status === "waiting") {
-                      let imageSrc =
-                        "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
-
-                      let imageSize = new kakao.maps.Size(24, 35);
-
-                      let markerImage = new kakao.maps.MarkerImage(
-                        imageSrc,
-                        imageSize
-                      );
-
-                      // 결과값으로 받은 위치를 마커로 표시합니다
-                      let marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords,
-                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                        image: markerImage, // 마커 이미지
-                      });
-
-                      MakeMarkerEvent(marker, "지원 취소하기", CancelApply);
-                    } else if (applicant.data.data.status === "rejected") {
-                      let imageSrc =
-                        "https://cdn.pixabay.com/photo/2016/12/18/11/04/pointer-1915456_1280.png";
-
-                      let imageSize = new kakao.maps.Size(24, 35);
-
-                      let markerImage = new kakao.maps.MarkerImage(
-                        imageSrc,
-                        imageSize
-                      );
-
-                      // 결과값으로 받은 위치를 마커로 표시합니다
-                      let marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords,
-                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                        image: markerImage, // 마커 이미지
-                      });
-
-                      MakeMarkerEvent(
-                        marker,
-                        "지원 거절됨(삭제하기)",
-                        CancelApply
-                      );
-                    } else if (applicant.data.data.status === "accepted") {
-                      let imageSrc =
-                        "https://cdn.pixabay.com/photo/2014/04/02/10/45/location-304467_1280.png";
-
-                      let imageSize = new kakao.maps.Size(24, 35);
-
-                      let markerImage = new kakao.maps.MarkerImage(
-                        imageSrc,
-                        imageSize
-                      );
-
-                      // 결과값으로 받은 위치를 마커로 표시합니다
-                      let marker = new kakao.maps.Marker({
-                        map: map,
-                        position: coords,
-                        clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                        image: markerImage, // 마커 이미지
-                      });
-
-                      if (jobSeekerId === 0) {
-                        MakeMarkerEvent(marker, "지원 승인됨(회원만 채팅가능)");
-                      } else {
-                        MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
-                      }
+              // 지원을 요청하는 핸들러 제작
+              function ApplyJob() {
+                axios
+                  .post(`${process.env.REACT_APP_SERVER_URL}/applicant`, {
+                    jobId: data[i].id,
+                    jobSeekerId,
+                  })
+                  .then(res => {
+                    setApplyLocation([
+                      parseFloat(data[i].latitude),
+                      parseFloat(data[i].longitude),
+                    ]);
+                    setSearchLocation("");
+                    setMapLocation([
+                      parseFloat(data[i].latitude),
+                      parseFloat(data[i].longitude),
+                    ]);
+                    return res;
+                  })
+                  .then(res => {
+                    if (jobSeekerId === 0) {
+                      setTimeout(() => {
+                        console.log("res.data.id", res.data.id);
+                        axios
+                          .delete(
+                            `${process.env.REACT_APP_SERVER_URL}/applicant/${res.data.id}`,
+                            { withCredentials: true }
+                          )
+                          .then(res => {
+                            ChangeGuestApplyStatus();
+                          });
+                      }, 300000);
                     }
-                  } else {
-                    // 지원하지 않은 일자리의 경우 마커 생성
+                  })
+                  .catch();
+              }
 
-                    // 결과값으로 받은 위치를 마커로 표시합니다
-                    let marker = new kakao.maps.Marker({
-                      map: map,
-                      position: coords,
-                      clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
-                    });
-
-                    MakeMarkerEvent(marker, "지원", ApplyJob);
+              // 마커에 이벤트를 등록하는 핸들러 제작
+              function MakeMarkerEvent(
+                marker,
+                buttonContent,
+                applyHandler
+              ) {
+                // 마커에 마우스오버 이벤트를 등록합니다
+                kakao.maps.event.addListener(
+                  marker,
+                  "mouseover",
+                  function () {
+                    // 마커에 마우스오버 이벤트가 발생하면 인포윈도우를 마커위에 표시합니다
+                    infowindowHover.open(map, marker);
                   }
+                );
+
+                // 마커에 마우스아웃 이벤트를 등록합니다
+                kakao.maps.event.addListener(
+                  marker,
+                  "mouseout",
+                  function () {
+                    // 마커에 마우스아웃 이벤트가 발생하면 인포윈도우를 제거합니다
+                    infowindowHover.close();
+                  }
+                );
+
+                // 마커에 Hover 이벤트 등록 : 인포윈도우에 정보 제공
+                let infowindowHover = new kakao.maps.InfoWindow({
+                  content: `<div style="width:300px;text-align:center;padding:6px 0;line-height:30px;font-size:20px">
+                <div>근무요일 : ${JSON.parse(data[i].day)}</div>
+                <div>근무시간 : ${simplifyTime(
+                  data[i].startTime
+                )}~${simplifyTime(data[i].endTime)}</div>
+                <div>월급여 : ${numberWithCommas(
+                  data[i].monthlyWage
+                )}원</div>
+                <div>포지션 : ${data[i].position}</div>
+              </div>`,
                 });
-            }
-          });
+
+                // 마커에 click 이벤트 등록 : 인포윈도우에 정보 제공 및 일자리 지원 가능
+                let contentClick = document.createElement("div");
+                contentClick.style.cssText =
+                  "width: 300px; text-align:center; padding:6px 0; 1px 0; line-height:30px;font-size:20px;";
+                let companyName = document.createElement("div");
+                companyName.textContent = `회사명 : ${data[i].companyName}`;
+                let day = document.createElement("div");
+                day.textContent = `근무요일 : ${JSON.parse(data[i].day)}`;
+                let time = document.createElement("div");
+                time.textContent = `근무시간 : ${simplifyTime(
+                  data[i].startTime
+                )}~${simplifyTime(data[i].endTime)}(${data[i].time}시간)`;
+                let hourlyWage = document.createElement("div");
+                hourlyWage.textContent = `시급 : ${numberWithCommas(
+                  data[i].hourlyWage
+                )}원`;
+                let monthlyWage = document.createElement("div");
+                monthlyWage.textContent = `예상 월급여 : ${numberWithCommas(
+                  data[i].monthlyWage
+                )}원`;
+                let position = document.createElement("div");
+                position.textContent = `포지션 : ${data[i].position}`;
+                let btn = document.createElement("button");
+                btn.style.cssText =
+                  "border:none; width:50px; height:50px ;font-size:20px; border-radius:5px; background-color: rgb(50, 108, 249); color:#fff;";
+                btn.textContent = buttonContent;
+                btn.onclick = applyHandler;
+
+                contentClick.append(
+                  companyName,
+                  day,
+                  time,
+                  hourlyWage,
+                  monthlyWage,
+                  position,
+                  btn
+                );
+
+                let infowindowClick = new kakao.maps.InfoWindow({
+                  content: contentClick,
+                  removable: true,
+                });
+                // 마커에 클릭이벤트를 등록합니다
+                kakao.maps.event.addListener(marker, "click", function () {
+                  // 마커 위에 인포윈도우를 표시합니다
+                  infowindowClick.open(map, marker);
+                });
+              }
+
+              if (applicant.data.data) {
+                // 이미 지원 한 일자리의 경우 마커 생성
+
+                if (applicant.data.data.status === "waiting") {
+                  let imageSrc =
+                    "https://t1.daumcdn.net/localimg/localimages/07/mapapidoc/markerStar.png";
+
+                  let imageSize = new kakao.maps.Size(24, 35);
+
+                  let markerImage = new kakao.maps.MarkerImage(
+                    imageSrc,
+                    imageSize
+                  );
+
+                  // 결과값으로 받은 위치를 마커로 표시합니다
+                  let marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                    clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                    image: markerImage, // 마커 이미지
+                  });
+
+                  MakeMarkerEvent(marker, "지원 취소하기", CancelApply);
+                } else if (applicant.data.data.status === "rejected") {
+                  let imageSrc =
+                    "https://cdn.pixabay.com/photo/2016/12/18/11/04/pointer-1915456_1280.png";
+
+                  let imageSize = new kakao.maps.Size(24, 35);
+
+                  let markerImage = new kakao.maps.MarkerImage(
+                    imageSrc,
+                    imageSize
+                  );
+
+                  // 결과값으로 받은 위치를 마커로 표시합니다
+                  let marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                    clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                    image: markerImage, // 마커 이미지
+                  });
+
+                  MakeMarkerEvent(
+                    marker,
+                    "지원 거절됨(삭제하기)",
+                    CancelApply
+                  );
+                } else if (applicant.data.data.status === "accepted") {
+                  let imageSrc =
+                    "https://cdn.pixabay.com/photo/2014/04/02/10/45/location-304467_1280.png";
+
+                  let imageSize = new kakao.maps.Size(24, 35);
+
+                  let markerImage = new kakao.maps.MarkerImage(
+                    imageSrc,
+                    imageSize
+                  );
+
+                  // 결과값으로 받은 위치를 마커로 표시합니다
+                  let marker = new kakao.maps.Marker({
+                    map: map,
+                    position: coords,
+                    clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                    image: markerImage, // 마커 이미지
+                  });
+
+                  if (jobSeekerId === 0) {
+                    MakeMarkerEvent(marker, "지원 승인됨(회원만 채팅가능)");
+                  } else {
+                    MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
+                  }
+                }
+              } else {
+                // 지원하지 않은 일자리의 경우 마커 생성
+
+                // 결과값으로 받은 위치를 마커로 표시합니다
+                let marker = new kakao.maps.Marker({
+                  map: map,
+                  position: coords,
+                  clickable: true, // 마커를 클릭했을 때 지도의 클릭 이벤트가 발생하지 않도록 설정합니다
+                });
+
+                MakeMarkerEvent(marker, "지원", ApplyJob);
+              }
+            });
+
         }
       });
   }, [
