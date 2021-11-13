@@ -27,6 +27,7 @@ function App() {
       <Switch>
         <Route exact path="/" component={LandingPage} />
         <Route exact path="/mypage" component={MyPage} />
+        <Route exact path="/chat" component={ChatPage} />
         <Route
           exact
           path="/map"

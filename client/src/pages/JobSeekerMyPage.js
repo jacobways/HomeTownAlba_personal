@@ -57,19 +57,19 @@ export default function JobSeekerMyPage(props) {
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
 
   // jobSeeker 정보 수정용
-  const nameHandler = (event) => {
+  const nameHandler = event => {
     setName(event.target.value);
   };
 
-  const ageHandler = (event) => {
+  const ageHandler = event => {
     setAge(event.target.value);
   };
 
-  const genderHandler = (event) => {
+  const genderHandler = event => {
     setGender(event.target.value);
   };
 
-  const imageHandler = (event) => {
+  const imageHandler = event => {
     setContent(event.target.files[0]);
     setImgUploadBtn(true);
   };
@@ -97,11 +97,11 @@ export default function JobSeekerMyPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         setFilePath(res.data.fileName);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   };
@@ -119,12 +119,12 @@ export default function JobSeekerMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
         setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
         setImgUploadBtn(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -136,11 +136,11 @@ export default function JobSeekerMyPage(props) {
     setPasswordUpdating(!passwordUpdating);
   };
 
-  const passwordHandler = (event) => {
+  const passwordHandler = event => {
     setPassword(event.target.value);
   };
 
-  const questionHandler = (event) => {
+  const questionHandler = event => {
     setQuestion(event.target.value);
   };
 
@@ -155,13 +155,13 @@ export default function JobSeekerMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setPasswordUpdating(!passwordUpdating);
         setPassword("");
         setQuestion("");
         setPasswordErrorMessage("");
       })
-      .catch((err) => {
+      .catch(err => {
         setPasswordErrorMessage("질문의 답이 올바르지 않습니다");
       });
   };
@@ -194,15 +194,15 @@ export default function JobSeekerMyPage(props) {
   };
 
   // 경력 정보 생성 및 수정 핸들러
-  const companyHandler = (event) => {
+  const companyHandler = event => {
     setCompany(event.target.value);
   };
 
-  const periodHandler = (event) => {
+  const periodHandler = event => {
     setPeriod(event.target.value);
   };
 
-  const positionHandler = (event) => {
+  const positionHandler = event => {
     setPosition(event.target.value);
   };
 
@@ -219,10 +219,10 @@ export default function JobSeekerMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -239,14 +239,14 @@ export default function JobSeekerMyPage(props) {
         { params: { id } },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         let careerInfo = res.data.data; // 객체로 불러옴
         setCareerId(careerInfo.id);
         setCompany(careerInfo.company);
         setPeriod(careerInfo.period);
         setPosition(careerInfo.position);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -268,36 +268,36 @@ export default function JobSeekerMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 
-  const deleteCareer = (id) => {
+  const deleteCareer = id => {
     axios
       .delete(`${process.env.REACT_APP_SERVER_URL}/career/${id}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 
   // 지원 목록에서 지원을 취소하는 핸들러
-  const CancelApply = (jobId) => {
+  const CancelApply = jobId => {
     axios
       .delete(
         `${process.env.REACT_APP_SERVER_URL}/applicant`,
         { params: { jobId, jobSeekerId: jobSeekerId } },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
       });
   };
@@ -306,7 +306,7 @@ export default function JobSeekerMyPage(props) {
     // JobSeeker 정보 받기 (동혁님 전달 코드)
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         let jobSeekerInfo = res.data.user;
         setJobSeekerId(jobSeekerInfo.id);
 
@@ -317,7 +317,7 @@ export default function JobSeekerMyPage(props) {
 
         console.log(res.data.user);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
 
@@ -326,10 +326,10 @@ export default function JobSeekerMyPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/career/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         setCareerList(res.data.data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
 
@@ -338,7 +338,7 @@ export default function JobSeekerMyPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/applicant/job/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         setApplyList(res.data.data);
       });
 
@@ -348,7 +348,7 @@ export default function JobSeekerMyPage(props) {
         { params: { jobSeekerId } },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         console.log("res----", res);
         setResultList(res.data.data);
         setStatusList(res.data.applyStatus);
@@ -360,7 +360,7 @@ export default function JobSeekerMyPage(props) {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_serverURL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         console.log(res.data.user.type, typeof res.data.user.type);
         setUserLoginType(res.data.user.type);
         if (res.data.user && res.data.user.type) {
@@ -463,7 +463,7 @@ export default function JobSeekerMyPage(props) {
           </div>
         ) : (
           <div className="user">
-            <tbody>
+            <tbody className="new">
               <tr>
                 <th scope="row">이름</th>
                 <input
@@ -496,12 +496,17 @@ export default function JobSeekerMyPage(props) {
                 <th scope="row">사진</th>
                 <input name="image" type="file" onChange={imageHandler} />
               </tr>
+              <tr></tr>
               <tr>
                 {ImgUploadBtn ? (
-                  <button onClick={upoadImage}>이미지 업로드</button>
+                  <button className="bubbly-button" onClick={upoadImage}>
+                    이미지 업로드
+                  </button>
                 ) : null}
+                <button className="bubbly-button" onClick={UpdateJobSeeker}>
+                  수정 완료
+                </button>
               </tr>
-              <button onClick={UpdateJobSeeker}>수정 완료</button>
             </tbody>
           </div>
         )}
@@ -632,37 +637,47 @@ export default function JobSeekerMyPage(props) {
             <div className="careerSection">지원 내역이 없습니다</div>
           ) : (
             <div className="careerSection">
-              <table>
-                <tr>
-                  <th>회사명</th>
-                  <th>주소</th>
-                  <th>근무요일</th>
-                  <th>근무시간</th>
-                  <th>시급</th>
-                  <th>예상 월급여</th>
-                  <th>포지션</th>
-                  <th></th>
-                </tr>
-                {applyList.map((job) => {
-                  return (
-                    <tr key={job.id}>
-                      <td>{job.companyName}</td>
-                      <td>{job.location}</td>
-                      <td>{job.day}</td>
-                      <td>
-                        {job.startTime}~{job.endTime} ({job.time}시간)
-                      </td>
-                      <td>{job.hourlyWage}</td>
-                      <td>{job.monthlyWage}</td>
-                      <td>{job.position}</td>
-                      <CancelApplyModal
-                        CancelApply={CancelApply}
-                        jobId={job.id}
-                      />
+              <div className="job-list-table-container">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>회사명</th>
+                      <th>주소</th>
+                      <th>근무요일</th>
+                      <th>근무시간</th>
+                      <th>시급</th>
+                      <th>예상 월급여</th>
+                      <th>포지션</th>
+                      <th></th>
                     </tr>
-                  );
-                })}
-              </table>
+                  </thead>
+                </table>
+              </div>
+              {applyList.map(job => {
+                return (
+                  <div className="job-list-table-container">
+                    <table>
+                      <thead>
+                        <tr key={job.id}>
+                          <td>{job.companyName}</td>
+                          <td>{job.location}</td>
+                          <td>{job.day}</td>
+                          <td>
+                            {job.startTime}~{job.endTime} ({job.time}시간)
+                          </td>
+                          <td>{job.hourlyWage}</td>
+                          <td>{job.monthlyWage}</td>
+                          <td>{job.position}</td>
+                          <CancelApplyModal
+                            CancelApply={CancelApply}
+                            jobId={job.id}
+                          />
+                        </tr>
+                      </thead>
+                    </table>
+                  </div>
+                );
+              })}
             </div>
           )}
           <br></br>
@@ -670,63 +685,69 @@ export default function JobSeekerMyPage(props) {
           {resultList.length === 0 ? (
             <div>지원 결과가 없습니다</div>
           ) : (
-            <table>
-              <tr>
-                <th>회사명</th>
-                <th>주소</th>
-                <th>근무요일</th>
-                <th>근무시간</th>
-                <th>시급</th>
-                <th>예상 월급여</th>
-                <th>포지션</th>
-                <th>결과</th>
-                <th></th>
-              </tr>
-              {resultList.map((job, number) => {
-                if (statusList[number]) {
-                  if (statusList[number].status === "rejected") {
-                    return (
-                      <tr key={job.id}>
-                        <td>{job.companyName}</td>
-                        <td>{job.location}</td>
-                        <td>{job.day}</td>
-                        <td>
-                          {job.startTime}~{job.endTime} ({job.time}시간)
-                        </td>
-                        <td>{job.hourlyWage}</td>
-                        <td>{job.monthlyWage}</td>
-                        <td>{job.position}</td>
-                        <td>지원 거절</td>
-                        <CancelApplyModal
-                          CancelApply={CancelApply}
-                          jobId={job.id}
-                        />
-                      </tr>
-                    );
-                  } else if (statusList[number].status === "accepted") {
-                    return (
-                      <tr key={job.id}>
-                        <td>{job.companyName}</td>
-                        <td>{job.location}</td>
-                        <td>{job.day}</td>
-                        <td>
-                          {job.startTime}~{job.endTime} ({job.time}시간)
-                        </td>
-                        <td>{job.hourlyWage}</td>
-                        <td>{job.monthlyWage}</td>
-                        <td>{job.position}</td>
-                        <td>지원 승인</td>
-                        <CancelApplyModal
-                          CancelApply={CancelApply}
-                          jobId={job.id}
-                        />
-                        <button className="bubbly-button">채팅창 열기</button>
-                      </tr>
-                    );
+            <div className="job-list-table-container">
+              <table>
+                <thead>
+                  <tr>
+                    <th>회사명</th>
+                    <th>주소</th>
+                    <th>근무요일</th>
+                    <th>근무시간</th>
+                    <th>시급</th>
+                    <th>예상 월급여</th>
+                    <th>포지션</th>
+                    <th>결과</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                {resultList.map((job, number) => {
+                  if (statusList[number]) {
+                    if (statusList[number].status === "rejected") {
+                      return (
+                        <tr key={job.id}>
+                          <td>{job.companyName}</td>
+                          <td>{job.location}</td>
+                          <td>{job.day}</td>
+                          <td>
+                            {job.startTime}~{job.endTime} ({job.time}시간)
+                          </td>
+                          <td>{job.hourlyWage}</td>
+                          <td>{job.monthlyWage}</td>
+                          <td>{job.position}</td>
+                          <td>지원 거절</td>
+                          <CancelApplyModal
+                            CancelApply={CancelApply}
+                            jobId={job.id}
+                          />
+                        </tr>
+                      );
+                    } else if (statusList[number].status === "accepted") {
+                      return (
+                        <tr key={job.id}>
+                          <td>{job.companyName}</td>
+                          <td>{job.location}</td>
+                          <td>{job.day}</td>
+                          <td>
+                            {job.startTime}~{job.endTime} ({job.time}시간)
+                          </td>
+                          <td>{job.hourlyWage}</td>
+                          <td>{job.monthlyWage}</td>
+                          <td>{job.position}</td>
+                          <td>지원 승인</td>
+                          <CancelApplyModal
+                            CancelApply={CancelApply}
+                            jobId={job.id}
+                          />
+                          <button id="chat" className="bubbly-button">
+                            채팅창 열기
+                          </button>
+                        </tr>
+                      );
+                    }
                   }
-                }
-              })}
-            </table>
+                })}
+              </table>
+            </div>
           )}
         </div>
       </div>

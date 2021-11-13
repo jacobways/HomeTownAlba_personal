@@ -74,19 +74,19 @@ export default function CompanyMyPage(props) {
   const [applicantList, setApplicantList] = useState({}); // 객체이며 key 는 idx 값
   const [showingApplicantList, setShowingApplicantList] = useState({});
   const [applyStatusList, setApplyStatusList] = useState({});
-
+  const [List, setList] = useState(false);
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
   // company 회원 정보 수정용
-  const companyNameHandler = (event) => {
+  const companyNameHandler = event => {
     setCompanyName(event.target.value);
   };
 
-  const businessNumberHandler = (event) => {
+  const businessNumberHandler = event => {
     setBusinessNumber(event.target.value);
   };
 
-  const imageHandler = (event) => {
+  const imageHandler = event => {
     setContent(event.target.files[0]);
     setImgUploadBtn(true);
   };
@@ -101,7 +101,7 @@ export default function CompanyMyPage(props) {
   };
 
   // 카카오 지도 API 활용하여 주소 선택 후 닫기
-  const CompleteCompanyPost = (data) => {
+  const CompleteCompanyPost = data => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -126,7 +126,7 @@ export default function CompanyMyPage(props) {
     top: "0%",
     width: "400px",
     height: "400px",
-    padding: "7px",
+    left: "110px",
   };
   // 카카오 주소검색 API 활용 공간
 
@@ -135,6 +135,9 @@ export default function CompanyMyPage(props) {
     setCompanyInfoUpdating(!companyInfoUpdating);
   };
 
+  const listHandler = () => {
+    setList(!List);
+  };
   // company 업데이트 하기
   // 이미지 업로드용 핸들러 따로 만들기
   const upoadImage = () => {
@@ -146,11 +149,11 @@ export default function CompanyMyPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         setFilePath(res.data.fileName);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   };
@@ -168,12 +171,12 @@ export default function CompanyMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setEventStatus(!eventStatus);
         setCompanyInfoUpdating(!companyInfoUpdating);
         setImgUploadBtn(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
   };
@@ -183,11 +186,11 @@ export default function CompanyMyPage(props) {
     setPasswordUpdating(!passwordUpdating);
   };
 
-  const passwordHandler = (event) => {
+  const passwordHandler = event => {
     setPassword(event.target.value);
   };
 
-  const questionHandler = (event) => {
+  const questionHandler = event => {
     setQuestion(event.target.value);
   };
 
@@ -202,13 +205,13 @@ export default function CompanyMyPage(props) {
         },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         setPasswordUpdating(!passwordUpdating);
         setPassword("");
         setQuestion("");
         setPasswordErrorMessage("");
       })
-      .catch((err) => {
+      .catch(err => {
         setPasswordErrorMessage("질문의 답이 올바르지 않습니다");
       });
   };
@@ -246,7 +249,7 @@ export default function CompanyMyPage(props) {
   };
 
   // 카카오 지도 API 활용하여 Job 주소 선택 후 닫기
-  const CompleteJobPost = (data) => {
+  const CompleteJobPost = data => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -268,7 +271,7 @@ export default function CompanyMyPage(props) {
   };
 
   // 카카오 API를 통해 주소를 위도와 경도로 좌표로 저장하기
-  const ChangeLocationToCoordinate = (location) => {
+  const ChangeLocationToCoordinate = location => {
     // 주소-좌표 변환 객체를 생성합니다
     let geocoder = new kakao.maps.services.Geocoder();
     geocoder.addressSearch(location, function (result, status) {
@@ -347,19 +350,19 @@ export default function CompanyMyPage(props) {
     setSunChecked(!sunChecked);
   };
 
-  const startTimeHandler = (event) => {
+  const startTimeHandler = event => {
     setStartTime(event.target.value);
   };
 
-  const endTimeHandler = (event) => {
+  const endTimeHandler = event => {
     setEndTime(event.target.value);
   };
 
-  const positionHandler = (event) => {
+  const positionHandler = event => {
     setPosition(event.target.value);
   };
 
-  const hourlyWageHandler = (event) => {
+  const hourlyWageHandler = event => {
     setHourlyWage(event.target.value);
   };
 
@@ -392,14 +395,14 @@ export default function CompanyMyPage(props) {
           },
           { withCredentials: true }
         )
-        .then((res) => {
+        .then(res => {
           setEventStatus(!eventStatus);
         });
     }
   };
 
   // 일자리 삭제하기
-  const DeleteJob = (jobId) => {
+  const DeleteJob = jobId => {
     // 일자리에 묶인 지원자들도 삭제하기 + 메일 보내기
     axios
       .delete(
@@ -407,30 +410,30 @@ export default function CompanyMyPage(props) {
         { params: { jobId } },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         // Applicant를 삭제 후 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
         axios
           .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
             withCredentials: true,
           })
-          .then((res) => {
+          .then(res => {
             setEventStatus(!eventStatus);
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
           });
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
         // 삭제할 applicant가 없을 때 해당 Job을 삭제하기 (Applicant 메일 발송 시 Job 정보가 필요하기 때문)
         axios
           .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
             withCredentials: true,
           })
-          .then((res) => {
+          .then(res => {
             setEventStatus(!eventStatus);
           })
-          .catch((err) => {
+          .catch(err => {
             console.log(err);
           });
       });
@@ -447,7 +450,7 @@ export default function CompanyMyPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/applicant/jobseeker/${jobId}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
         console.log("res.data.applyStatus----", res.data.applyStatus);
         if (res.data.data.length !== 0) {
@@ -461,13 +464,13 @@ export default function CompanyMyPage(props) {
           setApplyStatusList({ ...applyStatusList, [idx]: null });
         }
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
 
   // applicantList 닫는 핸들러
-  const closeApplicantList = (idx) => {
+  const closeApplicantList = idx => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
 
@@ -479,10 +482,10 @@ export default function CompanyMyPage(props) {
         { jobId, jobSeekerId },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         openApplicantList(idx, jobId);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -495,10 +498,10 @@ export default function CompanyMyPage(props) {
         { jobId, jobSeekerId },
         { withCredentials: true }
       )
-      .then((res) => {
+      .then(res => {
         openApplicantList(idx, jobId);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   };
@@ -507,7 +510,7 @@ export default function CompanyMyPage(props) {
     // company 정보 불러오기
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         let companyInfo = res.data.user;
         setCompanyId(companyInfo.id);
         setCompanyName(companyInfo.companyName);
@@ -515,7 +518,7 @@ export default function CompanyMyPage(props) {
         setBusinessNumber(companyInfo.businessNumber);
         setLogo(companyInfo.logo);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
 
@@ -524,10 +527,10 @@ export default function CompanyMyPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/job/${companyId}`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         setJobList(res.data.data);
       })
-      .catch((err) => {
+      .catch(err => {
         console.log(err);
       });
   }, [companyId, eventStatus]);
@@ -546,7 +549,7 @@ export default function CompanyMyPage(props) {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_serverURL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         console.log(res.data.user.type, typeof res.data.user.type);
         setUserLoginType(res.data.user.type);
         if (res.data.user && res.data.user.type) {
@@ -559,286 +562,395 @@ export default function CompanyMyPage(props) {
 
   return (
     <>
-      <h1>사업자 마이페이지</h1>
-      <br></br>
-      <h2>회원 정보</h2>
-      {!companyInfoUpdating ? (
-        <table>
-          <tr>
-            <th scope="row">회사명</th>
-            <td>{companyName}</td>
-          </tr>
-          <tr>
-            <th scope="row">회사 주소</th>
-            <td>{companyLocation}</td>
-          </tr>
-          <tr>
-            <th scope="row">사업자등록번호</th>
-            <td>{businessNumber}</td>
-          </tr>
-          <tr>
-            <th scope="row">로고</th>
-            <td>
-              <img src={Logo} alt="logo" />
-            </td>
-          </tr>
-          <tr>
-            <button onClick={companyHandler}>회원 정보 수정</button>
-          </tr>
-        </table>
-      ) : (
-        <table>
-          <tr>
-            <th scope="row">회사명</th>
-            <input
-              name="name"
-              type="text"
-              onChange={companyNameHandler}
-              value={companyName}
-            />
-          </tr>
-          <tr>
-            <th scope="row">회사 주소</th>
-            <td>{companyLocation}</td>
-            <button onClick={OpenCompanyPost}>주소창 열기</button>
-            {isOpenCompanyPost ? (
-              <>
-                <DaumPostcode
-                  onClick={OpenCompanyPost}
-                  style={postCodeStyle}
-                  autoClose
-                  onComplete={CompleteCompanyPost}
-                />
-                <button onClick={CancelCompanyPost}>주소창 닫기</button>
-              </>
-            ) : null}
-            {/* 위치 검색할수있는 input */}
-          </tr>
-          <tr>
-            <th scope="row">사업자등록번호</th>
-            <input
-              name="businessNumber"
-              type="text"
-              onChange={businessNumberHandler}
-              value={businessNumber}
-            />
-          </tr>
-          <tr>
-            <th scope="row">사진</th>
-            <input name="image" type="file" onChange={imageHandler} />
-          </tr>
-          {ImgUploadBtn ? (
-            <button onClick={upoadImage}>이미지 업로드</button>
-          ) : null}
-          <button onClick={updateCompany}>수정 완료</button>
-        </table>
-      )}
-      <br></br>
-      {!passwordUpdating ? (
-        <button onClick={OpenPasswordUpdate}>비밀번호 변경</button>
-      ) : (
-        <>
-          <label>질문: 출신 초등학교는?</label>
-          <input name="question" type="text" onChange={questionHandler} />
-          <label>수정할 비밀번호</label>
-          <input name="password" type="password" onChange={passwordHandler} />
-          <span>{passwordErrorMessage}</span>
-          <button onClick={UpdatePassword}>완료</button>
-          <button onClick={CancelUpdatePassword}>취소</button>
-        </>
-      )}
-      <br></br>
-      <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
-      <br></br>
-      <br></br>
+      <div className="mypage">
+        <h1>사업자 마이페이지</h1>
+        <h2 className="header2">회사 정보</h2>
+        {!companyInfoUpdating ? (
+          <div className="user">
+            <tbody>
+              <table>
+                <tr>
+                  <td>
+                    <img id="profile" src={Logo} alt="logo" />
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">회사명</th>
+                  <td>{companyName}</td>
+                </tr>
+                <tr>
+                  <th scope="row">회사 주소</th>
+                  <td>{companyLocation}</td>
+                </tr>
+                <tr>
+                  <th scope="row">사업자등록번호</th>
+                  <td>{businessNumber}</td>
+                </tr>
+              </table>
+              <button
+                id="left"
+                className="bubbly-button"
+                onClick={companyHandler}
+              >
+                회원 정보 수정
+              </button>
+              {!passwordUpdating ? (
+                <button className="bubbly-button" onClick={OpenPasswordUpdate}>
+                  비밀번호 변경
+                </button>
+              ) : (
+                <>
+                  <input
+                    className="jobFlow"
+                    placeholder="출신 초등학교는?"
+                    name="question"
+                    type="text"
+                    onChange={questionHandler}
+                  />
 
-      <h1>일자리 등록</h1>
-      <form>
-        <label>
-          {" "}
-          주소 :
-          <input
-            name="location"
-            onClick={OpenJobPost}
-            placeholder="클릭하셔서 주소를 검색해주세요"
-            value={jobLocation}
-          />
-          {isOpenJobPost ? (
-            <>
-              <DaumPostcode
-                onClick={OpenJobPost}
-                style={postCodeStyle}
-                autoClose
-                onComplete={CompleteJobPost}
-              />
-            </>
-          ) : null}
-        </label>
-        <label>
-          {" "}
-          근무 요일 :
-          <input name="day" id="mon" type="checkbox" onClick={monHandler} />
-          월
-          <input name="day" id="tue" type="checkbox" onClick={tueHandler} />
-          화
-          <input name="day" id="wed" type="checkbox" onClick={wedHandler} />
-          <label for="wed">수</label>
-          <input name="day" id="thu" type="checkbox" onClick={thuHandler} />
-          <label for="thu">목</label>
-          <input name="day" id="fri" type="checkbox" onClick={friHandler} />
-          <label for="fri">금</label>
-          <input name="day" id="sat" type="checkbox" onClick={satHandler} />
-          <label for="sat">토</label>
-          <input name="day" id="sun" type="checkbox" onClick={sunHandler} />
-          <label for="sun">일</label>
-        </label>
-        <label>
-          {" "}
-          근무 시간 :
-          <input
-            name="startTime"
-            type="time"
-            placeholder="시작 시간"
-            onChange={startTimeHandler}
-          />
-          <input
-            name="endTime"
-            type="time"
-            placeholder="끝 시간"
-            onChange={endTimeHandler}
-          />
-        </label>
-        <label>
-          {" "}
-          포지션 :
-          <input name="position" type="text" onChange={positionHandler} />
-        </label>
-        <label>
-          {" "}
-          시급(₩) :
-          <input name="hourlyWage" type="text" onChange={hourlyWageHandler} />
-        </label>
-
-        {!jobLocation ||
-        day.length === 0 ||
-        !startTime ||
-        !endTime ||
-        !position ||
-        !hourlyWage ? (
-          <>
-            <button>제출</button>
-            <span>모든 항목을 입력해주세요</span>
-          </>
-        ) : (
-          <input type="submit" value="제출" onClick={createJob} />
-        )}
-      </form>
-
-      <br></br>
-      <br></br>
-
-      <h1>등록 일자리 목록</h1>
-      {/* (페이지를 하나 더 만들기보다는 한 페이지에 만들 수 있게 하기. 무한스크롤도 괜찮음) */}
-
-      {jobList.length === 0 ? (
-        <h3>일자리 정보를 등록해주세요</h3>
-      ) : (
-        <>
-          {jobList.map((job, idx) => {
-            return (
-              <div key={idx}>
-                <h4>
-                  주소 : {job.location}
-                  포지션 : {job.position}
-                  시급 : {job.hourlyWage}
-                  요일 : {JSON.parse(job.day)}
-                  시간 : {job.startTime}~{job.endTime}
-                  <DeleteJobModal DeleteJob={DeleteJob} id={job.id} />
-                </h4>
-
-                {!showingApplicantList[idx] ? (
+                  <input
+                    className="jobFlow"
+                    placeholder="수정할 비밀번호"
+                    name="password"
+                    type="password"
+                    onChange={passwordHandler}
+                  />
+                  <span>{passwordErrorMessage}</span>
                   <button
-                    onClick={() => {
-                      openApplicantList(idx, job.id);
-                    }}
+                    id="left"
+                    className="bubbly-button"
+                    onClick={UpdatePassword}
                   >
-                    지원자 보기
+                    완료
                   </button>
-                ) : (
+                  <button
+                    className="bubbly-button"
+                    onClick={CancelUpdatePassword}
+                  >
+                    취소
+                  </button>
+                </>
+              )}
+              <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
+            </tbody>
+          </div>
+        ) : (
+          <div className="user">
+            <tbody className="new">
+              <tr>
+                <th scope="row">회사명</th>
+                <input
+                  className="jobFlow"
+                  placeholder="회사명"
+                  name="name"
+                  type="text"
+                  onChange={companyNameHandler}
+                  value={companyName}
+                />
+              </tr>
+              <tr>
+                <th scope="row">회사 주소</th>
+                {/* <td className="jobFlow">{companyLocation}</td>
+            <button className="bubbly-button" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
+                <input
+                  className="jobFlow"
+                  name="location"
+                  onClick={OpenJobPost}
+                  placeholder={companyLocation}
+                  value={jobLocation}
+                />
+                {isOpenJobPost ? (
                   <>
+                    <DaumPostcode
+                      onClick={OpenJobPost}
+                      style={postCodeStyle}
+                      autoClose
+                      onComplete={CompleteJobPost}
+                    />
+                  </>
+                ) : null}
+                {isOpenCompanyPost ? (
+                  <>
+                    <DaumPostcode
+                      onClick={OpenCompanyPost}
+                      style={postCodeStyle}
+                      autoClose
+                      onComplete={CompleteCompanyPost}
+                    />
                     <button
+                      className="bubbly-button"
+                      onClick={CancelCompanyPost}
+                    >
+                      주소창 닫기
+                    </button>
+                  </>
+                ) : null}
+                {/* 위치 검색할수있는 input */}
+              </tr>
+              <tr>
+                <th scope="row">사업자등록번호</th>
+                <input
+                  className="jobFlow"
+                  placeholder="사업자등록번호"
+                  name="businessNumber"
+                  type="text"
+                  onChange={businessNumberHandler}
+                  value={businessNumber}
+                />
+              </tr>
+              <tr>
+                <th scope="row">사진</th>
+                <input name="image" type="file" onChange={imageHandler} />
+              </tr>
+              <tr>
+                {ImgUploadBtn ? (
+                  <button
+                    id="left"
+                    className="bubbly-button"
+                    onClick={upoadImage}
+                  >
+                    이미지 업로드
+                  </button>
+                ) : null}
+                <button className="bubbly-button" onClick={updateCompany}>
+                  수정 완료
+                </button>
+              </tr>
+            </tbody>
+            <br />
+            <br />
+            <br />
+          </div>
+        )}
+        <br></br>
+
+        <h2 className="header2">일자리 등록</h2>
+        <div className="careerSection">
+          <form>
+            <label>
+              {" "}
+              근무 요일 :
+              <input name="day" id="mon" type="checkbox" onClick={monHandler} />
+              월
+              <input name="day" id="tue" type="checkbox" onClick={tueHandler} />
+              화
+              <input name="day" id="wed" type="checkbox" onClick={wedHandler} />
+              <label for="wed">수</label>
+              <input name="day" id="thu" type="checkbox" onClick={thuHandler} />
+              <label for="thu">목</label>
+              <input name="day" id="fri" type="checkbox" onClick={friHandler} />
+              <label for="fri">금</label>
+              <input name="day" id="sat" type="checkbox" onClick={satHandler} />
+              <label for="sat">토</label>
+              <input name="day" id="sun" type="checkbox" onClick={sunHandler} />
+              <label for="sun">일</label>
+            </label>
+            <br></br>
+            <label>
+              {" "}
+              근무 시간 :
+              <input
+                name="startTime"
+                type="time"
+                placeholder="시작 시간"
+                onChange={startTimeHandler}
+              />
+              <input
+                name="endTime"
+                type="time"
+                placeholder="끝 시간"
+                onChange={endTimeHandler}
+              />
+            </label>
+            <br></br>
+            <label>
+              {" "}
+              <input
+                className="jobFlow"
+                name="location"
+                onClick={OpenJobPost}
+                placeholder="클릭하셔서 주소를 검색해주세요"
+                value={jobLocation}
+              />
+              {isOpenJobPost ? (
+                <>
+                  <DaumPostcode
+                    onClick={OpenJobPost}
+                    style={postCodeStyle}
+                    autoClose
+                    onComplete={CompleteJobPost}
+                  />
+                </>
+              ) : null}
+            </label>
+            <br></br>
+            <label>
+              {" "}
+              <input
+                className="jobFlow"
+                placeholder="포지션"
+                name="position"
+                type="text"
+                onChange={positionHandler}
+              />
+            </label>
+            <br></br>
+            <label>
+              {" "}
+              <input
+                className="jobFlow"
+                placeholder="시급"
+                name="hourlyWage"
+                type="text"
+                onChange={hourlyWageHandler}
+              />
+            </label>
+
+            {!jobLocation ||
+            day.length === 0 ||
+            !startTime ||
+            !endTime ||
+            !position ||
+            !hourlyWage ? (
+              <>
+                <button className="bubbly-button">제출</button>
+              </>
+            ) : (
+              <input type="submit" value="제출" onClick={createJob} />
+            )}
+          </form>
+          <br />
+          <span>모든 항목을 입력해주세요</span>
+        </div>
+        <div className="job-list-title-wrapper">
+          <h1 className="job-list-title">등록 일자리 목록</h1>
+        </div>
+
+        {jobList.length === 0 ? (
+          <div className="careerSection">
+            <h3>일자리 정보를 등록해주세요</h3>
+          </div>
+        ) : (
+          <>
+            {jobList.map((job, idx) => {
+              return (
+                <div className="job-list-table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>구인 위치</th>
+                        <th>포지션</th>
+                        <th>시급</th>
+                        <th>요일</th>
+                        <th>시간</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>{job.location}</td>
+                        <td>{job.position}</td>
+                        <td>{job.hourlyWage}</td>
+                        <td>{JSON.parse(job.day)}</td>
+                        <td>
+                          {job.startTime.slice(0, 5)}~{job.endTime.slice(0, 5)}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  {!showingApplicantList[idx] ? (
+                    <button
+                      className="bubbly-button"
                       onClick={() => {
-                        closeApplicantList(idx);
+                        openApplicantList(idx, job.id);
                       }}
                     >
-                      지원자 숨기기
+                      지원자 보기
                     </button>
-                    {!applicantList[idx] ? (
-                      <h5>아직 지원자가 없습니다</h5>
-                    ) : (
-                      <table>
-                        <tr>
-                          <th>이름</th>
-                          <th>나이</th>
-                          <th>성별</th>
-                          <th></th>
-                          <th></th>
-                        </tr>
-                        {applicantList[idx].map((jobSeeker, number) => {
-                          if (applyStatusList[idx]) {
-                            if (
-                              applyStatusList[idx][number].status === "waiting"
-                            ) {
-                              return (
-                                <tr key={jobSeeker.id}>
-                                  <td>{jobSeeker.name}</td>
-                                  <td>{jobSeeker.age}</td>
-                                  <td>{jobSeeker.gender}</td>
-                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
-                                  <RejectApplyModal
-                                    RejectApply={RejectApply}
-                                    idx={idx}
-                                    jobId={job.id}
-                                    jobSeekerId={jobSeeker.id}
-                                  />
-                                  <AcceptApplyModal
-                                    AcceptApply={AcceptApply}
-                                    idx={idx}
-                                    jobId={job.id}
-                                    jobSeekerId={jobSeeker.id}
-                                  />
-                                </tr>
-                              );
-                            } else if (
-                              applyStatusList[idx][number].status === "accepted"
-                            ) {
-                              return (
-                                <tr key={jobSeeker.id}>
-                                  <td>{jobSeeker.name}</td>
-                                  <td>{jobSeeker.age}</td>
-                                  <td>{jobSeeker.gender}</td>
-                                  <ApplicantInfoModal jobSeeker={jobSeeker} />
-                                  <RejectApplyModal
-                                    RejectApply={RejectApply}
-                                    idx={idx}
-                                    jobId={job.id}
-                                    jobSeekerId={jobSeeker.id}
-                                  />
-                                  <button>채팅창 열기</button>
-                                </tr>
-                              );
+                  ) : (
+                    <>
+                      <button
+                        className="bubbly-button"
+                        onClick={() => {
+                          closeApplicantList(idx);
+                        }}
+                      >
+                        지원자 숨기기
+                      </button>
+                      {!applicantList[idx] ? (
+                        <h5>아직 지원자가 없습니다</h5>
+                      ) : (
+                        <table className="apply-table-container">
+                          <thead>
+                            <tr>
+                              <th>이름</th>
+                              <th>나이</th>
+                              <th>성별</th>
+                            </tr>
+                          </thead>
+                          {applicantList[idx].map((jobSeeker, number) => {
+                            if (applyStatusList[idx]) {
+                              if (
+                                applyStatusList[idx][number].status ===
+                                "waiting"
+                              ) {
+                                return (
+                                  <>
+                                    <tbody>
+                                      <tr key={jobSeeker.id}>
+                                        <td>{jobSeeker.name}</td>
+                                        <td>{jobSeeker.age}</td>
+                                        <td>{jobSeeker.gender}</td>
+                                      </tr>
+                                    </tbody>
+                                    <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                    <RejectApplyModal
+                                      RejectApply={RejectApply}
+                                      idx={idx}
+                                      jobId={job.id}
+                                      jobSeekerId={jobSeeker.id}
+                                    />
+                                    <AcceptApplyModal
+                                      AcceptApply={AcceptApply}
+                                      idx={idx}
+                                      jobId={job.id}
+                                      jobSeekerId={jobSeeker.id}
+                                    />
+                                  </>
+                                );
+                              } else if (
+                                applyStatusList[idx][number].status ===
+                                "accepted"
+                              ) {
+                                return (
+                                  <tr key={jobSeeker.id}>
+                                    <td>{jobSeeker.name}</td>
+                                    <td>{jobSeeker.age}</td>
+                                    <td>{jobSeeker.gender}</td>
+                                    <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                    <RejectApplyModal
+                                      RejectApply={RejectApply}
+                                      idx={idx}
+                                      jobId={job.id}
+                                      jobSeekerId={jobSeeker.id}
+                                    />
+                                    <button className="bubbly-button">
+                                      채팅창 열기
+                                    </button>
+                                  </tr>
+                                );
+                              }
                             }
-                          }
-                        })}
-                      </table>
-                    )}
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </>
-      )}
+                          })}
+                        </table>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })}
+          </>
+        )}
+      </div>
     </>
   );
 }

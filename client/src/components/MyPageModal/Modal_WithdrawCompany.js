@@ -28,22 +28,29 @@ function WithdrawCompany({ WithdrawCompany }) {
 
   const CloseAndDeleteHandler = () => {
     setIsOpen(!isOpen);
-    WithdrawCompany()
+    WithdrawCompany();
   };
-
 
   return (
     <>
-        <button onClick={openModalHandler}>
-          {isOpen === false ? "회원탈퇴" : "탈퇴중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>정말 탈퇴하시겠습니까?</span>
-            <button onClick={CloseModalHandler}>아니요</button>
-            <button onClick={CloseAndDeleteHandler}>탈퇴하기</button>
-          </ModalBackdrop>
-        ) : null}
+      <button id="left" className="bubbly-button" onClick={openModalHandler}>
+        {isOpen === false ? "회원탈퇴" : "탈퇴중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>정말 탈퇴하시겠습니까?</span>
+          <button
+            id="left"
+            className="bubbly-button"
+            onClick={CloseModalHandler}
+          >
+            아니요
+          </button>
+          <button className="bubbly-button" onClick={CloseAndDeleteHandler}>
+            탈퇴하기
+          </button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }

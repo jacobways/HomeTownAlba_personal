@@ -31,19 +31,22 @@ function CancelApplyModal({ CancelApply, jobId }) {
     CancelApply(jobId);
   };
 
-
   return (
     <>
-        <button onClick={openModalHandler}>
-          {isOpen === false ? "지원 취소" : "지원 취소중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>지원을 취소하시겠습니까?</span>
-            <button onClick={CloseModalHandler}>아니요</button>
-            <button onClick={CloseAndDeleteHandler}>네, 지원을 취소합니다</button>
-          </ModalBackdrop>
-        ) : null}
+      <button className="bubbly-button" id="chat" onClick={openModalHandler}>
+        {isOpen === false ? "지원 취소" : "지원 취소중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>지원을 취소하시겠습니까?</span>
+          <button className="bubbly-button" onClick={CloseModalHandler}>
+            아니요
+          </button>
+          <button className="bubbly-button" onClick={CloseAndDeleteHandler}>
+            네, 지원을 취소합니다
+          </button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }

@@ -13,7 +13,7 @@
 }
 
 .footer-wrapper p {
-  font-size: 1.5em;
+  font-size: 1.3em;
   font-weight: 500;
 }
 
@@ -32,7 +32,7 @@
   color: rgb(63, 71, 82);
 }
 .footer-title {
-  font-size: 2.3rem;
+  font-size: 2rem;
   font-weight: 700;
   padding-bottom: 30px;
 }
@@ -46,7 +46,7 @@
 }
 
 .fa-headset {
-  font-size: 1.5em;
+  font-size: 1.3em;
 }
 
 .footer-info-social {
@@ -58,7 +58,7 @@
 /* 푸터 인포 */
 .footer-info-container {
   text-align: center;
-  padding-bottom: 100px;
+  padding-bottom: 50px;
   color: rgb(63, 71, 82);
   font-size: 20px;
 }

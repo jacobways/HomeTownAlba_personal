@@ -31,19 +31,18 @@ function RejectApplyModal({ idx, jobId, jobSeekerId, RejectApply }) {
     RejectApply(idx, jobId, jobSeekerId);
   };
 
-
   return (
     <>
-        <button onClick={openModalHandler}>
-          {isOpen === false ? "지원거절" : "지원거절중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>지원을 거절하시겠습니까?</span>
-            <button onClick={CloseModalHandler}>아니요</button>
-            <button onClick={CloseAndDeleteHandler}>지원 거절하기</button>
-          </ModalBackdrop>
-        ) : null}
+      <button className="bubbly-button" onClick={openModalHandler}>
+        {isOpen === false ? "지원거절" : "지원거절중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>지원을 거절하시겠습니까?</span>
+          <button onClick={CloseModalHandler}>아니요</button>
+          <button onClick={CloseAndDeleteHandler}>지원 거절하기</button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }

@@ -20,7 +20,7 @@ sequelize
   .then(() => {
     console.log("Database connection Success");
   })
-  .catch((err) => {
+  .catch(err => {
     console.error(err);
   });
 
@@ -143,7 +143,7 @@ const { Server } = require("socket.io");
 const expressServer = createServer(app);
 const io = new Server(expressServer, { cors: { origin: "*" } });
 
-io.on("connection", (socket) => {
+io.on("connection", socket => {
   socket.on("message", ({ name, message }) => {
     io.emit("message", { name, message });
     console.log("name과 message", name, message);
@@ -161,3 +161,32 @@ app.post("/uploads3", uploadS3.single("image"), (req, res, next) => {
 app.listen(port, () => {
   console.log("yaho1");
 });
+
+// //소켓io test
+// // port를 동일하게 하면??
+// const server = require("http").createServer(app);
+// const io = require("socket.io")(server, {
+//   cors: {
+//     origin: "*",
+//     credentials: true,
+//   },
+// });
+
+// io.on("connection", socket => {
+//   // 클라이언트에서 emit으로 보낸 데이터 받기는 on
+//   socket.on("chatting", ({ name, message }) => {
+//     //socket.emit으로 클라이언트에서 보낸 메세지를 보낼때는 emit
+//     // db에 저장을 한 후에 보내야 저장이 됨
+//     // chat model field name message
+//     const time = new Date().toLocaleTimeString("en-US", {
+//       hour: "numeric",
+//       minute: "numeric",
+//       hour12: true,
+//     });
+//     io.emit("chatting", { name, message, time });
+//   });
+// });
+// server.listen(5050, function () {
+//   console.log("listening on port 5050");
+// });
+// //소켓io test

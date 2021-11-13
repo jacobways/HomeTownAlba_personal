@@ -31,19 +31,18 @@ function AccpetApplyModal({ idx, jobId, jobSeekerId, AcceptApply }) {
     AcceptApply(idx, jobId, jobSeekerId);
   };
 
-
   return (
     <>
-        <button onClick={openModalHandler}>
-          {isOpen === false ? "지원승인" : "지원승인중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>지원을 승인하시겠습니까?</span>
-            <button onClick={CloseModalHandler}>아니요</button>
-            <button onClick={CloseAndAccpetHandler}>지원 승인하기</button>
-          </ModalBackdrop>
-        ) : null}
+      <button id="left" className="bubbly-button" onClick={openModalHandler}>
+        {isOpen === false ? "지원승인" : "지원승인중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>지원을 승인하시겠습니까?</span>
+          <button onClick={CloseModalHandler}>아니요</button>
+          <button onClick={CloseAndAccpetHandler}>지원 승인하기</button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }

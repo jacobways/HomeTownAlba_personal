@@ -157,6 +157,10 @@ function NavBar() {
         <div className="navbar-header-logo">
           <Link to="/">logo</Link>
         </div>
+        <div className="guest-picket">
+          <i class="far fa-id-badge"></i>
+          <span>비회원용</span>
+        </div>
         <ul className="navbar-header-menu">
           <li>
             <Link to="/map">알바찾기</Link>

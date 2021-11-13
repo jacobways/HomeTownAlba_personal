@@ -1,6 +1,8 @@
 import { useHistory } from "react-router";
 import { useState } from "react";
 import axios from "axios";
+import "../pages/RegisterPage.css";
+
 const { Kakao } = window;
 
 function KaKaoRegister() {
@@ -14,7 +16,7 @@ function KaKaoRegister() {
   const [Id, setId] = useState("");
   let history = useHistory();
 
-  const registerHandler = (e) => {
+  const registerHandler = e => {
     e.preventDefault();
 
     let body = {
@@ -26,29 +28,33 @@ function KaKaoRegister() {
       question: Question,
     };
     axios
-      .post(`${process.env.REACT_APP_serverURL}/jobseeker/kakaoJobRegister`, body, {
-        withCredentials: true,
-      })
-      .then((res) => {
+      .post(
+        `${process.env.REACT_APP_serverURL}/jobseeker/kakaoJobRegister`,
+        body,
+        {
+          withCredentials: true,
+        }
+      )
+      .then(res => {
         console.log(res.data);
         if (res.data.message) {
           history.push("/");
         }
       });
   };
-  const QuestionHandler = (e) => {
+  const QuestionHandler = e => {
     setQuestion(e.target.value);
   };
-  const PasswordHandler = (e) => {
+  const PasswordHandler = e => {
     setPassword(e.target.value);
   };
-  const LocationHandler = (e) => {
+  const LocationHandler = e => {
     setLocation(e.target.value);
   };
-  const BusinessNumberHandler = (e) => {
+  const BusinessNumberHandler = e => {
     setBusinessNumber(e.target.value);
   };
-  const IdHandler = (e) => {
+  const IdHandler = e => {
     setId(e.target.value);
   };
 
@@ -92,7 +98,7 @@ function KaKaoRegister() {
 
   return (
     <>
-      <div>
+      <div className="kakao-btn-container">
         <button onClick={loginWithKakao}>회원가입하기</button>
       </div>
       {Click ? (

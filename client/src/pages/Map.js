@@ -1,11 +1,13 @@
 /*global kakao*/
-import axios from "axios";
 import React, { useState, useEffect } from "react";
-import "./Map.css";
+
+import axios from "axios";
 import NavBar from "../components/NavBar";
+import "./Map.css";
 
 const { kakao } = window;
-export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
+
+export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
   const [jobSeekerId, setJobSeekerId] = useState(0);
   const [Login, setLogin] = useState(false);
   const [applyLocation, setApplyLocation] = useState([]); // 지원시 해당 위치를 지도에 띄우도록 하기 위한 state
@@ -14,7 +16,8 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
   const [endTimeFilter, setEndTimeFilter] = useState();
   const [minWageFilter, setMinWageFilter] = useState();
   const [maxWageFilter, setMaxWageFilter] = useState();
-
+  console.log(startTimeFilter);
+  console.log(endTimeFilter);
   const [mapLocation, setMapLocation] = useState([
     37.5665406708322, 126.97787259165268,
   ]); //[위도, 경도]
@@ -27,6 +30,7 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
   const [isOpenList, setIsOpenList] = useState(false);
 
   const [isOpenFilterBar, setIsOpenFilterBar] = useState(false);
+  const [value, setValue] = React.useState(null);
 
   const toggleFilterBar = () => {
     setIsOpenFilterBar(!isOpenFilterBar);
@@ -205,13 +209,13 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
           return res;
         }
       })
-      .then((res)=>{
-        if (jobSeekerId===0) {
+      .then(res => {
+        if (jobSeekerId === 0) {
           return res;
         } else {
-          return res.filter((job)=>{
-            return job.companyId !== 0
-          })
+          return res.filter(job => {
+            return job.companyId !== 0;
+          });
         }
       })
       .then(data => {
@@ -363,11 +367,11 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                       })
                       .catch();
                   }
-                
+
                   const ChangeGuestApplyStatus = () => {
                     guestApplyStatusHandler();
-                  }
-                
+                  };
+
                   // 지원을 요청하는 핸들러 제작
                   function ApplyJob() {
                     axios
@@ -375,7 +379,7 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                         jobId: data[i].id,
                         jobSeekerId,
                       })
-                      .then((res) => {
+                      .then(res => {
                         setApplyLocation([
                           parseFloat(result[0].y),
                           parseFloat(result[0].x),
@@ -387,15 +391,19 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                         ]);
                         return res;
                       })
-                      .then((res)=>{
-                        if(jobSeekerId===0) {
-                          setTimeout(()=>{
-                            console.log('res.data.id', res.data.id)
-                            axios.delete(`${process.env.REACT_APP_SERVER_URL}/applicant/${res.data.id}`, {withCredentials: true})
-                            .then((res)=>{
-                              ChangeGuestApplyStatus();
-                            })
-                          }, 300000)
+                      .then(res => {
+                        if (jobSeekerId === 0) {
+                          setTimeout(() => {
+                            console.log("res.data.id", res.data.id);
+                            axios
+                              .delete(
+                                `${process.env.REACT_APP_SERVER_URL}/applicant/${res.data.id}`,
+                                { withCredentials: true }
+                              )
+                              .then(res => {
+                                ChangeGuestApplyStatus();
+                              });
+                          }, 300000);
                         }
                       })
                       .catch();
@@ -556,10 +564,10 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                         image: markerImage, // 마커 이미지
                       });
 
-                      if (jobSeekerId===0) {
+                      if (jobSeekerId === 0) {
                         MakeMarkerEvent(marker, "지원 승인됨(회원만 채팅가능)");
                       } else {
-                      MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
+                        MakeMarkerEvent(marker, "지원 승인됨(채팅창 열기)");
                       }
                     }
                   } else {
@@ -587,7 +595,7 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
     endTimeFilter,
     minWageFilter,
     maxWageFilter,
-    guestApplyStatus
+    guestApplyStatus,
   ]);
   return (
     <div className="map-container">
@@ -605,9 +613,9 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
                     <h1>{job.companyName}</h1>
                     <p className="list-location">{job.location}</p>
                     <p className="list-monthlyWage">
-                      예상 월급 : {job.monthlyWage}원
+                      예상 월급 : {numberWithCommas(job.monthlyWage)}원
                     </p>
-                    <p>근무 요일 : {JSON.parse(job.day)}</p>
+                    <p>근무 요일 : {JSON.parse(job.day).join(" , ")}</p>
                     <p className="list-created">
                       등록일 : {job.createdAt.slice(0, 10)}
                     </p>
@@ -741,9 +749,7 @@ export default function Map({guestApplyStatus, guestApplyStatusHandler}) {
         </aside>
       </div>
 
-
       <div id="map"></div>
-
     </div>
   );
 }
