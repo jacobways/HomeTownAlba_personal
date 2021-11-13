@@ -536,7 +536,7 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
 
                   MakeMarkerEvent(
                     marker,
-                    "지원 거절됨(삭제하기)",
+                    "거절-삭제",
                     CancelApply
                   );
                 } else if (applicant.data.data.status === "accepted") {
