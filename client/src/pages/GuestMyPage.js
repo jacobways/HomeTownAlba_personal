@@ -1,32 +1,34 @@
 import React, { useState, useEffect } from "react";
-import NavBar from "../components/NavBar";
-import Footer from "../components/Footer";
-import axios from "axios";
+import NavBar from "../components/NavBar"
+import Footer from "../components/Footer"
+import axios from 'axios'
 import DeleteCareerModal from "../components/MyPageModal/Modal_DeleteCareer";
 import CancelApplyModal from "../components/MyPageModal/Modal_CancelApply";
 import DeleteJobModal from "../components/MyPageModal/Modal_DeleteJob";
 import RejectApplyModal from "../components/MyPageModal/Modal_RejectApply";
-import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply";
+import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply"
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import DaumPostcode from "react-daum-postcode";
 const { kakao } = window;
 
-function GuestMyPage({ guestApplyStatus }) {
-  const [GuestStatus, setGuestStatus] = useState("jobseeker");
+function GuestMyPage({guestApplyStatus}) {
 
+  const [GuestStatus, setGuestStatus] = useState("jobseeker");
+  
   // 구직자 사업자 중 선택
-  const JobSeekrHandler = e => {
+  const JobSeekrHandler = (e) => {
     setGuestStatus("jobseeker");
   };
-  const CompanyHandler = e => {
+  const CompanyHandler = (e) => {
     setGuestStatus("company");
   };
 
   const [jobSeekerId, setJobSeekerId] = useState(0);
   const [companyId, setCompanyId] = useState(0);
-  const [companyName, setCompanyName] = useState("우리동네알바");
+  const [companyName, setCompanyName] = useState('우리동네알바');
 
-  // 구직자 마이페이지용 -----------
+
+  // 구직자 마이페이지용 ----------- 
   const [careerList, setCareerList] = useState([]); // career 정보 모두 불러와 배열로 저장
 
   // career 항목 나머지 개별 정보
@@ -40,22 +42,22 @@ function GuestMyPage({ guestApplyStatus }) {
 
   const [applyList, setApplyList] = useState([]); // jobSeeker가 지원한 job 목록 보여주기
 
-  const [resultList, setResultList] = useState([]); // 지원 결과가 나온 job 목록 보여주기
-  const [statusList, setStatusList] = useState([]); // 지원 결과의 상태 보여주기
+  const [resultList, setResultList] = useState([]);  // 지원 결과가 나온 job 목록 보여주기
+  const [statusList, setStatusList] = useState([]);  // 지원 결과의 상태 보여주기
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
   const [eventSetTimeout, setEventSetTimeout] = useState(false);
 
   // 경력 정보 생성 및 수정 핸들러
-  const companyHandler = event => {
+  const companyHandler = (event) => {
     setCompany(event.target.value);
   };
 
-  const periodHandler = event => {
+  const periodHandler = (event) => {
     setPeriod(event.target.value);
   };
 
-  const careerPositionHandler = event => {
+  const careerPositionHandler = (event) => {
     setCareerPosition(event.target.value);
   };
 
@@ -72,21 +74,17 @@ function GuestMyPage({ guestApplyStatus }) {
         },
         { withCredentials: true }
       )
-      .then(res => {
-        setEventStatus(!eventStatus);
-        setTimeout(() => {
-          console.log("res.data.id", res.data.id);
-          axios
-            .delete(
-              `${process.env.REACT_APP_SERVER_URL}/career/${res.data.id}`,
-              { withCredentials: true }
-            )
-            .then(res => {
-              setEventSetTimeout(!eventSetTimeout);
-            });
-        }, 300000);
+      .then((res) => {
+        setEventStatus(!eventStatus)
+        setTimeout(()=>{
+          console.log('res.data.id', res.data.id)
+          axios.delete(`${process.env.REACT_APP_SERVER_URL}/career/${res.data.id}`, {withCredentials: true})
+          .then((res)=>{
+            setEventSetTimeout(!eventSetTimeout);
+          })
+        }, 300000)
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -103,14 +101,14 @@ function GuestMyPage({ guestApplyStatus }) {
         { params: { id } },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         let careerInfo = res.data.data; // 객체로 불러옴
         setCareerId(careerInfo.id);
         setCompany(careerInfo.company);
         setPeriod(careerInfo.period);
         setCareerPosition(careerInfo.position);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
@@ -132,47 +130,47 @@ function GuestMyPage({ guestApplyStatus }) {
         },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
-  const deleteCareer = id => {
+  const deleteCareer = (id) => {
     axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/career/${id}`, {
-        withCredentials: true,
-      })
-      .then(res => {
+      .delete(`${process.env.REACT_APP_SERVER_URL}/career/${id}`, { withCredentials: true })
+      .then((res) => {
         setEventStatus(!eventStatus);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   // 지원 목록에서 지원을 취소하는 핸들러
-  const CancelApply = jobId => {
+  const CancelApply = (jobId) => {
     axios
       .delete(
         `${process.env.REACT_APP_SERVER_URL}/applicant`,
         { params: { jobId, jobSeekerId: jobSeekerId } },
         { withCredentials: true }
       )
-      .then(res => {
+      .then((res) => {
         setEventStatus(!eventStatus);
       });
   };
 
-  // 사업자 마이페이지용 -----------
+
+
+  // 사업자 마이페이지용 ----------- 
   // job 정보
-  const [jobLocation, setJobLocation] = useState(""); // DB에 등록될 일자리 주소
+  const [jobLocation, setJobLocation] = useState("");  // DB에 등록될 일자리 주소
   const [isOpenJobPost, setIsOpenJobPost] = useState(false);
   const [jobZipCode, setJobZipCode] = useState(""); // 우편번호
-  const [latitude, setLatitude] = useState(0); // 일자리의 위치의 위도
-  const [longitude, setLongitude] = useState(0); // 일자리 위치의 경도
+  const [latitude, setLatitude] = useState(0)    // 일자리의 위치의 위도
+  const [longitude, setLongitude] = useState(0)  // 일자리 위치의 경도
 
   const [day, setDay] = useState([]);
   const [mon, setMon] = useState([]);
@@ -201,6 +199,7 @@ function GuestMyPage({ guestApplyStatus }) {
   const [showingApplicantList, setShowingApplicantList] = useState({});
   const [applyStatusList, setApplyStatusList] = useState({});
 
+
   // Job 위치 수정창 오픈
   const OpenJobPost = () => {
     setIsOpenJobPost(!isOpenJobPost);
@@ -208,10 +207,10 @@ function GuestMyPage({ guestApplyStatus }) {
 
   const CancelJobPost = () => {
     setIsOpenJobPost(false);
-  };
+  }
 
   // 카카오 지도 API 활용하여 Job 주소 선택 후 닫기
-  const CompleteJobPost = data => {
+  const CompleteJobPost = (data) => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -229,7 +228,7 @@ function GuestMyPage({ guestApplyStatus }) {
     setJobZipCode(data.zonecode);
     setJobLocation(fullAddr);
     setIsOpenJobPost(false);
-    ChangeLocationToCoordinate(fullAddr);
+    ChangeLocationToCoordinate(fullAddr)
   };
 
   const postCodeStyle = {
@@ -242,16 +241,17 @@ function GuestMyPage({ guestApplyStatus }) {
   };
 
   // 카카오 API를 통해 주소를 위도와 경도로 좌표로 저장하기
-  const ChangeLocationToCoordinate = location => {
+  const ChangeLocationToCoordinate = (location) => {
+
     // 주소-좌표 변환 객체를 생성합니다
     let geocoder = new kakao.maps.services.Geocoder();
-    geocoder.addressSearch(location, function (result, status) {
-      if (status === kakao.maps.services.Status.OK) {
-        setLatitude(result[0].y);
-        setLongitude(result[0].x);
-      }
-    });
-  };
+      geocoder.addressSearch(location, function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          setLatitude(result[0].y)
+          setLongitude(result[0].x)
+        }
+      })
+  }
 
   // check된 요일을 day state에 모아주기
   const dayHandler = () => {
@@ -321,19 +321,19 @@ function GuestMyPage({ guestApplyStatus }) {
     setSunChecked(!sunChecked);
   };
 
-  const startTimeHandler = event => {
+  const startTimeHandler = (event) => {
     setStartTime(event.target.value);
   };
 
-  const endTimeHandler = event => {
+  const endTimeHandler = (event) => {
     setEndTime(event.target.value);
   };
 
-  const positionHandler = event => {
+  const positionHandler = (event) => {
     setPosition(event.target.value);
   };
 
-  const hourlyWageHandler = event => {
+  const hourlyWageHandler = (event) => {
     setHourlyWage(event.target.value);
   };
 
@@ -356,33 +356,29 @@ function GuestMyPage({ guestApplyStatus }) {
         },
         { withCredentials: true }
       )
-      .then(res => {
-        setEventStatus(!eventStatus);
-        setTimeout(() => {
-          axios
-            .delete(`${process.env.REACT_APP_SERVER_URL}/job/${res.data.id}`, {
-              withCredentials: true,
-            })
-            .then(res => {
-              setEventSetTimeout(!eventSetTimeout);
-            });
-        }, 300000);
-      });
+      .then((res) => {
+        setEventStatus(!eventStatus)
+        setTimeout(()=>{
+          axios.delete(`${process.env.REACT_APP_SERVER_URL}/job/${res.data.id}`, {withCredentials: true})
+          .then((res)=>{
+            setEventSetTimeout(!eventSetTimeout);
+          })
+        }, 300000)
+      })
   };
 
   // 일자리 삭제하기
-  const DeleteJob = jobId => {
+  const DeleteJob = (jobId) => {
+
     // 해당 Job을 삭제하기
     axios
-      .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, {
-        withCredentials: true,
-      })
-      .then(res => {
-        setEventStatus(!eventStatus);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    .delete(`${process.env.REACT_APP_SERVER_URL}/job/${jobId}`, { withCredentials: true })
+    .then((res) => {
+      setEventStatus(!eventStatus);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
   };
 
   // 각 일자리별 지원자를 applicantList state에 저장
@@ -393,77 +389,70 @@ function GuestMyPage({ guestApplyStatus }) {
   const openApplicantList = (idx, jobId) => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: true });
     axios
-      .get(
-        `${process.env.REACT_APP_SERVER_URL}/applicant/jobseeker/nonmember/${jobId}`,
-        {
-          withCredentials: true,
-        }
-      )
-      .then(res => {
+      .get(`${process.env.REACT_APP_SERVER_URL}/applicant/jobseeker/nonmember/${jobId}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
         // bracket notation으로는 값이 저장되지 않아 구조분해할당 사용
         if (res.data.data.length !== 0) {
           setApplicantList({ ...applicantList, [idx]: res.data.data });
-          setApplyStatusList({
-            ...applyStatusList,
-            [idx]: res.data.applyStatus,
-          });
+          setApplyStatusList({...applyStatusList, [idx]: res.data.applyStatus})
         } else {
           setApplicantList({ ...applicantList, [idx]: null });
           setApplyStatusList({ ...applyStatusList, [idx]: null });
         }
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
   };
 
   // applicantList 닫는 핸들러
-  const closeApplicantList = idx => {
+  const closeApplicantList = (idx) => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
 
   // 자원자에 대해 지원 거절
   const RejectApply = (idx, jobId, jobSeekerId) => {
     axios
-      .patch(
-        `${process.env.REACT_APP_SERVER_URL}/applicant`,
-        { jobId, jobSeekerId },
-        { withCredentials: true }
-      )
-      .then(res => {
-        openApplicantList(idx, jobId);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    .patch(
+      `${process.env.REACT_APP_SERVER_URL}/applicant`,
+      { jobId, jobSeekerId },
+      { withCredentials: true }
+    )
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   };
 
   // 지원자에 대해 지원 승인
   const AcceptApply = (idx, jobId, jobSeekerId) => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_SERVER_URL}/applicant/status`,
-        { jobId, jobSeekerId },
-        { withCredentials: true }
-      )
-      .then(res => {
-        openApplicantList(idx, jobId);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  };
+    axios.patch(`${process.env.REACT_APP_SERVER_URL}/applicant/status`,
+    { jobId, jobSeekerId },
+    { withCredentials: true })
+    .then((res) => {
+      openApplicantList(idx, jobId);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
 
   useEffect(() => {
+
     // Career 정보 받기
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}/career/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setCareerList(res.data.data);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err);
       });
 
@@ -472,32 +461,29 @@ function GuestMyPage({ guestApplyStatus }) {
       .get(`${process.env.REACT_APP_SERVER_URL}/applicant/job/${jobSeekerId}`, {
         withCredentials: true,
       })
-      .then(res => {
+      .then((res) => {
         setApplyList(res.data.data);
       });
 
-    axios
-      .get(
-        `${process.env.REACT_APP_SERVER_URL}/applicant/job`,
-        { params: { jobSeekerId } },
-        { withCredentials: true }
-      )
-      .then(res => {
-        setResultList(res.data.data);
-        setStatusList(res.data.applyStatus);
-      });
+    axios.get(`${process.env.REACT_APP_SERVER_URL}/applicant/job`, 
+      {params: {jobSeekerId}}, 
+      {withCredentials: true}
+    )
+    .then((res) => {
+      setResultList(res.data.data);
+      setStatusList(res.data.applyStatus)
+    });
 
     // job 정보 받기
     axios
-      .get(`${process.env.REACT_APP_SERVER_URL}/job/${companyId}`, {
-        withCredentials: true,
-      })
-      .then(res => {
-        setJobList(res.data.data);
-      })
-      .catch(err => {
-        console.log(err);
-      });
+    .get(`${process.env.REACT_APP_SERVER_URL}/job/${companyId}`, { withCredentials: true })
+    .then((res) => {
+      setJobList(res.data.data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
   }, [eventStatus, jobSeekerId, eventSetTimeout, guestApplyStatus]);
 
   // 체크박스로 체크한 요일을 day에 담기 위한 기능
@@ -505,7 +491,8 @@ function GuestMyPage({ guestApplyStatus }) {
     dayHandler();
   }, [mon, tue, wed, thu, fri, sat, sun]);
 
-  if (GuestStatus === "jobseeker") {
+
+ if (GuestStatus === "jobseeker") {
     return (
       <>
         <NavBar />
@@ -523,10 +510,7 @@ function GuestMyPage({ guestApplyStatus }) {
                 </li>
               </ul>
               {/* 아래 문구 수정 */}
-              <h1 className="header">
-                비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분
-                내 자동으로 삭제됩니다.
-              </h1>
+              <h1 className="header">비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분 내 자동으로 삭제됩니다.</h1>
               <br />
               <div className="messageBox">
                 <ul>
@@ -587,139 +571,113 @@ function GuestMyPage({ guestApplyStatus }) {
 
               {/* 아래와 같이 경력사항 표시, 수정, 삭제하는 코드 추가 */}
               <div className="job">
-                <h2 className="header2">경력 사항</h2>
-                <div className="careerSection">
-                  <div className="careerDiv">
-                    <tbody>
-                      <div className="workCom">근무 회사</div>
-                      <div className="position">포지션</div>
-                      <div className="month">기간(월)</div>
-                    </tbody>
-                  </div>
-                  <table className="career">
-                    {careerList.length === 0 ? (
-                      <div>등록된 경력 사항이 없습니다.</div>
-                    ) : (
-                      <table className="career">
-                        {careerList.map((career, idx) => {
-                          return (
-                            <>
-                              {!careerUpdating[idx] ? (
-                                <div className="careerDiv">
-                                  <tr key={career.id}>
-                                    <td className="workCom">
-                                      {career.company}
-                                    </td>
-                                    <td className="position">
-                                      {career.position}
-                                    </td>
-                                    <td className="month">{career.period}</td>
-                                    <button
-                                        className='bubbly-button' id='left'
-                                      onClick={() => {
-                                        careerHandler(idx, career.id);
-                                      }}
-                                    >
-                                      수정
-                                    </button>
-                                    <DeleteCareerModal
-                                      deleteCareer={deleteCareer}
-                                      id={career.id}
-                                    />
-                                  </tr>
-                                </div>
-                              ) : (
-                                <tr key={career.id}>
-                                  <td>
-                                    <input
-                                      className="jobFlow"
-                                      name="company"
-                                      type="text"
-                                      onChange={companyHandler}
-                                      value={company}
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      className="jobFlow"
-                                      name="position"
-                                      type="text"
-                                      onChange={careerPositionHandler}
-                                      value={careerPosition}
-                                    />
-                                  </td>
-                                  <td>
-                                    <input
-                                      className="jobFlow"
-                                      name="period"
-                                      type="text"
-                                      onChange={periodHandler}
-                                      value={period}
-                                    />
-                                  </td>
-                                  <button
-                                     className='bubbly-button'
-                                    onClick={() => {
-                                      updateCareer(idx, career.id);
-                                    }}
-                                  >
-                                    수정 완료
-                                  </button>
-                                </tr>
-                              )}
-                            </>
-                          );
-                        })}
-                      </table>
-                    )}
-                  </table>
-                </div>
+              <h2 className="header2">경력 사항</h2>
+              <div className="careerSection">
+              <div className="careerDiv">
+              <tbody>
+                           <div className="workCom">근무 회사</div>
+                           <div className="position">포지션</div>
+                           <div className="month">기간(월)</div>
+                            </tbody>
+              </div>
+              <table className="career">
+              {careerList.length === 0 ? (
+                <div>등록된 경력 사항이 없습니다.</div>
+              ) : (
+                <table className="career">
+                  {careerList.map((career, idx) => {
+                    return (
+                      <>
+                        {!careerUpdating[idx] ? (
+                          <div className="careerDiv">
+                          
+                          <tr key={career.id}>
+                            <td className="workCom">{career.company}</td>
+                            <td className="position">{career.position}</td>
+                            <td className="month">{career.period}</td>
+                            <button
+                              onClick={() => {
+                                careerHandler(idx, career.id);
+                              }}
+                            >
+                              수정
+                            </button>
+                            <DeleteCareerModal
+                              deleteCareer={deleteCareer}
+                              id={career.id}
+                            />
+                          </tr>
+                          </div>
+                        ) : (
+                          <tr key={career.id}>
+                            <td>
+                              <input
+                              className='jobFlow'
+                                name="company"
+                                type="text"
+                                onChange={companyHandler}
+                                value={company}
+                              />
+                            </td>
+                            <td>
+                              <input
+                              className='jobFlow'
+                                name="position"
+                                type="text"
+                                onChange={careerPositionHandler}
+                                value={careerPosition}
+                              />
+                            </td>
+                            <td>
+                              <input
+                              className='jobFlow'
+                                name="period"
+                                type="text"
+                                onChange={periodHandler}
+                                value={period}
+                              />
+                            </td>
+                            <button
+                              onClick={() => {
+                                updateCareer(idx, career.id);
+                              }}
+                            >
+                              수정 완료
+                            </button>
+                          </tr>
+                        )}
+                      </>
+                    );
+                  })}
+                </table>
+                
+              )}
+              </table>
+              </div>
               </div>
               {/* 아래에서는 경력사항 등록할 수 있도록 태크에 핸들러 추가 */}
-              <h2 className="header2">경력 사항 등록</h2>
-              <div className="careerSection">
-                {/* 위의 형식대로 테이블 양식에 맞출지, 아래 처럼 일렬로 표현할지 결정 필요 */}
-                {/* <form> */}
-
-                <input
-                  className="jobFlow"
-                  placeholder="근무 회사명"
-                  name="company"
-                  type="text"
-                  onChange={companyHandler}
-                />
-
-                <input
-                  className="jobFlow"
-                  placeholder="포지션"
-                  name="position"
-                  type="text"
-                  onChange={careerPositionHandler}
-                />
-
-                <input
-                  className="jobFlow"
-                  placeholder="근무 기간(월)"
+            <h2 className="header2">경력 사항 등록</h2>
+            <div className="careerSection">
+           
+              {/* 위의 형식대로 테이블 양식에 맞출지, 아래 처럼 일렬로 표현할지 결정 필요 */}
+              {/* <form> */}
+                
+                <input className='jobFlow' placeholder='근무 회사명' name="company" type="text" onChange={companyHandler} />
+                
+                <input className='jobFlow' placeholder='포지션' name="position" type="text" onChange={careerPositionHandler} />
+                
+                <input className='jobFlow' placeholder='근무 기간(월)'
                   name="period"
                   type="text"
                   onChange={periodHandler}
                   placeholder="입력예시 : 3"
                 />
-                <input
-                  className="bubbly-button"
-                  type="submit"
-                  value="등록"
-                  onClick={createCareer}
-                />
-              </div>
+                <input className='bubbly-button' type="submit" value="등록" onClick={createCareer} />
+                </div>
               {/* </form> */}
 
-              <br></br>
-                <div className="job-list-title-wrapper">
-                <h1 className="job-list-title">등록 일자리 목록</h1>
-
-                {/* 아래처럼 등록된 일자리 및 지원자를 확인하는 코드 추가 */}
-               <h2 className="header2">지원 현황</h2>
+              {/* 아래와 같이 지원현황 및 지원결과 확인 코드 추가 */}
+              <h2 className="header2">지원 현황</h2>
                 {applyList.length === 0 ? (
                   <div className="careerSection">지원 내역이 없습니다</div>
                 ) : (
@@ -824,15 +782,13 @@ function GuestMyPage({ guestApplyStatus }) {
                 )}
 
 
-              {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
+             {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
               <br />
               <div className="bottomButton">
                 <button id="left" className="bubbly-button">
                   수정 완료
                 </button>
-                <button id="change" className="bubbly-button">
-                  회원탈퇴
-                </button>
+                <button id='change'className="bubbly-button">회원탈퇴</button>
               </div>
             </div>
           </div>
@@ -865,10 +821,7 @@ function GuestMyPage({ guestApplyStatus }) {
                 </li>
               </ul>
               {/* 아래 문구 수정 */}
-              <h1 className="header">
-                비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분
-                내 자동으로 삭제됩니다.
-              </h1>
+              <h1 className='header'>비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분 내 자동으로 삭제됩니다.</h1>
               <div className="messageBox">
                 <ul>
                   <li>
@@ -905,101 +858,55 @@ function GuestMyPage({ guestApplyStatus }) {
 
                 <h1 className="companyJob">일자리 등록</h1>
 
-                {/* tbody 내에서 input 태그에 이벤트 핸들러 할당 & 주소 부분은 다음 API 사용하도록 코드 수정 */}
+                 {/* tbody 내에서 input 태그에 이벤트 핸들러 할당 & 주소 부분은 다음 API 사용하도록 코드 수정 */}
                 <tbody>
                   {/* 제목 부분은 필요 없어서 삭제 */}
 
                   <tr>
                     <th>주소</th>
                     <td>
-                      <input
-                        className="jobFlow"
-                        name="location"
-                        onClick={OpenJobPost}
-                        placeholder="클릭하셔서 주소를 검색해주세요"
-                        value={jobLocation}
+                      <input className='jobFlow' name="location" 
+                      onClick={OpenJobPost}
+                      placeholder="클릭하셔서 주소를 검색해주세요"
+                      value={jobLocation}
                       ></input>
                       {isOpenJobPost ? (
-                        <>
-                          <DaumPostcode
-                            onClick={OpenJobPost}
-                            style={postCodeStyle}
-                            autoClose
-                            onComplete={CompleteJobPost}
-                          />
-                        </>
+                      <>
+                      <DaumPostcode
+                        onClick={OpenJobPost}
+                        style={postCodeStyle}
+                        autoClose
+                        onComplete={CompleteJobPost}
+                      />
+                      </>
                       ) : null}
                     </td>
                   </tr>
                   <tr>
                     <th>근무요일</th>
                     <td>
-                      <input
-                        name="day"
-                        id="mon"
-                        type="checkbox"
-                        onClick={monHandler}
-                      ></input>
-                      월
-                      <input
-                        name="day"
-                        id="tue"
-                        type="checkbox"
-                        onClick={tueHandler}
-                      ></input>
-                      화
-                      <input
-                        name="day"
-                        id="wed"
-                        type="checkbox"
-                        onClick={wedHandler}
-                      ></input>
-                      수
-                      <input
-                        name="day"
-                        id="thu"
-                        type="checkbox"
-                        onClick={thuHandler}
-                      ></input>
-                      목
-                      <input
-                        name="day"
-                        id="fri"
-                        type="checkbox"
-                        onClick={friHandler}
-                      ></input>
-                      금
-                      <input
-                        name="day"
-                        id="sat"
-                        type="checkbox"
-                        onClick={satHandler}
-                      ></input>
-                      토
-                      <input
-                        name="day"
-                        id="sun"
-                        type="checkbox"
-                        onClick={sunHandler}
-                      ></input>
-                      일
+                      <input name="day" id="mon" type="checkbox" onClick={monHandler}></input>월
+                      <input name="day" id="tue" type="checkbox" onClick={tueHandler}></input>화
+                      <input name="day" id="wed" type="checkbox" onClick={wedHandler}></input>수
+                      <input name="day" id="thu" type="checkbox" onClick={thuHandler}></input>목
+                      <input name="day" id="fri" type="checkbox" onClick={friHandler}></input>금
+                      <input name="day" id="sat" type="checkbox" onClick={satHandler}></input>토
+                      <input name="day" id="sun" type="checkbox" onClick={sunHandler}></input>일
                     </td>
                   </tr>
                   <tr>
                     <th>근무시간</th>
                     <td>
                       {" "}
-                      <input
-                        className="jobFlow"
+                      <input className='jobFlow'
                         name="startTime"
                         type="time"
                         placeholder="시작 시간"
                         onChange={startTimeHandler}
                       />
-                      <input
-                        className="jobFlow"
-                        name="endTime"
-                        type="time"
+                      <input className='jobFlow' 
+                        name="endTime" 
+                        type="time" 
                         placeholder="끝 시간"
                         onChange={endTimeHandler}
                       />
@@ -1008,24 +915,14 @@ function GuestMyPage({ guestApplyStatus }) {
                   <tr>
                     <th>포지션</th>
                     <td>
-                      <input
-                        className="jobFlow"
-                        name="position"
-                        type="text"
-                        onChange={positionHandler}
-                      />
+                      <input className='jobFlow' name="position" type="text" onChange={positionHandler}/>
                     </td>
                   </tr>
                   <tr>
                     <th>시급(₩)</th>
                     <td>
                       {" "}
-                      <input
-                        className="jobFlow"
-                        name="hourlyWage"
-                        type="text"
-                        onChange={hourlyWageHandler}
-                      />
+                      <input className='jobFlow' name="hourlyWage" type="text" onChange={hourlyWageHandler}/>
                     </td>
                   </tr>
                   {!jobLocation ||
@@ -1041,11 +938,11 @@ function GuestMyPage({ guestApplyStatus }) {
                       <span>모든 항목을 입력해주세요</span>
                     </>
                   ) : (
-                    <button className="bubbly-button" onClick={createJob}>
-                      제출
-                    </button>
+                    <button className="bubbly-button" onClick={createJob}>제출</button>
                   )}
                 </tbody>
+
+
 
                 {/* <form>
             <label>
@@ -1095,19 +992,25 @@ function GuestMyPage({ guestApplyStatus }) {
               <input name="hourlyWage" type="text" />
             </label> */}
 
+
+
+
                 {/* </form> */}
 
                 <br></br>
-
-                <h1>등록 일자리 목록</h1>
+                <div className="job-list-title-wrapper">
+                <h1 className="job-list-title">등록 일자리 목록</h1>
 
                 {/* 아래처럼 등록된 일자리 및 지원자를 확인하는 코드 추가 */}
                 {jobList.length === 0 ? (
+                  <div className="careerSection">
                   <h3>일자리 정보를 등록해주세요</h3>
+                  </div>
                 ) : (
                   <>
                     {jobList.map((job, idx) => {
                       return (
+                        
                         <div key={idx}>
                           <h4>
                             주소 : {job.location}
@@ -1146,60 +1049,48 @@ function GuestMyPage({ guestApplyStatus }) {
                                     <th></th>
                                     <th></th>
                                   </tr>
-                                  {applicantList[idx].map(
-                                    (jobSeeker, number) => {
-                                      if (applyStatusList[idx]) {
-                                        if (
-                                          applyStatusList[idx][number]
-                                            .status === "waiting"
-                                        ) {
-                                          return (
-                                            <tr key={jobSeeker.id}>
-                                              <td>{jobSeeker.name}</td>
-                                              <td>{jobSeeker.age}</td>
-                                              <td>{jobSeeker.gender}</td>
-                                              <ApplicantInfoModal
-                                                jobSeeker={jobSeeker}
-                                              />
-                                              <RejectApplyModal
-                                                RejectApply={RejectApply}
-                                                idx={idx}
-                                                jobId={job.id}
-                                                jobSeekerId={jobSeeker.id}
-                                              />
-                                              <AcceptApplyModal
-                                                AcceptApply={AcceptApply}
-                                                idx={idx}
-                                                jobId={job.id}
-                                                jobSeekerId={jobSeeker.id}
-                                              />
-                                            </tr>
-                                          );
-                                        } else if (
-                                          applyStatusList[idx][number]
-                                            .status === "accepted"
-                                        ) {
-                                          return (
-                                            <tr key={jobSeeker.id}>
-                                              <td>{jobSeeker.name}</td>
-                                              <td>{jobSeeker.age}</td>
-                                              <td>{jobSeeker.gender}</td>
-                                              <ApplicantInfoModal
-                                                jobSeeker={jobSeeker}
-                                              />
-                                              <RejectApplyModal
-                                                RejectApply={RejectApply}
-                                                idx={idx}
-                                                jobId={job.id}
-                                                jobSeekerId={jobSeeker.id}
-                                              />
-                                              <button>채팅창 열기</button>
-                                            </tr>
-                                          );
-                                        }
+                                  {applicantList[idx].map((jobSeeker, number) => {
+                                    if(applyStatusList[idx]) {
+                                      if(applyStatusList[idx][number].status==="waiting") {
+                                        return (
+                                          <tr key={jobSeeker.id}>
+                                            <td>{jobSeeker.name}</td>
+                                            <td>{jobSeeker.age}</td>
+                                            <td>{jobSeeker.gender}</td>
+                                            <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                            <RejectApplyModal
+                                              RejectApply={RejectApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                            <AcceptApplyModal
+                                              AcceptApply={AcceptApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                          </tr>
+                                        );
+                                      } else if (applyStatusList[idx][number].status==="accepted") {
+                                        return (
+                                          <tr key={jobSeeker.id}>
+                                            <td>{jobSeeker.name}</td>
+                                            <td>{jobSeeker.age}</td>
+                                            <td>{jobSeeker.gender}</td>
+                                            <ApplicantInfoModal jobSeeker={jobSeeker} />
+                                            <RejectApplyModal
+                                              RejectApply={RejectApply}
+                                              idx={idx}
+                                              jobId={job.id}
+                                              jobSeekerId={jobSeeker.id}
+                                            />
+                                            <button className='bubbly-button'>채팅창 열기</button>
+                                          </tr>
+                                        );
                                       }
                                     }
-                                  )}
+                                  })}
                                 </table>
                               )}
                             </>
@@ -1209,8 +1100,15 @@ function GuestMyPage({ guestApplyStatus }) {
                     })}
                   </>
                 )}
-
+              </div>
+                
                 <br></br>
+
+
+
+
+
+
 
                 {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
                 <div className="bottomButton">
