@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
+import Footer from "../components/Footer";
+import NavBar from "../components/NavBar";
 
-export default function (Error) {
+import "./ErrorPage.css";
+
+export default function () {
   return (
     <>
-      <h1>404 not found</h1>
+      <NavBar />
+      <div className="error-container">
+        <div className="error-wrapper"></div>
+      </div>
+      <Footer />
     </>
   );
 }

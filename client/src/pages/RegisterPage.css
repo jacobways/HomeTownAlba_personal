@@ -1,0 +1,177 @@
+.company-container,
+.jobseeker-container {
+  padding-top: 150px;
+  display: flex;
+  justify-content: center;
+}
+
+.jobseeker-wrapper,
+.company-wrapper {
+  display: flex;
+  width: 100%;
+  position: fixed;
+}
+
+.jobseeker-wrapper button,
+.company-wrapper button {
+  width: 100%;
+  height: 50px;
+  border: none;
+  background: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.jobseeker-wrapper button:hover,
+.company-wrapper button:hover {
+  background: rgb(50, 108, 249);
+  color: #fff;
+  font-weight: 700;
+}
+
+.hover {
+  background-color: blue;
+}
+
+.jobseeker-wrapper > button:nth-child(2),
+.company-wrapper > button:nth-child(2) {
+  border-left: 1px solid rgb(205, 205, 205);
+  border-right: 1px solid rgb(205, 205, 205);
+}
+
+.jobseeker-submit-wrapper,
+.company-submit-wrapper {
+  margin: 100px 0px;
+  width: 60%;
+}
+
+.jobseeker-form,
+.company-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border-radius: 20px;
+  background-color: #fff;
+  padding: 20px;
+  box-shadow: 0px 12px 18px -6px rgba(0, 0, 0, 0.4);
+  margin: auto;
+}
+
+.jobseeker-submit-form,
+.company-submit-form {
+  width: 250px;
+}
+
+.jobseeker-title,
+.company-title {
+  font-size: 2rem;
+  text-align: center;
+  margin: 20px 0px;
+  font-weight: 800;
+}
+
+.jobseeker-register-wrapper input,
+select,
+.company-register-wrapper input,
+select {
+  width: 100%;
+  outline: none;
+  border-radius: 5px;
+  border: 1px solid rgb(205, 205, 205);
+  height: 40px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.jobseeker-register-wrapper input::placeholder,
+select::placeholder,
+.company-register-wrapper input::placeholder,
+select::placeholder {
+  font-size: 1rem;
+  color: rgb(173, 173, 173);
+}
+
+.jobseeker-register-wrapper div,
+.company-register-wrapper div {
+  font-weight: 700;
+  margin: 10px;
+  text-align: center;
+  font-size: 1rem;
+  color: rgb(39, 42, 47);
+}
+
+.jobseeker-register-wrapper input[type="file"],
+.company-register-wrapper input[type="file"] {
+  position: absolute;
+  width: 0px;
+  height: 0px;
+  padding: 0;
+  margin: 0px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.jobseeker-register-wrapper label,
+.company-register-wrapper label {
+  display: block;
+  padding: 0.5em 0.75em;
+  color: #fff;
+  font-size: inherit;
+  line-height: normal;
+  text-align: center;
+  border: 1px solid rgb(50, 108, 249);
+  background-color: rgb(50, 108, 249);
+  cursor: pointer;
+  font-weight: 700;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.jobseeker-register-wrapper label:hover,
+.company-register-wrapper label:hover {
+  background-color: #fff;
+  color: black;
+  border: 1px solid rgb(205, 205, 205);
+}
+
+.jobseeker-register-wrapper .upload-name,
+.company-register-wrapper .upload-name {
+  display: inline-block;
+  margin-bottom: 10px;
+  height: 40px;
+  font-size: inherit;
+  font-family: inherit;
+  line-height: normal;
+  vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid rgb(205, 205, 205);
+  border-radius: 5px;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.jobseeker-register-wrapper button,
+.company-register-wrapper button {
+  width: 100%;
+  height: 35px;
+  padding: 0.5em 0.75em;
+  border-radius: 5px;
+  border: none;
+  margin-top: 10px;
+  font-size: inherit;
+  color: #fff;
+  font-weight: 700;
+  background-color: rgb(50, 108, 249);
+  cursor: pointer;
+}
+.jobseeker-register-wrapper button:hover,
+.company-register-wrapper button:hover {
+  background-color: #fff;
+  color: black;
+  border: 1px solid rgb(205, 205, 205);
+}

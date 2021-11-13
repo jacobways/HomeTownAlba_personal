@@ -33,12 +33,26 @@
   text-indent: -100em;
 }
 
+.guest-picket {
+  font-weight: 600;
+  font-size: 1.4rem;
+  color: #fff;
+  text-align: center;
+}
+
 .navbar-header-menu {
   flex-wrap: wrap;
   list-style: none;
   display: flex;
   padding-left: 0;
   font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.fa-id-badge {
+  padding-right: 5px;
+  text-align: end;
+  color: white;
   font-size: 1.3rem;
 }
 

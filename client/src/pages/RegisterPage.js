@@ -4,10 +4,10 @@ import { withRouter } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import DaumPostcode from "react-daum-postcode";
-import KakaoR from "../components/jobRegister";
 import LoadingModal from "../components/LoadingModal";
 import NavBar from "../components/NavBar";
-import "./RegistarPage.css";
+import "./RegisterPage.css";
+import Footer from "../components/Footer";
 
 function RegisterPage(props) {
   const [RegisterDisplay, setRegisterDisplay] = useState("jobseeker");
@@ -19,12 +19,13 @@ function RegisterPage(props) {
 
   const [isOpenPost, setIsOpenPost] = useState(false);
   const [LoadingStatus, setLoadingStatus] = useState(false);
+  const [fileSelect, setFileSelect] = useState("파일선택");
 
   const onChangeOpenPost = () => {
     setIsOpenPost(!isOpenPost);
   };
 
-  const onCompletePost = (data) => {
+  const onCompletePost = data => {
     let fullAddr = data.address;
     let extraAddr = "";
 
@@ -50,9 +51,9 @@ function RegisterPage(props) {
     display: "block",
     position: "relative",
     top: "0%",
+    right: "70px",
     width: "400px",
     height: "400px",
-    padding: "7px",
   };
   // 카카오 주소검색 API 활용 공간
 
@@ -85,12 +86,14 @@ function RegisterPage(props) {
   const [Question, setQuestion] = useState("");
   const [CompanyName, setCompanyName] = useState("");
   const [BusinessNumber, setBusinessNumber] = useState("");
+  const [isOpenJobSeeker, setIsOpenJobSeeker] = useState(false);
 
   // 이미지 업로드 테스트
 
   const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
+
 
   // checkbox
   const [CheckBox, setCheckBox] = useState(false);
@@ -103,6 +106,7 @@ function RegisterPage(props) {
   const ImgUploadHandler = (e) => {
     // console.log(e.target.files);
     setContent(e.target.files[0]);
+    setFileSelect(e.target.files[0].name);
   };
 
   const [Logo, setLogo] = useState("");
@@ -119,6 +123,7 @@ function RegisterPage(props) {
 
   const ChangeJobDisplay = () => {
     setRegisterDisplay("jobseeker");
+    setIsOpenJobSeeker(!isOpenJobSeeker);
   };
 
   const ChangeCompanyDisplay = () => {
@@ -128,58 +133,61 @@ function RegisterPage(props) {
     setRegisterDisplay("kakao");
   };
 
+
   const JobIdHandler = (e) => {
     setId(e.target.value);
   };
   const CompanyIdHandler = (e) => {
+
     setId(e.target.value);
   };
-  const PasswordHandler = (e) => {
+  const PasswordHandler = e => {
     setPassword(e.target.value);
   };
-  const ConfirmPasswordHandler = (e) => {
+  const ConfirmPasswordHandler = e => {
     setConfirmPassword(e.target.value);
     setPasswordWarn(e.target.value !== Password);
   };
-  const NameHandler = (e) => {
+  const NameHandler = e => {
     setName(e.target.value);
   };
-  const EmailHandler = (e) => {
+  const EmailHandler = e => {
     setEmail(e.target.value);
   };
 
-  const CompanyEmailHandler = (e) => {
+  const CompanyEmailHandler = e => {
     setCompanyEmail(e.target.value);
   };
-  const AgeHandler = (e) => {
+  const AgeHandler = e => {
     setAge(e.target.value);
   };
-  const genderHandler = (e) => {
+  const genderHandler = e => {
     // console.log(e.target.value);
     setGender(e.target.value);
   };
-  const QuestionHandler = (e) => {
+  const QuestionHandler = e => {
     setQuestion(e.target.value);
   };
-  const CompanyNameHandler = (e) => {
+  const CompanyNameHandler = e => {
     setCompanyName(e.target.value);
   };
 
-  const BusinessNumberHandler = (e) => {
+  const BusinessNumberHandler = e => {
     setBusinessNumber(e.target.value);
   };
 
   // 인증번호 입력란
-  const InputHandler = (e) => {
+  const InputHandler = e => {
     setJobSeekerInputAuthCode(e.target.value);
     setAutchCodeWarn(e.target.value === JobSeekerAuthCode);
   };
 
-  const CompanyInputHandler = (e) => {
+  const CompanyInputHandler = e => {
     setCompanyInputAuthCode(e.target.value);
     setAutchCodeWarn(e.target.value === CompanyAuthCode);
   };
   // 구직자 회원가입 처리 로직 : 이메일 인증 -> 최종 회원가입
+
 
   const checkBoxHandler = (e) => {
     setCheckBox(e.target.checked);
@@ -188,6 +196,7 @@ function RegisterPage(props) {
   };
 
   const JobSeekrSubmitHandler = (e) => {
+
     e.preventDefault();
     setLoadingStatus(true);
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -200,11 +209,11 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         setFilePath(res.data.fileName);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -219,7 +228,7 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         // console.log(res.data);
         setLoadingStatus(false);
         setJobSeekerEmailInput(true);
@@ -227,7 +236,7 @@ function RegisterPage(props) {
       });
   };
 
-  const finalJobSeekerSubmitHandler = (e) => {
+  const finalJobSeekerSubmitHandler = e => {
     e.preventDefault();
     console.log(typeof Gender, "남자");
 
@@ -248,6 +257,7 @@ function RegisterPage(props) {
       // console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
       setPasswordWarn(true);
     } else {
+
       if (CheckBox) {
         setPasswordWarn(false);
         if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
@@ -269,6 +279,7 @@ function RegisterPage(props) {
           console.log("인증번호가 다릅니다");
           setAutchCodeWarn(true);
         }
+
       } else {
         console.log("이용약관에 동의해주세요");
         setCheckBoxWarn(true);
@@ -278,7 +289,7 @@ function RegisterPage(props) {
 
   // 사업자 회원가입 처리 로직 : 이메일 인증 -> 최종 회원가입
 
-  const CompanySubmitHandler = (e) => {
+  const CompanySubmitHandler = e => {
     e.preventDefault();
     // 회원가입할때 Db에 type이라는 field를 한개 추가
     setLoadingStatus(true);
@@ -310,7 +321,7 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/mail`, authEmailData, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         // console.log(res.data);
         setLoadingStatus(false);
 
@@ -319,7 +330,7 @@ function RegisterPage(props) {
       });
   };
 
-  const finalCompanySubmitHandler = (e) => {
+  const finalCompanySubmitHandler = e => {
     e.preventDefault();
 
     let submitData = {
@@ -337,6 +348,7 @@ function RegisterPage(props) {
       console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
       setPasswordWarn(true);
     } else {
+
       if (CheckBox) {
         setPasswordWarn(false);
         if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
@@ -361,6 +373,7 @@ function RegisterPage(props) {
       } else {
         console.log("이용약관에 동의해주세요");
         setCheckBoxWarn(true);
+
       }
     }
   };
@@ -392,6 +405,7 @@ function RegisterPage(props) {
 
   if (RegisterDisplay === "jobseeker") {
     return (
+
       <div>
         <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
         <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
@@ -692,6 +706,7 @@ function RegisterPage(props) {
 
           <KakaoR />
         </div>
+        <Footer />
       </>
     );
   }

@@ -1,0 +1,31 @@
+.error-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70vw;
+  width: 100vw;
+}
+
+.error-wrapper {
+  width: 70%;
+  height: 70%;
+  margin-top: 100px;
+  border-radius: 30px;
+  background-image: url(./images/404-page.svg);
+  background-position: center;
+  background-size: cover;
+}
+
+/* @media screen and (max-width: 1028px) {
+  .error-wrapper {
+    width: 600px;
+    height: 600px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .error-wrapper {
+    width: 400px;
+    height: 400px;
+  }
+} */

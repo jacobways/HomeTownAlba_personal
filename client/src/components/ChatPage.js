@@ -3,6 +3,9 @@ import io from "socket.io-client";
 import axios from "axios";
 import "./Chat.css";
 
+import NavBar from "./NavBar";
+
+
 function ChatPage() {
   // 실시간 데이터값
   const [Name, setName] = useState("");
@@ -17,7 +20,7 @@ function ChatPage() {
   useEffect(() => {
     axios
       .get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true })
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         if (res.data.user && res.data.user.name) {
           setUserName(res.data.user.name);
@@ -64,12 +67,13 @@ function ChatPage() {
     setMessage("");
   };
 
-  const MessageHandler = (e) => {
+  const MessageHandler = e => {
     setMessage(e.target.value);
   };
   // 채팅
 
   return (
+
     <div className="wrapper">
       <div className="user-container">
         <label for="nickname">사용자 명</label>

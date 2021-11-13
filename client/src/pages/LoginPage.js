@@ -28,13 +28,13 @@ function LoginPage(props) {
     setLoginDisplay(false);
   };
 
-  const IdHandler = (e) => {
+  const IdHandler = e => {
     setId(e.target.value);
   };
-  const PasswordHandler = (e) => {
+  const PasswordHandler = e => {
     setPassword(e.target.value);
   };
-  const JobSeekrSubmitHandler = (e) => {
+  const JobSeekrSubmitHandler = e => {
     e.preventDefault();
     let submitData = {
       userId: Id,
@@ -42,18 +42,22 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginJobSeeker(submitData))
+
       .then((res) => {
+
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
           alert("로그인에 실패하였습니다.");
         }
       })
+
       .catch((err) => {
+
         setLoginError(true);
       });
   };
-  const CompanySubmitHandler = (e) => {
+  const CompanySubmitHandler = e => {
     console.log("사업자 로그인");
     // redux
     e.preventDefault();
@@ -63,14 +67,18 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginCompany(submitData))
+
       .then((res) => {
+
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
           alert("로그인에 실패하였습니다.");
         }
       })
+
       .catch((err) => {
+
         setLoginError(true);
       });
   };
@@ -116,7 +124,7 @@ function LoginPage(props) {
           withCredentials: true,
         }
       )
-      .then((res) => {
+      .then(res => {
         console.log("id", res.data);
         if (res.data.message) {
           history.push("/company/login");
@@ -202,22 +210,26 @@ function LoginPage(props) {
           />
           <button type="submit">로그인</button> */}
           {/* 구글 Oauth */}
-          <a
-            className="googleSns"
-            href={`${process.env.REACT_APP_SERVER_URL}/auth/google`}
-          ></a>
-          {/* 구글 Oauth */}
-          {/* KaKao Oauth */}
-          <a
-            className="kakaoSns"
-            href={`${process.env.REACT_APP_SERVER_URL}/auth/kakao`}
-          ></a>
+          <div>
+            <a
+              className="googleSns"
+              href={`${process.env.REACT_APP_SERVER_URL}/auth/google`}
+            ></a>
+            {/* 구글 Oauth */}
+            {/* KaKao Oauth */}
+            <a
+              className="kakaoSns"
+              href={`${process.env.REACT_APP_SERVER_URL}/auth/kakao`}
+            ></a>
+          </div>
           {/* <button className="kakaoSns" onClick={loginWithKakao}></button> */}
           {/* KaKao Oauth */}
-
-          <Link to="/register">회원가입</Link>
-          <Link to="#">아이디/비밀번호 찾기</Link>
-
+          <div className="chooseLog">
+            <Link className="goRegister" to="/register">
+              회원가입
+            </Link>
+            <Link to="#">아이디/비밀번호 찾기</Link>
+          </div>
           {/* </form> */}
         </div>
       </div>
@@ -296,8 +308,12 @@ function LoginPage(props) {
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
           ) : null}
-          <Link to="/register">회원가입</Link>
-          <Link to="#">아이디/비밀번호 찾기</Link>
+          <div className="chooseLog">
+            <Link className="goRegister" to="/register">
+              회원가입
+            </Link>
+            <Link to="#">아이디/비밀번호 찾기</Link>
+          </div>
         </div>
       </div>
     );
