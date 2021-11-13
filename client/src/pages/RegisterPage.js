@@ -405,296 +405,296 @@ function RegisterPage(props) {
 
   if (RegisterDisplay === "jobseeker") {
     return (
+      <>
+        <NavBar />
+        <div className="jobseeker-container">
+          <div className="jobseeker-wrapper">
+            <button className="hover" onClick={ChangeJobDisplay}>
+              구직자 회원가입
+            </button>
+            <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
+          </div>
 
-      <div>
-        <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
-        <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
-        <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
+          <div className="jobseeker-submit-wrapper">
+            <form
+              className="jobseeker-form"
+              onSubmit={finalJobSeekerSubmitHandler}
+              encType="multipart/form-data"
+            >
+              <div className="jobseeker-title">구직자 회원가입</div>
 
-        <form
-          onSubmit={finalJobSeekerSubmitHandler}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-          encType="multipart/form-data"
-        >
-          <label>아이디</label>
-          {/* 체크박스 테스트 */}
-          {/* 체크박스 테스트 */}
-          <input
-            required
-            type="text"
-            value={Id}
-            onChange={JobIdHandler}
-            placeholder="아이디를 입력하세요"
-          />
-          {JobIdSame ? (
-            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
-          ) : null}
-          <label>비밀번호</label>
-          <input
-            required
-            type="password"
-            value={Password}
-            onChange={PasswordHandler}
-            placeholder="비밀번호를 입력하세요"
-          />
-          <label>비밀번호 확인</label>
-          <input
-            required
-            type="password"
-            value={ConfirmPassword}
-            onChange={ConfirmPasswordHandler}
-            placeholder="비밀번호를 한번 더 입력하세요"
-          />
-          {PasswordWarn ? (
-            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
-          ) : null}
-          <label>이름</label>
-
-          <input
-            required
-            type="text"
-            value={Name}
-            onChange={NameHandler}
-            placeholder="이름을 입력하세요"
-          />
-          <label>나이</label>
-
-          <input
-            required
-            type="number"
-            value={Age}
-            onChange={AgeHandler}
-            placeholder="나이를 입력하세요"
-          />
-          <label>성별</label>
-          <select onChange={genderHandler}>
-            <option value="">--성별을 선택해주세요--</option>
-            <option value="남자">남자</option>
-            <option value="여자">여자</option>
-          </select>
-
-          <label>
-            졸업한 초등학교를 입력해주세요(비밀번호 수정을 위해 사용됩니다.)
-          </label>
-          <input
-            required
-            type="text"
-            value={Question}
-            placeholder="졸업한 초등학교를 입력해주세요"
-            onChange={QuestionHandler}
-          />
-
-          <label>프로필사진</label>
-          <input
-            required
-            name="image"
-            type="file"
-            placeholder="프로필 사진을 등록하세요"
-            onChange={ImgUploadHandler}
-          />
-          <label>이메일</label>
-
-          <input
-            required
-            type="email"
-            value={Email}
-            onChange={EmailHandler}
-            placeholder="인증번호 발송을 위한 이메일을 입력하세요"
-          />
-          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-          {LoadingStatus && <LoadingModal />}
-          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-
-          <button onClick={JobSeekrSubmitHandler}>
-            이메일 인증번호를 받으시고 회원가입을 완료하세요
-          </button>
-
-          {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
-          {JobSeekerEmailInput ? (
-            <div>
-              <h4>회원 가입을 위한 인증번호 입니다.</h4>
-              <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
-              <input
-                required
-                type="text"
-                placeholder="인증번호를 입력하세요"
-                value={JobSeekerInputAuthCode}
-                onChange={InputHandler}
-              />
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ marginRight: "0.5rem" }}>
-                  이용약관에 동의하시면 클릭해주세요
+              <div className="jobseeker-submit-form">
+                <div className="jobseeker-register-wrapper">
+                  <div>아이디</div>
+                  <input
+                    required
+                    type="text"
+                    value={Id}
+                    onChange={IdHandler}
+                    placeholder="아이디"
+                  />
                 </div>
-                <input type="checkbox" onChange={checkBoxHandler} />
+                <div className="jobseeker-register-wrapper">
+                  <div>비밀번호</div>
+                  <input
+                    required
+                    type="password"
+                    value={Password}
+                    onChange={PasswordHandler}
+                    placeholder="비밀번호"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>비밀번호 확인</div>
+                  <input
+                    required
+                    type="password"
+                    value={ConfirmPassword}
+                    onChange={ConfirmPasswordHandler}
+                    placeholder="비밀번호 확인"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>이름</div>
+
+                  <input
+                    required
+                    type="text"
+                    value={Name}
+                    onChange={NameHandler}
+                    placeholder="이름"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>나이</div>
+
+                  <input
+                    required
+                    type="number"
+                    value={Age}
+                    onChange={AgeHandler}
+                    placeholder="    나이"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>성별</div>
+                  <select onChange={genderHandler}>
+                    <option value="">성별을 선택해주세요</option>
+                    <option value="남자">남자</option>
+                    <option value="여자">여자</option>
+                  </select>
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>졸업한 초등학교를 입력해주세요</div>
+                  <div style={{ color: "rgb(63, 71, 82)", fontWeight: "400" }}>
+                    비밀번호 수정을 위해 사용 됩니다
+                  </div>
+                  <input
+                    required
+                    type="text"
+                    value={Question}
+                    placeholder="졸업한 초등학교를 입력해주세요"
+                    onChange={QuestionHandler}
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>프로필사진</div>
+                  <input
+                    className="upload-name"
+                    value={fileSelect}
+                    disabled="disabled"
+                  />
+                  <label for="file-upload">사진 업로드</label>
+                  <input
+                    required
+                    className="upload-hidden"
+                    id="file-upload"
+                    name="image"
+                    type="file"
+                    placeholder="프로필 사진을 등록하세요"
+                    onChange={ImgUploadHandler}
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>이메일</div>
+
+                  <input
+                    required
+                    type="email"
+                    value={Email}
+                    onChange={EmailHandler}
+                    placeholder="인증번호 발송을 위한 이메일을 입력하세요"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+                  {LoadingStatus && <LoadingModal />}
+                  {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+                  <button onClick={JobSeekrSubmitHandler}>인증하기</button>
+
+                  {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
+                  {JobSeekerEmailInput ? (
+                    <div>
+                      <h4>회원 가입을 위한 인증번호 입니다.</h4>
+                      <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
+                      <input
+                        required
+                        type="text"
+                        placeholder="인증번호를 입력하세요"
+                        value={JobSeekerInputAuthCode}
+                        onChange={InputHandler}
+                      />
+                      <button type="submit">회원가입</button>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              {AutchCodeWarn ? (
-                <div style={{ color: "red" }}>
-                  입력하신 인증번호가 올바르지 않습니다.
-                </div>
-              ) : null}
-              {CheckBoxWarn ? (
-                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
-              ) : null}
-              <button type="submit">회원가입</button>
-            </div>
-          ) : null}
-        </form>
-      </div>
+            </form>
+          </div>
+        </div>
+        <Footer />
+      </>
     );
   } else if (RegisterDisplay === "company") {
     return (
-      <div>
-        <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
-        <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
-        <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
+      <>
+        <NavBar />
+        <div className="company-container">
+          <div className="company-wrapper">
+            <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
+            <button className="hover" onClick={ChangeCompanyDisplay}>
+              사업자 회원가입
+            </button>
+          </div>
 
-        <form
-          onSubmit={finalCompanySubmitHandler}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <label>아이디</label>
-          <input
-            type="text"
-            value={Id}
-            onChange={CompanyIdHandler}
-            placeholder="아이디를 입력하세요"
-          />
-          {CompanyIdSame ? (
-            <div style={{ color: "red" }}>중복된 아이디가 있습니다.</div>
-          ) : null}
-          <label>비밀번호</label>
-          <input
-            type="password"
-            value={Password}
-            onChange={PasswordHandler}
-            placeholder="비밀번호를 입력하세요"
-          />
-
-          <label>비밀번호 확인</label>
-          <input
-            required
-            type="password"
-            value={ConfirmPassword}
-            onChange={ConfirmPasswordHandler}
-            placeholder="비밀번호를 한번 더 입력하세요"
-          />
-          {PasswordWarn ? (
-            <div style={{ color: "red" }}>비밀번호가 서로 다릅니다.</div>
-          ) : null}
-          <label>이메일</label>
-
-          <input
-            required
-            type="email"
-            value={CompanyEmail}
-            onChange={CompanyEmailHandler}
-            placeholder="인증번호 발송을 위한 이메일을 입력하세요"
-          />
-
-          <label>사업자 위치</label>
-          {/* 위치 검색할수있는 input */}
-          <input
-            type="text"
-            onClick={onChangeOpenPost}
-            placeholder="클릭하셔서 사업자 위치를 검색해주세요"
-            value={addressDetail}
-          />
-          {isOpenPost ? (
-            <DaumPostcode
-              style={postCodeStyle}
-              autoClose
-              onComplete={onCompletePost}
-            />
-          ) : null}
-          {/* 위치 검색할수있는 input */}
-
-          <label>사업자 번호</label>
-
-          <input
-            required
-            type="text"
-            value={BusinessNumber}
-            onChange={BusinessNumberHandler}
-            placeholder="-를 제외하고 사업자번호를 입력하세요"
-          />
-          <label>사업자명</label>
-
-          <input
-            required
-            type="text"
-            value={CompanyName}
-            onChange={CompanyNameHandler}
-            placeholder="사업자명을 입력하세요"
-          />
-
-          <label>회사 로고</label>
-          <input
-            required
-            name="image"
-            type="file"
-            placeholder="회사 사진을 등록하세요"
-            onChange={logoUploadHandler}
-          />
-          <label>
-            자사 상품의 핵심 상품을 적어주세요(비밀번호 수정을 위해 사용됩니다.)
-          </label>
-          <input
-            required
-            type="text"
-            value={Question}
-            placeholder="자사 상품의 핵심 상품을 적어주세요"
-            onChange={QuestionHandler}
-          />
-
-          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-          {LoadingStatus && <LoadingModal />}
-          {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-
-          <button onClick={CompanySubmitHandler}>
-            이메일 인증번호를 받으시고 회원가입을 완료하세요
-          </button>
-          {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
-          {CompanyEmailInput ? (
-            <div>
-              <h4>회원 가입을 위한 인증번호 입니다.</h4>
-              <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
-              <input
-                type="text"
-                placeholder="인증번호를 입력하세요"
-                value={CompanyInputAuthCode}
-                onChange={CompanyInputHandler}
-              />
-              <div style={{ display: "flex", alignItems: "center" }}>
-                <div style={{ marginRight: "0.5rem" }}>
-                  이용약관에 동의하시면 클릭해주세요
+          <div className="company-submit-wrapper">
+            <form className="company-form" onSubmit={finalCompanySubmitHandler}>
+              <div className="company-title">사업자 회원가입</div>
+              <div className="company-submit-form">
+                <div className="company-register-wrapper">
+                  <div>아이디</div>
+                  <input
+                    required
+                    type="text"
+                    value={Id}
+                    onChange={IdHandler}
+                    placeholder="아이디"
+                  />
                 </div>
-                <input type="checkbox" onChange={checkBoxHandler} />
+                <div className="company-register-wrapper">
+                  <div>비밀번호</div>
+                  <input
+                    required
+                    type="password"
+                    value={Password}
+                    onChange={PasswordHandler}
+                    placeholder="비밀번호"
+                  />
+                </div>
+                <div className="company-register-wrapper">
+                  <div>비밀번호 확인</div>
+                  <input
+                    required
+                    type="password"
+                    value={ConfirmPassword}
+                    onChange={ConfirmPasswordHandler}
+                    placeholder="비밀번호 확인"
+                  />
+                </div>
+
+                <div className="company-register-wrapper">
+                  <div>사업자 위치</div>
+                  {/* 위치 검색할수있는 input */}
+                  <input
+                    type="text"
+                    onClick={onChangeOpenPost}
+                    placeholder="클릭하셔서 사업자 위치를 검색해주세요"
+                    value={addressDetail}
+                  />
+                  {isOpenPost ? (
+                    <DaumPostcode
+                      style={postCodeStyle}
+                      autoClose
+                      onComplete={onCompletePost}
+                    />
+                  ) : null}
+                  {/* 위치 검색할수있는 input */}
+                </div>
+                <div className="company-register-wrapper">
+                  <div>사업자 번호</div>
+
+                  <input
+                    required
+                    type="text"
+                    value={BusinessNumber}
+                    onChange={BusinessNumberHandler}
+                    placeholder="-를 제외하고 사업자번호를 입력하세요"
+                  />
+                </div>
+                <div className="company-register-wrapper">
+                  <div>사업자명</div>
+
+                  <input
+                    required
+                    type="text"
+                    value={CompanyName}
+                    onChange={CompanyNameHandler}
+                    placeholder="사업자명"
+                  />
+                </div>
+                <div className="company-register-wrapper">
+                  <div>자사 상품의 핵심 상품을 적어주세요</div>
+                  <div style={{ color: "rgb(63, 71, 82)", fontWeight: "400" }}>
+                    비밀번호 수정을 위해 사용 됩니다
+                  </div>
+                  <input
+                    required
+                    type="text"
+                    value={Question}
+                    placeholder="자사 상품의 핵심 상품을 적어주세요"
+                    onChange={QuestionHandler}
+                  />
+                </div>
+                <div className="company-register-wrapper">
+                  <div>이메일</div>
+
+                  <input
+                    required
+                    type="email"
+                    value={CompanyEmail}
+                    onChange={CompanyEmailHandler}
+                    placeholder="인증번호 발송을 위한 이메일을 입력하세요"
+                  />
+                </div>
+                <div className="company-register-wrapper">
+                  {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+                  {LoadingStatus && <LoadingModal />}
+                  {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
+
+                  <button onClick={CompanySubmitHandler}>인증하기</button>
+                  {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
+                  {CompanyEmailInput ? (
+                    <div>
+                      <h4>회원 가입을 위한 인증번호 입니다.</h4>
+                      <h4>아래 인증 번호를 입력하여 인증을 완료해주세요.</h4>
+                      <input
+                        type="text"
+                        placeholder="인증번호를 입력하세요"
+                        value={CompanyInputAuthCode}
+                        onChange={CompanyInputHandler}
+                      />
+                      <button type="submit">회원가입</button>
+                    </div>
+                  ) : null}
+                </div>
               </div>
-              {AutchCodeWarn ? (
-                <div style={{ color: "red" }}>
-                  입력하신 인증번호가 올바르지 않습니다.
-                </div>
-              ) : null}
-              {CheckBoxWarn ? (
-                <div style={{ color: "red" }}>이용약관에 동의해주세요.</div>
-              ) : null}
-              <button type="submit">회원가입 완료</button>
-            </div>
-          ) : null}
-        </form>
-      </div>
+            </form>
+          </div>
+        </div>
+        <Footer />
+      </>
     );
-  } 
+  }
 }
 
 export default withRouter(RegisterPage);
