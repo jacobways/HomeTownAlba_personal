@@ -192,31 +192,4 @@ app.listen(port, () => {
   console.log("yaho1");
 });
 
-// //소켓io test
-// // port를 동일하게 하면??
-// const server = require("http").createServer(app);
-// const io = require("socket.io")(server, {
-//   cors: {
-//     origin: "*",
-//     credentials: true,
-//   },
-// });
 
-// io.on("connection", socket => {
-//   // 클라이언트에서 emit으로 보낸 데이터 받기는 on
-//   socket.on("chatting", ({ name, message }) => {
-//     //socket.emit으로 클라이언트에서 보낸 메세지를 보낼때는 emit
-//     // db에 저장을 한 후에 보내야 저장이 됨
-//     // chat model field name message
-//     const time = new Date().toLocaleTimeString("en-US", {
-//       hour: "numeric",
-//       minute: "numeric",
-//       hour12: true,
-//     });
-//     io.emit("chatting", { name, message, time });
-//   });
-// });
-// server.listen(5050, function () {
-//   console.log("listening on port 5050");
-// });
-// //소켓io test
