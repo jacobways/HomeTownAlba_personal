@@ -694,22 +694,7 @@ function RegisterPage(props) {
         </form>
       </div>
     );
-  } else {
-    // 카카오 회원가입
-    return (
-      <>
-        <NavBar />
-        <div className="kakao-container">
-          <button onClick={ChangeJobDisplay}>구직자 회원가입</button>
-          <button onClick={ChangeCompanyDisplay}>사업자 회원가입</button>
-          <button onClick={ChangeKaKaoDisplay}>카카오 회원가입</button>
-
-          <KakaoR />
-        </div>
-        <Footer />
-      </>
-    );
-  }
+  } 
 }
 
 export default withRouter(RegisterPage);
