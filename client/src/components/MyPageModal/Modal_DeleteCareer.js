@@ -34,14 +34,14 @@ function DeleteCareerModal({ id, deleteCareer }) {
 
   return (
     <>
-        <button onClick={openModalHandler}>
+        <button className='bubbly-button' onClick={openModalHandler}>
           {isOpen === false ? "삭제" : "삭제중"}
         </button>
         {isOpen === true ? (
           <ModalBackdrop>
             <span>삭제하시겠습니까?</span>
-            <button onClick={CloseModalHandler}>아니요</button>
-            <button onClick={CloseAndDeleteHandler}>삭제하기</button>
+            <button id='left' className='bubbly-button' onClick={CloseModalHandler}>아니요</button>
+            <button className='bubbly-button' onClick={CloseAndDeleteHandler}>삭제하기</button>
           </ModalBackdrop>
         ) : null}
     </>
