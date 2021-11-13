@@ -430,7 +430,7 @@ function RegisterPage(props) {
                     required
                     type="text"
                     value={Id}
-                    onChange={IdHandler}
+                    onChange={JobIdHandler}
                     placeholder="아이디"
                   />
                          {JobIdSame ? (
@@ -597,7 +597,7 @@ function RegisterPage(props) {
                     required
                     type="text"
                     value={Id}
-                    onChange={IdHandler}
+                    onChange={CompanyIdHandler}
                     placeholder="아이디"
                   />
                           {CompanyIdSame ? (
