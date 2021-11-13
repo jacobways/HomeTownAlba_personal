@@ -11,7 +11,7 @@ import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import DaumPostcode from "react-daum-postcode";
 const { kakao } = window;
 
-function GuestMyPage({guestApplyStatus}) {
+function GuestMyPage({guestApplyStatus, guestApplyStatusHandler}) {
 
   const [GuestStatus, setGuestStatus] = useState("jobseeker");
   
@@ -411,6 +411,10 @@ function GuestMyPage({guestApplyStatus}) {
   const closeApplicantList = (idx) => {
     setShowingApplicantList({ ...showingApplicantList, [idx]: false });
   };
+  
+  const ChangeGuestApplyStatus = () => {
+    guestApplyStatusHandler();
+  };
 
   // 자원자에 대해 지원 거절
   const RejectApply = (idx, jobId, jobSeekerId) => {
@@ -422,6 +426,7 @@ function GuestMyPage({guestApplyStatus}) {
     )
     .then((res) => {
       openApplicantList(idx, jobId);
+      ChangeGuestApplyStatus()
     })
     .catch((err) => {
       console.log(err);
@@ -435,6 +440,7 @@ function GuestMyPage({guestApplyStatus}) {
     { withCredentials: true })
     .then((res) => {
       openApplicantList(idx, jobId);
+      ChangeGuestApplyStatus()
     })
     .catch((err) => {
       console.log(err);
