@@ -39,8 +39,8 @@ function AccpetApplyModal({ idx, jobId, jobSeekerId, AcceptApply }) {
       {isOpen === true ? (
         <ModalBackdrop>
           <span>지원을 승인하시겠습니까?</span>
-          <button onClick={CloseModalHandler}>아니요</button>
-          <button onClick={CloseAndAccpetHandler}>지원 승인하기</button>
+          <button id="left" className="bubbly-button" onClick={CloseModalHandler}>아니요</button>
+          <button className="bubbly-button" onClick={CloseAndAccpetHandler}>지원 승인하기</button>
         </ModalBackdrop>
       ) : null}
     </>
