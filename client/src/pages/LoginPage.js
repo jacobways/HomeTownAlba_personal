@@ -42,14 +42,18 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginJobSeeker(submitData))
-      .then(res => {
+
+      .then((res) => {
+
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
           alert("로그인에 실패하였습니다.");
         }
       })
-      .catch(err => {
+
+      .catch((err) => {
+
         setLoginError(true);
       });
   };
@@ -63,14 +67,18 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginCompany(submitData))
-      .then(res => {
+
+      .then((res) => {
+
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
           alert("로그인에 실패하였습니다.");
         }
       })
-      .catch(err => {
+
+      .catch((err) => {
+
         setLoginError(true);
       });
   };
@@ -171,6 +179,11 @@ function LoginPage(props) {
           >
             로그인
           </button>
+          {LoginError ? (
+            <div style={{ color: "red" }}>
+              아이디나 비밀번호를 한번 더 확인해주세요
+            </div>
+          ) : null}
           {/* <form
           onSubmit={JobSeekrSubmitHandler}
           style={{

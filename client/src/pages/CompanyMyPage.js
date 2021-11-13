@@ -86,9 +86,15 @@ export default function CompanyMyPage(props) {
     setBusinessNumber(event.target.value);
   };
 
-  const imageHandler = event => {
-    setContent(event.target.files[0]);
-    setImgUploadBtn(true);
+
+  const imageHandler = (event) => {
+    if (event.target) {
+      setContent(event.target.files[0]);
+      setImgUploadBtn(true);
+    } else {
+      setContent(FilePath);
+    }
+
   };
 
   // company 사업자 위치 수정창 오픈
@@ -159,26 +165,50 @@ export default function CompanyMyPage(props) {
   };
 
   const updateCompany = () => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_SERVER_URL}/company`,
-        {
-          id: companyId,
-          name: companyName,
-          location: companyLocation,
-          businessNumber,
-          logo: FilePath,
-        },
-        { withCredentials: true }
-      )
-      .then(res => {
-        setEventStatus(!eventStatus);
-        setCompanyInfoUpdating(!companyInfoUpdating);
-        setImgUploadBtn(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+    if (FilePath) {
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/company`,
+          {
+            id: companyId,
+            companyName,
+            location: companyLocation,
+            businessNumber,
+            logo: FilePath,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setEventStatus(!eventStatus);
+          setCompanyInfoUpdating(!companyInfoUpdating);
+          setImgUploadBtn(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/company`,
+          {
+            id: companyId,
+            companyName,
+            location: companyLocation,
+            businessNumber,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setEventStatus(!eventStatus);
+          setCompanyInfoUpdating(!companyInfoUpdating);
+          setImgUploadBtn(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
   };
 
   // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)

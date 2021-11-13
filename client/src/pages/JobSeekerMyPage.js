@@ -69,9 +69,16 @@ export default function JobSeekerMyPage(props) {
     setGender(event.target.value);
   };
 
-  const imageHandler = event => {
-    setContent(event.target.files[0]);
-    setImgUploadBtn(true);
+
+  const imageHandler = (event) => {
+    // console.log(event.target.files);
+    if (event.target) {
+      setContent(event.target.files[0]);
+      setImgUploadBtn(true);
+    } else {
+      setContent(FilePath);
+    }
+
   };
   //메인페이지 이동
   const home = () => {
@@ -107,26 +114,50 @@ export default function JobSeekerMyPage(props) {
   };
 
   const UpdateJobSeeker = () => {
-    axios
-      .patch(
-        `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
-        {
-          id: jobSeekerId,
-          name,
-          age,
-          gender,
-          image: FilePath,
-        },
-        { withCredentials: true }
-      )
-      .then(res => {
-        setEventStatus(!eventStatus);
-        setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
-        setImgUploadBtn(false);
-      })
-      .catch(error => {
-        console.error(error);
-      });
+
+    if (FilePath) {
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
+          {
+            id: jobSeekerId,
+            name,
+            age,
+            gender,
+            image: FilePath,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setEventStatus(!eventStatus);
+          setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
+          setImgUploadBtn(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    } else {
+      axios
+        .patch(
+          `${process.env.REACT_APP_SERVER_URL}/jobseeker`,
+          {
+            id: jobSeekerId,
+            name,
+            age,
+            gender,
+          },
+          { withCredentials: true }
+        )
+        .then((res) => {
+          setEventStatus(!eventStatus);
+          setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
+          setImgUploadBtn(false);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    }
+
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
     // 분기처리 안된 이유 : 비동기(axios 2개가 동시에 실행이 되어, 콜백처리 및 분기처리 진행)
   };
