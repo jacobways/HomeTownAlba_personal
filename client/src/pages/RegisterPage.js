@@ -19,7 +19,7 @@ function RegisterPage(props) {
 
   const [isOpenPost, setIsOpenPost] = useState(false);
   const [LoadingStatus, setLoadingStatus] = useState(false);
-  const [fileSelect, setFileSelect] = useState("파일선택");
+  const [fileSelect, setFileSelect] = useState("등록한 사진이 없습니다");
 
   const onChangeOpenPost = () => {
     setIsOpenPost(!isOpenPost);
