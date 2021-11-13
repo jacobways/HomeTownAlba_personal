@@ -219,7 +219,7 @@ companyRouter.patch("/password", isLoggedIn, async (req, res) => {
 companyRouter.patch("/", isLoggedIn, async (req, res) => {
   // auth로 id 가져와서 처리하면 됨
   // id 가져와서 찾고, req.body에 있는 내용으로 업데이트
-  const { name, location, businessNumber, logo } = req.body;
+  const { companyName, location, businessNumber, logo } = req.body;
 
   // password 수정
 
@@ -232,7 +232,7 @@ companyRouter.patch("/", isLoggedIn, async (req, res) => {
     res.status(404).json({ message: "사업자 정보가 없습니다" });
   } else {
     Company.update(
-      { name, location, businessNumber, logo },
+      { companyName, location, businessNumber, logo },
       { where: { id: companyId } }
     )
       .then((data) => {

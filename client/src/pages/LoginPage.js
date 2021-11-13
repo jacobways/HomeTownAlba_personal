@@ -16,7 +16,7 @@ function LoginPage(props) {
   const [Id, setId] = useState("");
   const [Password, setPassword] = useState("");
   const dispatch = useDispatch();
-   const [LoginError, setLoginError] = useState(false);
+  const [LoginError, setLoginError] = useState(false);
 
   const loginURL = `${process.env.REACT_APP_SERVER_URL}/auth/google`;
 
@@ -41,13 +41,15 @@ function LoginPage(props) {
       password: Password,
     };
     //   redux
-    dispatch(loginJobSeeker(submitData)).then((res) => {
-      if (res.payload.loginSuccess) {
-        props.history.push("/");
-      } else {
-        alert("로그인에 실패하였습니다.");
-      }
-    }).catch((err) => {
+    dispatch(loginJobSeeker(submitData))
+      .then((res) => {
+        if (res.payload.loginSuccess) {
+          props.history.push("/");
+        } else {
+          alert("로그인에 실패하였습니다.");
+        }
+      })
+      .catch((err) => {
         setLoginError(true);
       });
   };
@@ -60,13 +62,15 @@ function LoginPage(props) {
       password: Password,
     };
     //   redux
-    dispatch(loginCompany(submitData)).then((res) => {
-      if (res.payload.loginSuccess) {
-        props.history.push("/");
-      } else {
-        alert("로그인에 실패하였습니다.");
-      }
-    }).catch((err) => {
+    dispatch(loginCompany(submitData))
+      .then((res) => {
+        if (res.payload.loginSuccess) {
+          props.history.push("/");
+        } else {
+          alert("로그인에 실패하였습니다.");
+        }
+      })
+      .catch((err) => {
         setLoginError(true);
       });
   };
@@ -167,6 +171,11 @@ function LoginPage(props) {
           >
             로그인
           </button>
+          {LoginError ? (
+            <div style={{ color: "red" }}>
+              아이디나 비밀번호를 한번 더 확인해주세요
+            </div>
+          ) : null}
           {/* <form
           onSubmit={JobSeekrSubmitHandler}
           style={{
@@ -282,7 +291,7 @@ function LoginPage(props) {
           >
             로그인
           </button>
-                {LoginError ? (
+          {LoginError ? (
             <div style={{ color: "red" }}>
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
