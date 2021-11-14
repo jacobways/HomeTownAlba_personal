@@ -180,7 +180,7 @@ function LoginPage(props) {
             로그인
           </button>
           {LoginError ? (
-            <div style={{ color: "red" }}>
+            <div style={{ color: "red" ,marginBottom:"10px" }}>
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
           ) : null}
@@ -304,7 +304,7 @@ function LoginPage(props) {
             로그인
           </button>
           {LoginError ? (
-            <div style={{ color: "red" }}>
+            <div style={{ color: "red" ,marginBottom:"10px" }}>
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
           ) : null}
