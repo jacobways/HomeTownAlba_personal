@@ -57,7 +57,7 @@ function ApplicantInfo({ jobSeeker }) {
 
   return (
     <>
-      <button id="left" className="bubbly-button" onClick={openModalHandler}>
+      <button id="left" className="login-btn" onClick={openModalHandler}>
         {isOpen === false ? "추가정보" : "정보 확인중"}
       </button>
       {isOpen === true ? (
