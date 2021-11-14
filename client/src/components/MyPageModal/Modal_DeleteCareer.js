@@ -4,7 +4,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 
 export const ModalBackdrop = styled.div`
-  
   z-index: 999;
   top: 1;
   left: 1;
@@ -13,7 +12,6 @@ export const ModalBackdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   display: -webkit-flex;
   place-items: center;
-  width: 70%;
 `;
 
 function DeleteCareerModal({ id, deleteCareer }) {
@@ -32,19 +30,22 @@ function DeleteCareerModal({ id, deleteCareer }) {
     deleteCareer(id);
   };
 
-
   return (
     <>
-        <button className='bubbly-button' onClick={openModalHandler}>
-          {isOpen === false ? "삭제" : "삭제중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>삭제하시겠습니까?</span>
-            <button id='left' className='bubbly-button' onClick={CloseModalHandler}>아니요</button>
-            <button className='bubbly-button' onClick={CloseAndDeleteHandler}>삭제하기</button>
-          </ModalBackdrop>
-        ) : null}
+      <button className="login-btn" onClick={openModalHandler}>
+        {isOpen === false ? "삭제" : "삭제중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>삭제하시겠습니까?</span>
+          <button id="left" className="login-btn" onClick={CloseModalHandler}>
+            아니요
+          </button>
+          <button className="login-btn" onClick={CloseAndDeleteHandler}>
+            삭제하기
+          </button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }
