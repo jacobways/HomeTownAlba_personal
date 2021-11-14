@@ -31,19 +31,22 @@ function DeleteJobModal({ id, DeleteJob }) {
     DeleteJob(id);
   };
 
-
   return (
     <>
-        <button classname='bubbly-button' onClick={openModalHandler}>
-          {isOpen === false ? "삭제" : "삭제중"}
-        </button>
-        {isOpen === true ? (
-          <ModalBackdrop>
-            <span>삭제하시겠습니까?</span>
-            <button id='left' className='bubbly-button' onClick={CloseModalHandler}>아니요</button>
-            <button className='bubbly-button' onClick={CloseAndDeleteHandler}>삭제하기</button>
-          </ModalBackdrop>
-        ) : null}
+      <button classname="login-btn" onClick={openModalHandler}>
+        {isOpen === false ? "삭제" : "삭제중"}
+      </button>
+      {isOpen === true ? (
+        <ModalBackdrop>
+          <span>삭제하시겠습니까?</span>
+          <button id="left" className="login-btn" onClick={CloseModalHandler}>
+            아니요
+          </button>
+          <button className="login-btn" onClick={CloseAndDeleteHandler}>
+            삭제하기
+          </button>
+        </ModalBackdrop>
+      ) : null}
     </>
   );
 }
