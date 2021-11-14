@@ -13,6 +13,7 @@ export const ModalBackdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   display: -webkit-flex;
   place-items: center;
+  width: 30%;
 `;
 
 function CancelApplyModal({ CancelApply, jobId }) {
@@ -43,7 +44,7 @@ function CancelApplyModal({ CancelApply, jobId }) {
             아니요
           </button>
           <button className="bubbly-button" onClick={CloseAndDeleteHandler}>
-            네, 지원을 취소합니다
+            예
           </button>
         </ModalBackdrop>
       ) : null}
