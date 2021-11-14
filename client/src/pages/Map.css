@@ -75,7 +75,7 @@
   border-radius: 4px;
   background-color: rgb(50, 108, 249);
   color: #fff;
-  margin: 0px 5px 0px 5px;
+  margin-left: 5px;
   font-size: 1em;
   cursor: pointer;
   font-weight: 700;
@@ -93,7 +93,7 @@
   width: 400px;
   margin-top: 70px;
   height: 100%;
-  overflow-y: auto;
+  overflow-y: hidden;
   border-right: 1px solid rgb(231, 231, 231);
   background-color: rgba(255, 255, 255, 0.7);
   z-index: 2;
@@ -145,7 +145,6 @@
   background-color: rgb(50, 108, 249);
   color: #fff;
   border-radius: 4px;
-  margin-right: 6px;
   align-self: center;
   font-size: 1rem;
   cursor: pointer;
@@ -158,6 +157,7 @@
 .show-filter-item {
   display: none;
 }
+
 @media screen and (max-width: 768px) {
   .search-wrapper {
     width: 300px;
@@ -190,7 +190,7 @@
 
   .show-filter-item {
     position: absolute;
-    left: 300px;
+    left: 350px;
     top: 220px;
     z-index: 2;
     width: calc(100% - 300px);
@@ -199,8 +199,9 @@
     flex-direction: column;
   }
 
-  .filter-item > select {
-    width: 100%;
+  .filter-item > select,
+  .filter-item > input {
+    width: calc(100% - 100px);
     margin: 10px;
     font-size: 1em;
     font-weight: 400;
