@@ -592,104 +592,256 @@ export default function CompanyMyPage(props) {
       });
   }, [UserLoginType]);
 
-  return (
+ return (
     <>
-    <NavBar />
-      <div className="mypage">
-        <h1>사업자 마이페이지</h1>
-        <h2 className="header2">회사 정보</h2>
-        {!companyInfoUpdating ? (
-          <div className="user">
-            <tbody>
-              <table>
-                <tr>
-                  <td>
-                    <img id="profile" src={Logo} alt="logo" />
-                  </td>
-                </tr>
+      <NavBar />
+      <div className="company-myPage-container">
+        <div className="mypage">
+          <h1>사업자 마이페이지</h1>
+          <h2 className="header2">회사 정보</h2>
+          {!companyInfoUpdating ? (
+            <div className="user">
+              <tbody>
+                <table>
+                  <tr>
+                    <td>
+                      <img id="profile" src={Logo} alt="logo" />
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">회사명</th>
+                    <td>{companyName}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">회사 주소</th>
+                    <td>{companyLocation}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">사업자등록번호</th>
+                    <td>{businessNumber}</td>
+                  </tr>
+                </table>
+                <button
+                  id="left"
+                  className="bubbly-button"
+                  onClick={companyHandler}
+                >
+                  회원 정보 수정
+                </button>
+                {!passwordUpdating ? (
+                  <button
+                    className="bubbly-button"
+                    onClick={OpenPasswordUpdate}
+                  >
+                    비밀번호 변경
+                  </button>
+                ) : (
+                  <>
+                    <input
+                      className="jobFlow"
+                      placeholder="출신 초등학교는?"
+                      name="question"
+                      type="text"
+                      onChange={questionHandler}
+                    />
+
+                    <input
+                      className="jobFlow"
+                      placeholder="수정할 비밀번호"
+                      name="password"
+                      type="password"
+                      onChange={passwordHandler}
+                    />
+                    <span>{passwordErrorMessage}</span>
+                    <button
+                      id="left"
+                      className="bubbly-button"
+                      onClick={UpdatePassword}
+                    >
+                      완료
+                    </button>
+                    <button
+                      className="bubbly-button"
+                      onClick={CancelUpdatePassword}
+                    >
+                      취소
+                    </button>
+                  </>
+                )}
+                <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
+              </tbody>
+            </div>
+          ) : (
+            <div className="user">
+              <tbody className="new">
                 <tr>
                   <th scope="row">회사명</th>
-                  <td>{companyName}</td>
+                  <input
+                    className="jobFlow"
+                    placeholder="회사명"
+                    name="name"
+                    type="text"
+                    onChange={companyNameHandler}
+                    value={companyName}
+                  />
                 </tr>
                 <tr>
                   <th scope="row">회사 주소</th>
-                  <td>{companyLocation}</td>
+                  {/* <td className="jobFlow">{companyLocation}</td>
+            <button className="bubbly-button" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
+                  <input
+                    className="jobFlow"
+                    name="location"
+                    onClick={OpenJobPost}
+                    placeholder={companyLocation}
+                    value={jobLocation}
+                  />
+                  {isOpenJobPost ? (
+                    <>
+                      <DaumPostcode
+                        onClick={OpenJobPost}
+                        style={postCodeStyle}
+                        autoClose
+                        onComplete={CompleteJobPost}
+                      />
+                    </>
+                  ) : null}
+                  {isOpenCompanyPost ? (
+                    <>
+                      <DaumPostcode
+                        onClick={OpenCompanyPost}
+                        style={postCodeStyle}
+                        autoClose
+                        onComplete={CompleteCompanyPost}
+                      />
+                      <button
+                        className="bubbly-button"
+                        onClick={CancelCompanyPost}
+                      >
+                        주소창 닫기
+                      </button>
+                    </>
+                  ) : null}
+                  {/* 위치 검색할수있는 input */}
                 </tr>
                 <tr>
                   <th scope="row">사업자등록번호</th>
-                  <td>{businessNumber}</td>
-                </tr>
-              </table>
-              <button
-                id="left"
-                className="bubbly-button"
-                onClick={companyHandler}
-              >
-                회원 정보 수정
-              </button>
-              {!passwordUpdating ? (
-                <button className="bubbly-button" onClick={OpenPasswordUpdate}>
-                  비밀번호 변경
-                </button>
-              ) : (
-                <>
                   <input
                     className="jobFlow"
-                    placeholder="출신 초등학교는?"
-                    name="question"
+                    placeholder="사업자등록번호"
+                    name="businessNumber"
                     type="text"
-                    onChange={questionHandler}
+                    onChange={businessNumberHandler}
+                    value={businessNumber}
                   />
+                </tr>
+                <tr>
+                  <th scope="row">사진</th>
+                  <input name="image" type="file" onChange={imageHandler} />
+                </tr>
+                <tr>
+                  {ImgUploadBtn ? (
+                    <button
+                      id="left"
+                      className="bubbly-button"
+                      onClick={upoadImage}
+                    >
+                      이미지 업로드
+                    </button>
+                  ) : null}
+                  <button className="bubbly-button" onClick={updateCompany}>
+                    수정 완료
+                  </button>
+                </tr>
+              </tbody>
+              <br />
+              <br />
+              <br />
+            </div>
+          )}
+          <br></br>
 
-                  <input
-                    className="jobFlow"
-                    placeholder="수정할 비밀번호"
-                    name="password"
-                    type="password"
-                    onChange={passwordHandler}
-                  />
-                  <span>{passwordErrorMessage}</span>
-                  <button
-                    id="left"
-                    className="bubbly-button"
-                    onClick={UpdatePassword}
-                  >
-                    완료
-                  </button>
-                  <button
-                    className="bubbly-button"
-                    onClick={CancelUpdatePassword}
-                  >
-                    취소
-                  </button>
-                </>
-              )}
-              <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
-            </tbody>
-          </div>
-        ) : (
-          <div className="user">
-            <tbody className="new">
-              <tr>
-                <th scope="row">회사명</th>
+          <h2 className="header2">일자리 등록</h2>
+          <div className="careerSection">
+            <form>
+              <label>
+                {" "}
+                근무 요일 :
                 <input
-                  className="jobFlow"
-                  placeholder="회사명"
-                  name="name"
-                  type="text"
-                  onChange={companyNameHandler}
-                  value={companyName}
+                  name="day"
+                  id="mon"
+                  type="checkbox"
+                  onClick={monHandler}
                 />
-              </tr>
-              <tr>
-                <th scope="row">회사 주소</th>
-                {/* <td className="jobFlow">{companyLocation}</td>
-            <button className="bubbly-button" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
+                월
+                <input
+                  name="day"
+                  id="tue"
+                  type="checkbox"
+                  onClick={tueHandler}
+                />
+                화
+                <input
+                  name="day"
+                  id="wed"
+                  type="checkbox"
+                  onClick={wedHandler}
+                />
+                <label for="wed">수</label>
+                <input
+                  name="day"
+                  id="thu"
+                  type="checkbox"
+                  onClick={thuHandler}
+                />
+                <label for="thu">목</label>
+                <input
+                  name="day"
+                  id="fri"
+                  type="checkbox"
+                  onClick={friHandler}
+                />
+                <label for="fri">금</label>
+                <input
+                  name="day"
+                  id="sat"
+                  type="checkbox"
+                  onClick={satHandler}
+                />
+                <label for="sat">토</label>
+                <input
+                  name="day"
+                  id="sun"
+                  type="checkbox"
+                  onClick={sunHandler}
+                />
+                <label for="sun">일</label>
+              </label>
+              <br></br>
+              <label>
+                {" "}
+                근무 시간 :
+                <input
+                  name="startTime"
+                  type="time"
+                  placeholder="시작 시간"
+                  onChange={startTimeHandler}
+                />
+                <input
+                  name="endTime"
+                  type="time"
+                  placeholder="끝 시간"
+                  onChange={endTimeHandler}
+                />
+              </label>
+              <br></br>
+              <label>
+                {" "}
                 <input
                   className="jobFlow"
                   name="location"
                   onClick={OpenJobPost}
-                  placeholder={companyLocation}
+                  placeholder="클릭하셔서 주소를 검색해주세요"
                   value={jobLocation}
                 />
                 {isOpenJobPost ? (
@@ -702,288 +854,182 @@ export default function CompanyMyPage(props) {
                     />
                   </>
                 ) : null}
-                {isOpenCompanyPost ? (
-                  <>
-                    <DaumPostcode
-                      onClick={OpenCompanyPost}
-                      style={postCodeStyle}
-                      autoClose
-                      onComplete={CompleteCompanyPost}
-                    />
-                    <button
-                      className="bubbly-button"
-                      onClick={CancelCompanyPost}
-                    >
-                      주소창 닫기
-                    </button>
-                  </>
-                ) : null}
-                {/* 위치 검색할수있는 input */}
-              </tr>
-              <tr>
-                <th scope="row">사업자등록번호</th>
+              </label>
+              <br></br>
+              <label>
+                {" "}
                 <input
                   className="jobFlow"
-                  placeholder="사업자등록번호"
-                  name="businessNumber"
+                  placeholder="포지션"
+                  name="position"
                   type="text"
-                  onChange={businessNumberHandler}
-                  value={businessNumber}
+                  onChange={positionHandler}
                 />
-              </tr>
-              <tr>
-                <th scope="row">사진</th>
-                <input name="image" type="file" onChange={imageHandler} />
-              </tr>
-              <tr>
-                {ImgUploadBtn ? (
-                  <button
-                    id="left"
-                    className="bubbly-button"
-                    onClick={upoadImage}
-                  >
-                    이미지 업로드
-                  </button>
-                ) : null}
-                <button className="bubbly-button" onClick={updateCompany}>
-                  수정 완료
-                </button>
-              </tr>
-            </tbody>
-            <br />
-            <br />
-            <br />
-          </div>
-        )}
-        <br></br>
+              </label>
+              <br></br>
+              <label>
+                {" "}
+                <input
+                  className="jobFlow"
+                  placeholder="시급"
+                  name="hourlyWage"
+                  type="text"
+                  onChange={hourlyWageHandler}
+                />
+              </label>
 
-        <h2 className="header2">일자리 등록</h2>
-        <div className="careerSection">
-          <form>
-            <label>
-              {" "}
-              근무 요일 :
-              <input name="day" id="mon" type="checkbox" onClick={monHandler} />
-              월
-              <input name="day" id="tue" type="checkbox" onClick={tueHandler} />
-              화
-              <input name="day" id="wed" type="checkbox" onClick={wedHandler} />
-              <label for="wed">수</label>
-              <input name="day" id="thu" type="checkbox" onClick={thuHandler} />
-              <label for="thu">목</label>
-              <input name="day" id="fri" type="checkbox" onClick={friHandler} />
-              <label for="fri">금</label>
-              <input name="day" id="sat" type="checkbox" onClick={satHandler} />
-              <label for="sat">토</label>
-              <input name="day" id="sun" type="checkbox" onClick={sunHandler} />
-              <label for="sun">일</label>
-            </label>
-            <br></br>
-            <label>
-              {" "}
-              근무 시간 :
-              <input
-                name="startTime"
-                type="time"
-                placeholder="시작 시간"
-                onChange={startTimeHandler}
-              />
-              <input
-                name="endTime"
-                type="time"
-                placeholder="끝 시간"
-                onChange={endTimeHandler}
-              />
-            </label>
-            <br></br>
-            <label>
-              {" "}
-              <input
-                className="jobFlow"
-                name="location"
-                onClick={OpenJobPost}
-                placeholder="클릭하셔서 주소를 검색해주세요"
-                value={jobLocation}
-              />
-              {isOpenJobPost ? (
+              {!jobLocation ||
+              day.length === 0 ||
+              !startTime ||
+              !endTime ||
+              !position ||
+              !hourlyWage ? (
                 <>
-                  <DaumPostcode
-                    onClick={OpenJobPost}
-                    style={postCodeStyle}
-                    autoClose
-                    onComplete={CompleteJobPost}
-                  />
+                  <button className="bubbly-button">제출</button>
                 </>
-              ) : null}
-            </label>
-            <br></br>
-            <label>
-              {" "}
-              <input
-                className="jobFlow"
-                placeholder="포지션"
-                name="position"
-                type="text"
-                onChange={positionHandler}
-              />
-            </label>
-            <br></br>
-            <label>
-              {" "}
-              <input
-                className="jobFlow"
-                placeholder="시급"
-                name="hourlyWage"
-                type="text"
-                onChange={hourlyWageHandler}
-              />
-            </label>
-
-            {!jobLocation ||
-            day.length === 0 ||
-            !startTime ||
-            !endTime ||
-            !position ||
-            !hourlyWage ? (
-              <>
-                <button className="bubbly-button">제출</button>
-              </>
-            ) : (
-              <input type="submit" value="제출" onClick={createJob} />
-            )}
-          </form>
-          <br />
-          <span>모든 항목을 입력해주세요</span>
-        </div>
-        <div className="job-list-title-wrapper">
-          <h1 className="job-list-title">등록 일자리 목록</h1>
-        </div>
-
-        {jobList.length === 0 ? (
-          <div className="careerSection">
-            <h3>일자리 정보를 등록해주세요</h3>
+              ) : (
+                <input type="submit" value="제출" onClick={createJob} />
+              )}
+            </form>
+            <br />
+            <span>모든 항목을 입력해주세요</span>
           </div>
-        ) : (
-          <>
-            {jobList.map((job, idx) => {
-              return (
-                <div className="job-list-table-container">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>구인 위치</th>
-                        <th>포지션</th>
-                        <th>시급</th>
-                        <th>요일</th>
-                        <th>시간</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>{job.location}</td>
-                        <td>{job.position}</td>
-                        <td>{job.hourlyWage}</td>
-                        <td>{JSON.parse(job.day)}</td>
-                        <td>
-                          {job.startTime.slice(0, 5)}~{job.endTime.slice(0, 5)}
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  {!showingApplicantList[idx] ? (
-                    <button
-                      className="bubbly-button"
-                      onClick={() => {
-                        openApplicantList(idx, job.id);
-                      }}
-                    >
-                      지원자 보기
-                    </button>
-                  ) : (
-                    <>
+          <div className="job-list-title-wrapper">
+            <h1 className="job-list-title">등록 일자리 목록</h1>
+          </div>
+
+          {jobList.length === 0 ? (
+            <div className="careerSection">
+              <h3>일자리 정보를 등록해주세요</h3>
+            </div>
+          ) : (
+            <>
+              {jobList.map((job, idx) => {
+                return (
+                  <div className="job-list-table-container">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>구인 위치</th>
+                          <th>포지션</th>
+                          <th>시급</th>
+                          <th>요일</th>
+                          <th>시간</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>{job.location}</td>
+                          <td>{job.position}</td>
+                          <td>{job.hourlyWage}</td>
+                          <td>{JSON.parse(job.day)}</td>
+                          <td>
+                            {job.startTime.slice(0, 5)}~
+                            {job.endTime.slice(0, 5)}
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    {!showingApplicantList[idx] ? (
                       <button
                         className="bubbly-button"
                         onClick={() => {
-                          closeApplicantList(idx);
+                          openApplicantList(idx, job.id);
                         }}
                       >
-                        지원자 숨기기
+                        지원자 보기
                       </button>
-                      {!applicantList[idx] ? (
-                        <h5>아직 지원자가 없습니다</h5>
-                      ) : (
-                        <table className="apply-table-container">
-                          <thead>
-                            <tr>
-                              <th>이름</th>
-                              <th>나이</th>
-                              <th>성별</th>
-                            </tr>
-                          </thead>
-                          {applicantList[idx].map((jobSeeker, number) => {
-                            if (applyStatusList[idx]) {
-                              if (
-                                applyStatusList[idx][number].status ===
-                                "waiting"
-                              ) {
-                                return (
-                                  <>
-                                    <tbody>
-                                      <tr key={jobSeeker.id}>
-                                        <td>{jobSeeker.name}</td>
-                                        <td>{jobSeeker.age}</td>
-                                        <td>{jobSeeker.gender}</td>
-                                      </tr>
-                                    </tbody>
-                                    <ApplicantInfoModal jobSeeker={jobSeeker} />
-                                    <RejectApplyModal
-                                      RejectApply={RejectApply}
-                                      idx={idx}
-                                      jobId={job.id}
-                                      jobSeekerId={jobSeeker.id}
-                                    />
-                                    <AcceptApplyModal
-                                      AcceptApply={AcceptApply}
-                                      idx={idx}
-                                      jobId={job.id}
-                                      jobSeekerId={jobSeeker.id}
-                                    />
-                                  </>
-                                );
-                              } else if (
-                                applyStatusList[idx][number].status ===
-                                "accepted"
-                              ) {
-                                return (
-                                  <tr key={jobSeeker.id}>
-                                    <td>{jobSeeker.name}</td>
-                                    <td>{jobSeeker.age}</td>
-                                    <td>{jobSeeker.gender}</td>
-                                    <ApplicantInfoModal jobSeeker={jobSeeker} />
-                                    <RejectApplyModal
-                                      RejectApply={RejectApply}
-                                      idx={idx}
-                                      jobId={job.id}
-                                      jobSeekerId={jobSeeker.id}
-                                    />
-                                    <button className="bubbly-button">
-                                      채팅창 열기
-                                    </button>
-                                  </tr>
-                                );
+                    ) : (
+                      <>
+                        <button
+                          className="bubbly-button"
+                          onClick={() => {
+                            closeApplicantList(idx);
+                          }}
+                        >
+                          지원자 숨기기
+                        </button>
+                        {!applicantList[idx] ? (
+                          <h5>아직 지원자가 없습니다</h5>
+                        ) : (
+                          <table className="apply-table-container">
+                            <thead>
+                              <tr>
+                                <th>이름</th>
+                                <th>나이</th>
+                                <th>성별</th>
+                              </tr>
+                            </thead>
+                            {applicantList[idx].map((jobSeeker, number) => {
+                              if (applyStatusList[idx]) {
+                                if (
+                                  applyStatusList[idx][number].status ===
+                                  "waiting"
+                                ) {
+                                  return (
+                                    <>
+                                      <tbody>
+                                        <tr key={jobSeeker.id}>
+                                          <td>{jobSeeker.name}</td>
+                                          <td>{jobSeeker.age}</td>
+                                          <td>{jobSeeker.gender}</td>
+                                        </tr>
+                                      </tbody>
+                                      <ApplicantInfoModal
+                                        jobSeeker={jobSeeker}
+                                      />
+                                      <RejectApplyModal
+                                        RejectApply={RejectApply}
+                                        idx={idx}
+                                        jobId={job.id}
+                                        jobSeekerId={jobSeeker.id}
+                                      />
+                                      <AcceptApplyModal
+                                        AcceptApply={AcceptApply}
+                                        idx={idx}
+                                        jobId={job.id}
+                                        jobSeekerId={jobSeeker.id}
+                                      />
+                                    </>
+                                  );
+                                } else if (
+                                  applyStatusList[idx][number].status ===
+                                  "accepted"
+                                ) {
+                                  return (
+                                    <tr key={jobSeeker.id}>
+                                      <td>{jobSeeker.name}</td>
+                                      <td>{jobSeeker.age}</td>
+                                      <td>{jobSeeker.gender}</td>
+                                      <ApplicantInfoModal
+                                        jobSeeker={jobSeeker}
+                                      />
+                                      <RejectApplyModal
+                                        RejectApply={RejectApply}
+                                        idx={idx}
+                                        jobId={job.id}
+                                        jobSeekerId={jobSeeker.id}
+                                      />
+                                      <button className="bubbly-button">
+                                        채팅창 열기
+                                      </button>
+                                    </tr>
+                                  );
+                                }
                               }
-                            }
-                          })}
-                        </table>
-                      )}
-                    </>
-                  )}
-                </div>
-              );
-            })}
-          </>
-        )}
+                            })}
+                          </table>
+                        )}
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </>
+          )}
+        </div>
       </div>
+      <Footer />
     </>
   );
 }
