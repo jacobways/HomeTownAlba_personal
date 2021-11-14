@@ -579,7 +579,7 @@ function RegisterPage(props) {
                           이용약관에 동의하시면 클릭해주세요
                         </div>
                         <input
-                          style={{ flex: 1 }}
+                          style={{ flex: 1, transform: "scale(0.6)" }}
                           type="checkbox"
                           onChange={checkBoxHandler}
                         />
@@ -776,7 +776,7 @@ function RegisterPage(props) {
                           이용약관에 동의하시면 클릭해주세요
                         </div>
                         <input
-                          style={{ flex: 1 }}
+                          style={{ flex: 1, transform: "scale(0.6)" }}
                           type="checkbox"
                           onChange={checkBoxHandler}
                         />
