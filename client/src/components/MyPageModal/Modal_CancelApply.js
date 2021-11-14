@@ -13,7 +13,6 @@ export const ModalBackdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   display: -webkit-flex;
   place-items: center;
-  width: 30%;
 `;
 
 function CancelApplyModal({ CancelApply, jobId }) {
@@ -34,17 +33,17 @@ function CancelApplyModal({ CancelApply, jobId }) {
 
   return (
     <>
-      <button className="bubbly-button" id="chat" onClick={openModalHandler}>
+      <button className="login-btn" id="chat" onClick={openModalHandler}>
         {isOpen === false ? "지원 취소" : "지원 취소중"}
       </button>
       {isOpen === true ? (
         <ModalBackdrop>
-          <span>취소하시겠습니까?</span>
-          <button id='left' className="bubbly-button" onClick={CloseModalHandler}>
+          <span>지원을 취소하시겠습니까?</span>
+          <button id="left" className="login-btn" onClick={CloseModalHandler}>
             아니요
           </button>
-          <button className="bubbly-button" onClick={CloseAndDeleteHandler}>
-            예
+          <button className="login-btn" onClick={CloseAndDeleteHandler}>
+            네, 지원을 취소합니다
           </button>
         </ModalBackdrop>
       ) : null}
