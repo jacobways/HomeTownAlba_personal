@@ -49,6 +49,7 @@ body {
     }
   }
 }
+
 $fuschia: rgb(50, 108, 249);
 $button-bg: $fuschia;
 $button-text-color: #fff;
@@ -81,6 +82,18 @@ $baby-blue: #f8faff;
     background-color: darken($button-bg, 5%);
     box-shadow: 0 2px 25px rgba(255, 0, 130, 0.2);
   }
+}
+
+.login-container {
+  background-color: var(--mypage);
+  border-radius: 32px;
+  padding: 30px;
+  min-width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 250px calc(100vw - 90vw);
+  align-items: center;
 }
 
 .login-btn {
@@ -184,7 +197,7 @@ $baby-blue: #f8faff;
   }
   a {
     width: 100%;
-
+    cursor: pointer;
     color: #777;
     font-size: 15px;
     line-height: 1;
@@ -367,8 +380,6 @@ $baby-blue: #f8faff;
 .password {
   border-bottom: inset;
   width: 100%;
-  button {
-  }
 }
 
 .home {
