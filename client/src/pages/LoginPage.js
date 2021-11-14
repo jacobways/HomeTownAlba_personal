@@ -42,9 +42,7 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginJobSeeker(submitData))
-
-      .then((res) => {
-
+      .then(res => {
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
@@ -52,8 +50,7 @@ function LoginPage(props) {
         }
       })
 
-      .catch((err) => {
-
+      .catch(err => {
         setLoginError(true);
       });
   };
@@ -67,9 +64,7 @@ function LoginPage(props) {
     };
     //   redux
     dispatch(loginCompany(submitData))
-
-      .then((res) => {
-
+      .then(res => {
         if (res.payload.loginSuccess) {
           props.history.push("/");
         } else {
@@ -77,8 +72,7 @@ function LoginPage(props) {
         }
       })
 
-      .catch((err) => {
-
+      .catch(err => {
         setLoginError(true);
       });
   };
@@ -137,9 +131,9 @@ function LoginPage(props) {
   if (LoginDisplay) {
     return (
       <div>
-        <div className="mypage">
+        <div className="login-container">
           <ul className="tag">
-            <li className="on">
+            <li className="on" style={{ fontWeight: "700", fontSize: "1rem" }}>
               <a onClick={ChangeJobDisplay}>개인회원</a>
             </li>
             <li>
@@ -173,14 +167,14 @@ function LoginPage(props) {
             </tbody>
           </div>
           <button
-            className="bubbly-button"
+            className="login-btn"
             type="button"
             onClick={JobSeekrSubmitHandler}
           >
             로그인
           </button>
           {LoginError ? (
-            <div style={{ color: "red" ,marginBottom:"10px" }}>
+            <div style={{ color: "red", marginBottom: "10px" }}>
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
           ) : null}
@@ -237,12 +231,12 @@ function LoginPage(props) {
   } else {
     return (
       <div>
-        <div className="mypage">
+        <div className="login-container ">
           <ul className="tag">
             <li>
               <a onClick={ChangeJobDisplay}>개인회원</a>
             </li>
-            <li className="on">
+            <li className="on" style={{ fontWeight: "700", fontSize: "1rem" }}>
               <a onClick={ChangeCompanyDisplay}>기업회원</a>
             </li>
           </ul>
@@ -297,14 +291,14 @@ function LoginPage(props) {
             placeholder="비밀번호를 입력하세요"
           /> */}
           <button
-            className="bubbly-button"
+            className="login-btn"
             type="button"
             onClick={CompanySubmitHandler}
           >
             로그인
           </button>
           {LoginError ? (
-            <div style={{ color: "red" ,marginBottom:"10px" }}>
+            <div style={{ color: "red", marginBottom: "10px" }}>
               아이디나 비밀번호를 한번 더 확인해주세요
             </div>
           ) : null}
