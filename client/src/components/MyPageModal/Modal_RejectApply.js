@@ -33,14 +33,18 @@ function RejectApplyModal({ idx, jobId, jobSeekerId, RejectApply }) {
 
   return (
     <>
-      <button  className="bubbly-button" onClick={openModalHandler}>
+      <button className="login-btn" onClick={openModalHandler}>
         {isOpen === false ? "지원거절" : "지원거절중"}
       </button>
       {isOpen === true ? (
         <ModalBackdrop>
           <span>지원을 거절하시겠습니까?</span>
-          <button id='left' className='bubbly-button' onClick={CloseModalHandler}>아니요</button>
-          <button className='bubbly-button' onClick={CloseAndDeleteHandler}>지원 거절하기</button>
+          <button id="left" className="login-btn" onClick={CloseModalHandler}>
+            아니요
+          </button>
+          <button className="login-btn" onClick={CloseAndDeleteHandler}>
+            지원 거절하기
+          </button>
         </ModalBackdrop>
       ) : null}
     </>
