@@ -39,7 +39,7 @@ function CancelApplyModal({ CancelApply, jobId }) {
       </button>
       {isOpen === true ? (
         <ModalBackdrop>
-          <span>지원을 취소하시겠습니까?</span>
+          <span>취소하시겠습니까?</span>
           <button id='left' className="bubbly-button" onClick={CloseModalHandler}>
             아니요
           </button>
