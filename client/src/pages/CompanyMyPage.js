@@ -879,7 +879,9 @@ export default function CompanyMyPage(props) {
                   <button className="login-btn">제출</button>
                 </>
               ) : (
-                <input type="submit" value="제출" onClick={createJob} />
+                <button className="login-btn" type="submit" onClick={createJob}>
+                  제출
+                </button>
               )}
             </form>
             <br />
