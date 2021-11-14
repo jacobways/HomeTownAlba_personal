@@ -7,6 +7,7 @@ import AcceptApplyModal from "../components/MyPageModal/Modal_AcceptApply";
 import ApplicantInfoModal from "../components/MyPageModal/Modal_ApplicantInfo";
 import WithdrawCompanyModal from "../components/MyPageModal/Modal_WithdrawCompany";
 import DaumPostcode from "react-daum-postcode";
+import Footer from "../components/Footer";
 import NavBar from "../components/NavBar";
 
 const { kakao } = window;
@@ -88,15 +89,13 @@ export default function CompanyMyPage(props) {
     setBusinessNumber(event.target.value);
   };
 
-
-  const imageHandler = (event) => {
+  const imageHandler = event => {
     if (event.target) {
       setContent(event.target.files[0]);
       setImgUploadBtn(true);
     } else {
       setContent(FilePath);
     }
-
   };
 
   // company 사업자 위치 수정창 오픈
@@ -167,7 +166,6 @@ export default function CompanyMyPage(props) {
   };
 
   const updateCompany = () => {
-
     if (FilePath) {
       axios
         .patch(
@@ -181,12 +179,12 @@ export default function CompanyMyPage(props) {
           },
           { withCredentials: true }
         )
-        .then((res) => {
+        .then(res => {
           setEventStatus(!eventStatus);
           setCompanyInfoUpdating(!companyInfoUpdating);
           setImgUploadBtn(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
         });
     } else {
@@ -201,16 +199,15 @@ export default function CompanyMyPage(props) {
           },
           { withCredentials: true }
         )
-        .then((res) => {
+        .then(res => {
           setEventStatus(!eventStatus);
           setCompanyInfoUpdating(!companyInfoUpdating);
           setImgUploadBtn(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
         });
     }
-
   };
 
   // 비밀번호를 수정하기 위한 버튼의 핸들러 (클릭 시 회원정보 수정 가능)
@@ -592,7 +589,7 @@ export default function CompanyMyPage(props) {
       });
   }, [UserLoginType]);
 
- return (
+  return (
     <>
       <NavBar />
       <div className="company-myPage-container">
@@ -623,16 +620,13 @@ export default function CompanyMyPage(props) {
                 </table>
                 <button
                   id="left"
-                  className="bubbly-button"
+                  className="login-btn"
                   onClick={companyHandler}
                 >
                   회원 정보 수정
                 </button>
                 {!passwordUpdating ? (
-                  <button
-                    className="bubbly-button"
-                    onClick={OpenPasswordUpdate}
-                  >
+                  <button className="login-btn" onClick={OpenPasswordUpdate}>
                     비밀번호 변경
                   </button>
                 ) : (
@@ -655,13 +649,13 @@ export default function CompanyMyPage(props) {
                     <span>{passwordErrorMessage}</span>
                     <button
                       id="left"
-                      className="bubbly-button"
+                      className="login-btn"
                       onClick={UpdatePassword}
                     >
                       완료
                     </button>
                     <button
-                      className="bubbly-button"
+                      className="login-btn"
                       onClick={CancelUpdatePassword}
                     >
                       취소
@@ -688,7 +682,7 @@ export default function CompanyMyPage(props) {
                 <tr>
                   <th scope="row">회사 주소</th>
                   {/* <td className="jobFlow">{companyLocation}</td>
-            <button className="bubbly-button" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
+            <button className="login-btn" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
                   <input
                     className="jobFlow"
                     name="location"
@@ -714,10 +708,7 @@ export default function CompanyMyPage(props) {
                         autoClose
                         onComplete={CompleteCompanyPost}
                       />
-                      <button
-                        className="bubbly-button"
-                        onClick={CancelCompanyPost}
-                      >
+                      <button className="login-btn" onClick={CancelCompanyPost}>
                         주소창 닫기
                       </button>
                     </>
@@ -743,13 +734,13 @@ export default function CompanyMyPage(props) {
                   {ImgUploadBtn ? (
                     <button
                       id="left"
-                      className="bubbly-button"
+                      className="login-btn"
                       onClick={upoadImage}
                     >
                       이미지 업로드
                     </button>
                   ) : null}
-                  <button className="bubbly-button" onClick={updateCompany}>
+                  <button className="login-btn" onClick={updateCompany}>
                     수정 완료
                   </button>
                 </tr>
@@ -885,7 +876,7 @@ export default function CompanyMyPage(props) {
               !position ||
               !hourlyWage ? (
                 <>
-                  <button className="bubbly-button">제출</button>
+                  <button className="login-btn">제출</button>
                 </>
               ) : (
                 <input type="submit" value="제출" onClick={createJob} />
@@ -932,7 +923,7 @@ export default function CompanyMyPage(props) {
                     </table>
                     {!showingApplicantList[idx] ? (
                       <button
-                        className="bubbly-button"
+                        className="login-btn"
                         onClick={() => {
                           openApplicantList(idx, job.id);
                         }}
@@ -942,7 +933,7 @@ export default function CompanyMyPage(props) {
                     ) : (
                       <>
                         <button
-                          className="bubbly-button"
+                          className="login-btn"
                           onClick={() => {
                             closeApplicantList(idx);
                           }}
@@ -1010,7 +1001,7 @@ export default function CompanyMyPage(props) {
                                         jobId={job.id}
                                         jobSeekerId={jobSeeker.id}
                                       />
-                                      <button className="bubbly-button">
+                                      <button className="login-btn">
                                         채팅창 열기
                                       </button>
                                     </tr>
