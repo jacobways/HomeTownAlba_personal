@@ -69,8 +69,7 @@ export default function JobSeekerMyPage(props) {
     setGender(event.target.value);
   };
 
-
-  const imageHandler = (event) => {
+  const imageHandler = event => {
     // console.log(event.target.files);
     if (event.target) {
       setContent(event.target.files[0]);
@@ -78,7 +77,6 @@ export default function JobSeekerMyPage(props) {
     } else {
       setContent(FilePath);
     }
-
   };
   //메인페이지 이동
   const home = () => {
@@ -114,7 +112,6 @@ export default function JobSeekerMyPage(props) {
   };
 
   const UpdateJobSeeker = () => {
-
     if (FilePath) {
       axios
         .patch(
@@ -128,12 +125,12 @@ export default function JobSeekerMyPage(props) {
           },
           { withCredentials: true }
         )
-        .then((res) => {
+        .then(res => {
           setEventStatus(!eventStatus);
           setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
           setImgUploadBtn(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
         });
     } else {
@@ -148,12 +145,12 @@ export default function JobSeekerMyPage(props) {
           },
           { withCredentials: true }
         )
-        .then((res) => {
+        .then(res => {
           setEventStatus(!eventStatus);
           setJobSeekerInfoUpdating(!jobSeekerInfoUpdating);
           setImgUploadBtn(false);
         })
-        .catch((error) => {
+        .catch(error => {
           console.error(error);
         });
     }
@@ -443,16 +440,13 @@ export default function JobSeekerMyPage(props) {
               <div>
                 <button
                   id="left"
-                  className="bubbly-button"
+                  className="login-btn"
                   onClick={jobSeekerHandler}
                 >
                   회원 정보 수정
                 </button>
                 {!passwordUpdating ? (
-                  <button
-                    className="bubbly-button"
-                    onClick={OpenPasswordUpdate}
-                  >
+                  <button className="login-btn" onClick={OpenPasswordUpdate}>
                     비밀번호 변경
                   </button>
                 ) : (
@@ -475,13 +469,13 @@ export default function JobSeekerMyPage(props) {
                     <span>{passwordErrorMessage}</span>
                     <button
                       id="left"
-                      className="bubbly-button"
+                      className="login-btn"
                       onClick={UpdatePassword}
                     >
                       완료
                     </button>
                     <button
-                      className="bubbly-button"
+                      className="login-btn"
                       onClick={CancelUpdatePassword}
                     >
                       취소
@@ -530,11 +524,11 @@ export default function JobSeekerMyPage(props) {
               <tr></tr>
               <tr>
                 {ImgUploadBtn ? (
-                  <button className="bubbly-button" onClick={upoadImage}>
+                  <button className="login-btn" onClick={upoadImage}>
                     이미지 업로드
                   </button>
                 ) : null}
-                <button className="bubbly-button" onClick={UpdateJobSeeker}>
+                <button className="login-btn" onClick={UpdateJobSeeker}>
                   수정 완료
                 </button>
               </tr>
@@ -568,7 +562,7 @@ export default function JobSeekerMyPage(props) {
                             <td className="month">{career.period}</td>
                             <button
                               id="left"
-                              className="bubbly-button"
+                              className="login-btn"
                               onClick={() => {
                                 careerHandler(idx, career.id);
                               }}
@@ -625,7 +619,7 @@ export default function JobSeekerMyPage(props) {
                 </table>
               </>
             )}
-            <button className="bubbly-button" onClick={addCareer}>
+            <button className="login-btn" onClick={addCareer}>
               경력 사항 등록
             </button>
             {click ? (
@@ -652,7 +646,7 @@ export default function JobSeekerMyPage(props) {
                   onChange={periodHandler}
                 />
                 <input
-                  className="bubbly-button"
+                  className="login-btn"
                   type="submit"
                   value="등록"
                   onClick={createCareer}
@@ -769,7 +763,7 @@ export default function JobSeekerMyPage(props) {
                             CancelApply={CancelApply}
                             jobId={job.id}
                           />
-                          <button id="chat" className="bubbly-button">
+                          <button id="chat" className="login-btn">
                             채팅창 열기
                           </button>
                         </tr>
