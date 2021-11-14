@@ -172,9 +172,6 @@ select::placeholder {
   border: 1px solid rgb(205, 205, 205);
 }
 
-input[type="checkbox"] {
-  transform: scale(0.6);
-}
 
 @media screen and (max-width: 1028px) {
   .jobseeker-form,
