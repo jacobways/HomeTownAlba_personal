@@ -5,6 +5,7 @@ import DeleteCareerModal from "../components/MyPageModal/Modal_DeleteCareer";
 import CancelApplyModal from "../components/MyPageModal/Modal_CancelApply";
 import WithdrawJobSeekerModal from "../components/MyPageModal/Modal_WithdrawJobseeker";
 import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 // 구직자 마이페이지
 export default function JobSeekerMyPage(props) {
@@ -776,6 +777,7 @@ export default function JobSeekerMyPage(props) {
           )}
         </div>
       </div>
+<Footer/>
     </div>
   );
 }
