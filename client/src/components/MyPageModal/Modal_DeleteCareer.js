@@ -13,6 +13,7 @@ export const ModalBackdrop = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   display: -webkit-flex;
   place-items: center;
+  width: 70%;
 `;
 
 function DeleteCareerModal({ id, deleteCareer }) {
