@@ -568,7 +568,7 @@ export default function JobSeekerMyPage(props) {
                             <td className="month">{career.period}</td>
                             <button
                               id="left"
-                              className="pinkButton"
+                              className="bubbly-button"
                               onClick={() => {
                                 careerHandler(idx, career.id);
                               }}
