@@ -17,14 +17,6 @@
   font-weight: 500;
 }
 
-.footer-logo {
-  background-image: url("../images/hta_footer.svg");
-  background-repeat: no-repeat;
-  display: block;
-  height: 80px;
-  width: 240px;
-}
-
 .footer-content {
   flex: 1;
   margin-top: 12px;

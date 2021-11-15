@@ -25,6 +25,7 @@ export default function JobSeekerMyPage(props) {
   const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
+  const [fileSelect, setFileSelect] = useState(null);
   // 이미지 수정을 위한 변수 선언
 
   const [password, setPassword] = useState("");
@@ -56,7 +57,6 @@ export default function JobSeekerMyPage(props) {
 
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
-
   // jobSeeker 정보 수정용
   const nameHandler = event => {
     setName(event.target.value);
@@ -74,6 +74,7 @@ export default function JobSeekerMyPage(props) {
     // console.log(event.target.files);
     if (event.target) {
       setContent(event.target.files[0]);
+      setFileSelect(event.target.files[0].name);
       setImgUploadBtn(true);
     } else {
       setContent(FilePath);
@@ -401,49 +402,42 @@ export default function JobSeekerMyPage(props) {
   }, [UserLoginType]);
 
   return (
-    <div>
+    <>
       <NavBar />
-      <h1 onClick={home} className="home">
-        Home Town Alba
-      </h1>
-      <div className="mypage">
-        <h1>회원정보</h1>
+      <div className="jobseeker-myPage-container">
+        <div className="jobseeker-myPage-wrapper">
+          <h1>구직자 마이페이지</h1>
+          <h2
+            style={{
+              borderBottom: "ridge",
+              width: "100%",
+              paddingBottom: "10px",
+            }}
+          >
+            개인 기본 정보
+          </h2>
 
-        <br></br>
-        <h2 className="header2">개인 기본 정보</h2>
-
-        {!jobSeekerInfoUpdating ? (
-          <div className="user">
-            {/* <img id='profile' src={image} alt='profile' /> */}
-            <tbody>
-              <table>
-                <tr>
-                  <td>
-                    <img id="profile" src={image} alt="profile" />
-                  </td>
-                </tr>
-                <br />
-                <br />
-                <tr>
-                  <th scope="row">이름</th>
-                  <td>{name}</td>
-                </tr>
-                <br />
-                <tr>
-                  <th scope="row">나이</th>
-                  <td>{age}</td>
-                </tr>
-                <tr>
-                  <th scope="row">성별</th>
-                  <td>{gender}</td>
-                </tr>
-              </table>
-              <div>
-                <button
-                  id="left"
-                  className="login-btn"
-                  onClick={jobSeekerHandler}
-                >
+          {!jobSeekerInfoUpdating ? (
+            <div className="jobseeker-info">
+              <div className="profile-wrapper">
+                <img className="profile" src={image} alt="profile" />
+                <div className="table">
+                  <div className="table-wrapper">
+                    <div>이름</div>
+                    <div>{name}</div>
+                  </div>
+                  <div className="table-wrapper">
+                    <div>나이</div>
+                    <div>{age}</div>
+                  </div>
+                  <div className="table-wrapper">
+                    <div>성별</div>
+                    <div>{gender}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="jobseeker-btn-container">
+                <button className="login-btn" onClick={jobSeekerHandler}>
                   회원 정보 수정
                 </button>
                 {!passwordUpdating ? (
@@ -452,217 +446,309 @@ export default function JobSeekerMyPage(props) {
                   </button>
                 ) : (
                   <>
-                    <br />
                     <input
-                      className="jobFlow"
                       placeholder="출신 초등학교는?"
                       name="question"
                       type="text"
                       onChange={questionHandler}
+                      style={{
+                        height: "45px",
+                        width: "235px",
+                        marginTop: "10px",
+                        textAlign: "center",
+                      }}
                     />
                     <input
-                      className="jobFlow"
                       placeholder="수정할 비밀번호"
                       name="password"
                       type="password"
                       onChange={passwordHandler}
+                      style={{
+                        height: "45px",
+                        width: "235px",
+                        marginTop: "10px",
+                        textAlign: "center",
+                      }}
                     />
-                    <span>{passwordErrorMessage}</span>
-                    <button
-                      id="left"
-                      className="login-btn"
-                      onClick={UpdatePassword}
-                    >
-                      완료
-                    </button>
-                    <button
-                      className="login-btn"
-                      onClick={CancelUpdatePassword}
-                    >
-                      취소
-                    </button>
+                    <div className="myPage-mobal">
+                      <button className="login-btn" onClick={UpdatePassword}>
+                        완료
+                      </button>
+                      <button
+                        className="login-btn"
+                        onClick={CancelUpdatePassword}
+                      >
+                        취소
+                      </button>
+                    </div>
                   </>
                 )}
-                <WithdrawJobSeekerModal WithdrawJobseeker={WithdrawJobseeker} />
               </div>
-            </tbody>
-          </div>
-        ) : (
-          <div className="user">
-            <tbody className="new">
-              <tr>
-                <th scope="row">이름</th>
+              <WithdrawJobSeekerModal WithdrawJobseeker={WithdrawJobseeker} />
+            </div>
+          ) : (
+            <div className="jobseeker-info">
+              <div className="profile-wrapper">
+                <img className="profile" src={image} alt="profile" />
+                <div className="table">
+                  <div className="table-wrapper">
+                    <div>이름</div>
+                    <input
+                      className="table-input"
+                      name="name"
+                      type="text"
+                      onChange={nameHandler}
+                      value={name}
+                    />
+                  </div>
+                  <div className="table-wrapper">
+                    <div>나이</div>
+                    <input
+                      className="table-input"
+                      name="age"
+                      type="text"
+                      onChange={ageHandler}
+                      value={age}
+                    />
+                  </div>
+                  <div className="table-wrapper">
+                    <div>성별</div>
+                    <select className="table-select" onChange={genderHandler}>
+                      <option value="">성별을 선택해주세요</option>
+                      <option value="남자">남자</option>
+                      <option value="여자">여자</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="jobseeker-btn-container-edit">
                 <input
-                  className="jobFlow"
-                  name="name"
-                  type="text"
-                  onChange={nameHandler}
-                  value={name}
+                  required
+                  className="upload-name"
+                  placeholder="사진을 등록해주세요"
+                  style={{ textAlign: "center" }}
+                  value={fileSelect}
+                  disabled="disabled"
                 />
-              </tr>
-              <tr>
-                <th scope="row">나이</th>
+                <label for="file-upload">사진 업로드</label>
                 <input
-                  className="jobFlow"
-                  name="age"
-                  type="text"
-                  onChange={ageHandler}
-                  value={age}
+                  required
+                  className="upload-hidden"
+                  id="file-upload"
+                  name="image"
+                  type="file"
+                  onChange={imageHandler}
                 />
-              </tr>
-              <tr>
-                <th scope="row">성별</th>
-                <select onChange={genderHandler} className="jobFlow">
-                  <option value="">--성별을 선택해주세요--</option>
-                  <option value="남자">남자</option>
-                  <option value="여자">여자</option>
-                </select>
-              </tr>
-              <tr>
-                <th scope="row">사진</th>
-                <input name="image" type="file" onChange={imageHandler} />
-              </tr>
-              <tr></tr>
-              <tr>
                 {ImgUploadBtn ? (
-                  <button className="login-btn" onClick={upoadImage}>
-                    이미지 업로드
-                  </button>
+                  <button onClick={upoadImage}>이미지 업로드</button>
                 ) : null}
-                <button className="login-btn" onClick={UpdateJobSeeker}>
+                <button type="button" onClick={UpdateJobSeeker}>
                   수정 완료
                 </button>
-              </tr>
-            </tbody>
-          </div>
-        )}
-        <br></br>
-
-        <div className="job">
-          <h2 className="header2">경력 사항</h2>
-          <div className="careerSection">
-            {careerList.length === 0 ? (
-              <div>등록된 경력 사항이 없습니다.</div>
-            ) : (
-              <>
-                <div className="careerDiv">
-                  <tbody>
+              </div>
+            </div>
+          )}
+          <div className="jobseeker-myPage-career-container">
+            <h2
+              style={{
+                borderBottom: "ridge",
+                width: "100%",
+                paddingBottom: "10px",
+              }}
+            >
+              경력 사항
+            </h2>
+            <div className="jobseeker-myPage-career">
+              {careerList.length === 0 ? (
+                <div style={{ marginTop: "20px", textAlign: "center" }}>
+                  등록된 경력 사항이 없습니다.
+                </div>
+              ) : (
+                <>
+                  <div className="jobseeker-myPage-career-wrapper">
                     <div className="workCom">근무 회사</div>
                     <div className="position">포지션</div>
                     <div className="month">기간(월)</div>
-                  </tbody>
-                </div>
-                <table className="career">
-                  {careerList.map((career, idx) => {
-                    return (
-                      <>
-                        {!careerUpdating[idx] ? (
-                          <tr key={career.id}>
-                            <td className="workCom">{career.company}</td>
-                            <td className="position">{career.position}</td>
-                            <td className="month">{career.period}</td>
-                            <button
-                              id="left"
-                              className="login-btn"
-                              onClick={() => {
-                                careerHandler(idx, career.id);
-                              }}
-                            >
-                              수정
-                            </button>
-                            <DeleteCareerModal
-                              deleteCareer={deleteCareer}
-                              id={career.id}
-                            />
-                          </tr>
-                        ) : (
-                          <tr key={career.id}>
-                            <td>
-                              <input
-                                className="jobFlow"
-                                name="company"
-                                type="text"
-                                onChange={companyHandler}
-                                value={company}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="jobFlow"
-                                name="position"
-                                type="text"
-                                onChange={positionHandler}
-                                value={position}
-                              />
-                            </td>
-                            <td>
-                              <input
-                                className="jobFlow"
-                                name="period"
-                                type="text"
-                                onChange={periodHandler}
-                                value={period}
-                              />
-                            </td>
-                            <button
-                              className="pinkButton"
-                              onClick={() => {
-                                updateCareer(idx, career.id);
-                              }}
-                            >
-                              수정 완료
-                            </button>
-                          </tr>
-                        )}
-                      </>
-                    );
-                  })}
-                </table>
-              </>
-            )}
-            <button className="login-btn" onClick={addCareer}>
-              경력 사항 등록
-            </button>
-            {click ? (
-              <form>
-                <input
-                  className="jobFlow"
-                  placeholder="근무회사명"
-                  name="company"
-                  type="text"
-                  onChange={companyHandler}
-                />
-                <input
-                  className="jobFlow"
-                  placeholder="포지션"
-                  name="position"
-                  type="text"
-                  onChange={positionHandler}
-                />
-                <input
-                  className="jobFlow"
-                  placeholder="근무기간(월) ex) 3"
-                  name="period"
-                  type="text"
-                  onChange={periodHandler}
-                />
-                <input
-                  className="login-btn"
-                  type="submit"
-                  value="등록"
-                  onClick={createCareer}
-                />
-              </form>
+                  </div>
+                  <div className="jobseeker-MyPage-career-wrapper">
+                    {careerList.map((career, idx) => {
+                      return (
+                        <>
+                          {!careerUpdating[idx] ? (
+                            <>
+                              <div className="career-wrapper" key={career.id}>
+                                <div>{career.company}</div>
+                                <div>{career.position}</div>
+                                <div>{career.period}</div>
+                              </div>
+                              <div className="career-btn-wrapper">
+                                <button
+                                  className="login-btn"
+                                  onClick={() => {
+                                    careerHandler(idx, career.id);
+                                  }}
+                                >
+                                  수정
+                                </button>
+                                <DeleteCareerModal
+                                  deleteCareer={deleteCareer}
+                                  id={career.id}
+                                />
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div className="career-wrapper" key={career.id}>
+                                <div>{career.company}</div>
+                                <div>{career.position}</div>
+                                <div>{career.period}</div>
+                              </div>
+                              <div className="career-edit-form" key={career.id}>
+                                <input
+                                  name="company"
+                                  type="text"
+                                  onChange={companyHandler}
+                                  value={company}
+                                />
+                                <input
+                                  name="position"
+                                  type="text"
+                                  onChange={positionHandler}
+                                  value={position}
+                                />
+                                <input
+                                  name="period"
+                                  type="text"
+                                  onChange={periodHandler}
+                                  value={period}
+                                />
+                                <button
+                                  className="career-submit-btn"
+                                  onClick={() => {
+                                    updateCareer(idx, career.id);
+                                  }}
+                                >
+                                  수정 완료
+                                </button>
+                              </div>
+                            </>
+                          )}
+                        </>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+              <div className="career-submit-btn-wrapper">
+                <button className="career-submit-btn" onClick={addCareer}>
+                  경력 사항 등록
+                </button>
+              </div>
+              {click ? (
+                <form className="career-submit-form">
+                  <input
+                    placeholder="근무회사명"
+                    name="company"
+                    type="text"
+                    onChange={companyHandler}
+                  />
+                  <input
+                    placeholder="포지션"
+                    name="position"
+                    type="text"
+                    onChange={positionHandler}
+                  />
+                  <input
+                    placeholder="근무기간(월) ex) 3"
+                    name="period"
+                    type="text"
+                    onChange={periodHandler}
+                  />
+                  <div className="career-submit-btn-wrapper">
+                    <input
+                      className="login-btn"
+                      type="submit"
+                      value="등록"
+                      onClick={createCareer}
+                    />
+                  </div>
+                </form>
+              ) : (
+                <div></div>
+              )}
+            </div>
+            <br></br>
+            <h2
+              style={{
+                width: "100%",
+                paddingBottom: "10px",
+              }}
+            >
+              지원 내역
+            </h2>
+            {applyList.length === 0 ? (
+              <div className="careerSection">지원 내역이 없습니다</div>
             ) : (
-              <div></div>
+              <div className="careerSection">
+                <div className="job-list-table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>회사명</th>
+                        <th>주소</th>
+                        <th>근무요일</th>
+                        <th>근무시간</th>
+                        <th>시급</th>
+                        <th>예상 월급여</th>
+                        <th>포지션</th>
+                      </tr>
+                    </thead>
+                    {applyList.map(job => {
+                      return (
+                        <>
+                          <tbody style={{ marginTop: "20px" }} key={job.id}>
+                            <tr>
+                              <td>{job.companyName}</td>
+                              <td style={{ textAlign: "start" }}>
+                                {job.location.substr(0, 20)}
+                              </td>
+                              <td>{job.day.replace(/"/g, "")}</td>
+                              <td>
+                                {job.startTime}~{job.endTime}
+                                <br />({job.time}시간)
+                              </td>
+                              <td>{job.hourlyWage}</td>
+                              <td>{job.monthlyWage}</td>
+                              <td>{job.position}</td>
+                            </tr>
+                          </tbody>
+                          <CancelApplyModal
+                            CancelApply={CancelApply}
+                            jobId={job.id}
+                          />
+                        </>
+                      );
+                    })}
+                  </table>
+                </div>
+              </div>
             )}
-          </div>
-          <br></br>
-          <h2 className="header2">지원 내역</h2>
-          {applyList.length === 0 ? (
-            <div className="careerSection">지원 내역이 없습니다</div>
-          ) : (
-            <div className="careerSection">
+            <br></br>
+            <h2
+              style={{
+                marginBottom: "10px",
+                borderBottom: "ridge",
+                width: "100%",
+                paddingBottom: "10px",
+              }}
+            >
+              지원 결과
+            </h2>
+            {resultList.length === 0 ? (
+              <div style={{ textAlign: "center", marginTop: "20px" }}>
+                지원 결과가 없습니다
+              </div>
+            ) : (
               <div className="job-list-table-container">
                 <table>
                   <thead>
@@ -674,110 +760,73 @@ export default function JobSeekerMyPage(props) {
                       <th>시급</th>
                       <th>예상 월급여</th>
                       <th>포지션</th>
-                      <th></th>
+                      <th>결과</th>
                     </tr>
                   </thead>
+                  {resultList.map((job, number) => {
+                    if (statusList[number]) {
+                      if (statusList[number].status === "rejected") {
+                        return (
+                          <>
+                            <tbody style={{ marginTop: "20px" }}>
+                              <tr key={job.id}>
+                                <td>{job.companyName}</td>
+                                <td style={{ textAlign: "start" }}>
+                                  {job.location.substr(0, 20)}
+                                </td>
+                                <td>{job.day.replace(/"/g, "")}</td>
+                                <td>
+                                  {job.startTime}~{job.endTime} ({job.time}
+                                  시간)
+                                </td>
+                                <td>{job.hourlyWage}</td>
+                                <td>{job.monthlyWage}</td>
+                                <td>{job.position}</td>
+                                <td>지원 거절</td>
+                              </tr>
+                            </tbody>
+                            <CancelApplyModal
+                              CancelApply={CancelApply}
+                              jobId={job.id}
+                            />
+                          </>
+                        );
+                      } else if (statusList[number].status === "accepted") {
+                        return (
+                          <>
+                            <tbody style={{ marginTop: "20px" }}>
+                              <tr key={job.id}>
+                                <td>{job.companyName}</td>
+                                <td style={{ textAlign: "start" }}>
+                                  {job.location.substr(0, 20)}
+                                </td>
+                                <td>{job.day.replace(/"/g, "")}</td>
+                                <td>
+                                  {job.startTime}~{job.endTime} ({job.time}
+                                  시간)
+                                </td>
+                                <td>{job.hourlyWage}</td>
+                                <td>{job.monthlyWage}</td>
+                                <td>{job.position}</td>
+                                <td>지원 승인</td>
+                              </tr>
+                            </tbody>
+                            <CancelApplyModal
+                              CancelApply={CancelApply}
+                              jobId={job.id}
+                            />
+                          </>
+                        );
+                      }
+                    }
+                  })}
                 </table>
               </div>
-              {applyList.map(job => {
-                return (
-                  <div className="job-list-table-container">
-                    <table>
-                      <thead>
-                        <tr key={job.id}>
-                          <td>{job.companyName}</td>
-                          <td>{job.location}</td>
-                          <td>{job.day}</td>
-                          <td>
-                            {job.startTime}~{job.endTime} ({job.time}시간)
-                          </td>
-                          <td>{job.hourlyWage}</td>
-                          <td>{job.monthlyWage}</td>
-                          <td>{job.position}</td>
-                          <CancelApplyModal
-                            CancelApply={CancelApply}
-                            jobId={job.id}
-                          />
-                        </tr>
-                      </thead>
-                    </table>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-          <br></br>
-          <h3>지원 결과</h3>
-          {resultList.length === 0 ? (
-            <div>지원 결과가 없습니다</div>
-          ) : (
-            <div className="job-list-table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>회사명</th>
-                    <th>주소</th>
-                    <th>근무요일</th>
-                    <th>근무시간</th>
-                    <th>시급</th>
-                    <th>예상 월급여</th>
-                    <th>포지션</th>
-                    <th>결과</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                {resultList.map((job, number) => {
-                  if (statusList[number]) {
-                    if (statusList[number].status === "rejected") {
-                      return (
-                        <tr key={job.id}>
-                          <td>{job.companyName}</td>
-                          <td>{job.location}</td>
-                          <td>{job.day}</td>
-                          <td>
-                            {job.startTime}~{job.endTime} ({job.time}시간)
-                          </td>
-                          <td>{job.hourlyWage}</td>
-                          <td>{job.monthlyWage}</td>
-                          <td>{job.position}</td>
-                          <td>지원 거절</td>
-                          <CancelApplyModal
-                            CancelApply={CancelApply}
-                            jobId={job.id}
-                          />
-                        </tr>
-                      );
-                    } else if (statusList[number].status === "accepted") {
-                      return (
-                        <tr key={job.id}>
-                          <td>{job.companyName}</td>
-                          <td>{job.location}</td>
-                          <td>{job.day}</td>
-                          <td>
-                            {job.startTime}~{job.endTime} ({job.time}시간)
-                          </td>
-                          <td>{job.hourlyWage}</td>
-                          <td>{job.monthlyWage}</td>
-                          <td>{job.position}</td>
-                          <td>지원 승인</td>
-                          <CancelApplyModal
-                            CancelApply={CancelApply}
-                            jobId={job.id}
-                          />
-                          <button id="chat" className="login-btn">
-                            채팅창 열기
-                          </button>
-                        </tr>
-                      );
-                    }
-                  }
-                })}
-              </table>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-<Footer/>
-    </div>
+      <Footer />
+    </>
   );
 }

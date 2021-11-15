@@ -19,7 +19,7 @@ function RegisterPage(props) {
 
   const [isOpenPost, setIsOpenPost] = useState(false);
   const [LoadingStatus, setLoadingStatus] = useState(false);
-  const [fileSelect, setFileSelect] = useState("등록한 사진이 없습니다");
+  const [fileSelect, setFileSelect] = useState(null);
 
   const onChangeOpenPost = () => {
     setIsOpenPost(!isOpenPost);
@@ -94,7 +94,6 @@ function RegisterPage(props) {
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
 
-
   // checkbox
   const [CheckBox, setCheckBox] = useState(false);
 
@@ -103,16 +102,17 @@ function RegisterPage(props) {
   const [AutchCodeWarn, setAutchCodeWarn] = useState(false);
   const [CheckBoxWarn, setCheckBoxWarn] = useState(false);
 
-  const ImgUploadHandler = (e) => {
+  const ImgUploadHandler = e => {
     // console.log(e.target.files);
     setContent(e.target.files[0]);
     setFileSelect(e.target.files[0].name);
+    console.log(fileSelect);
   };
 
   const [Logo, setLogo] = useState("");
   const [LogoPath, setLogoPath] = useState("");
 
-  const logoUploadHandler = (e) => {
+  const logoUploadHandler = e => {
     // console.log(e.target.files);
     setLogo(e.target.files[0]);
   };
@@ -133,12 +133,10 @@ function RegisterPage(props) {
     setRegisterDisplay("kakao");
   };
 
-
-  const JobIdHandler = (e) => {
+  const JobIdHandler = e => {
     setId(e.target.value);
   };
-  const CompanyIdHandler = (e) => {
-
+  const CompanyIdHandler = e => {
     setId(e.target.value);
   };
   const PasswordHandler = e => {
@@ -188,15 +186,13 @@ function RegisterPage(props) {
   };
   // 구직자 회원가입 처리 로직 : 이메일 인증 -> 최종 회원가입
 
-
-  const checkBoxHandler = (e) => {
+  const checkBoxHandler = e => {
     setCheckBox(e.target.checked);
     setCheckBoxWarn(!e.target.checked);
     // console.log(e.target.checked); check되면 true
   };
 
-  const JobSeekrSubmitHandler = (e) => {
-
+  const JobSeekrSubmitHandler = e => {
     e.preventDefault();
     setLoadingStatus(true);
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -257,12 +253,11 @@ function RegisterPage(props) {
       // console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
       setPasswordWarn(true);
     } else {
-
       if (CheckBox) {
         setPasswordWarn(false);
         if (JobSeekerAuthCode === parseInt(JobSeekerInputAuthCode)) {
           dispatch(registerJobSeeker(submitData))
-            .then((res) => {
+            .then(res => {
               // console.log(res.payload);
               if (res.payload.registersuccess) {
                 props.history.push("/login");
@@ -272,14 +267,13 @@ function RegisterPage(props) {
                 setCheckBoxWarn(false);
               }
             })
-            .catch((err) => {
+            .catch(err => {
               setJobIdSame(true);
             });
         } else {
           console.log("인증번호가 다릅니다");
           setAutchCodeWarn(true);
         }
-
       } else {
         console.log("이용약관에 동의해주세요");
         setCheckBoxWarn(true);
@@ -302,12 +296,12 @@ function RegisterPage(props) {
       .post(`${process.env.REACT_APP_SERVER_URL}/uploads3`, formData, {
         header: { "content-type": "multipart/form-data" },
       })
-      .then((res) => {
+      .then(res => {
         console.log(res.data);
         setLogoPath(res.data.fileName);
         // 이부분도 수정
       })
-      .catch((error) => {
+      .catch(error => {
         console.error(error);
       });
     // 1차로 이미지 업로드 -> 최종 회원가입 눌렀을때 시간 소요 줄이기 위함
@@ -348,12 +342,11 @@ function RegisterPage(props) {
       console.log("비밀번호와 비밀번호 확인이 서로 같지 않습니다.");
       setPasswordWarn(true);
     } else {
-
       if (CheckBox) {
         setPasswordWarn(false);
         if (CompanyAuthCode === parseInt(CompanyInputAuthCode)) {
           dispatch(registerCompany(submitData))
-            .then((res) => {
+            .then(res => {
               // console.log(res.payload);
               if (res.payload.registersuccess) {
                 setCompanyIdSame(false);
@@ -363,7 +356,7 @@ function RegisterPage(props) {
                 setCheckBoxWarn(false);
               }
             })
-            .catch((err) => {
+            .catch(err => {
               setCompanyIdSame(true);
             });
         } else {
@@ -373,7 +366,6 @@ function RegisterPage(props) {
       } else {
         console.log("이용약관에 동의해주세요");
         setCheckBoxWarn(true);
-
       }
     }
   };
@@ -383,7 +375,7 @@ function RegisterPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/jobseeker/getall`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         // console.log(res.data);
         if (res.data && res.data.userId) {
           setJobSeekerIdCheck(res.data.userId);
@@ -395,7 +387,7 @@ function RegisterPage(props) {
       .get(`${process.env.REACT_APP_SERVER_URL}/company/getall`, {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(res => {
         // console.log(res.data);
         if (res.data && res.data.userId) {
           setCompanyIdCheck(res.data.userId);
@@ -403,7 +395,7 @@ function RegisterPage(props) {
       });
   }, []);
 
- if (RegisterDisplay === "jobseeker") {
+  if (RegisterDisplay === "jobseeker") {
     return (
       <>
         <NavBar />
@@ -511,6 +503,7 @@ function RegisterPage(props) {
                   <div>프로필사진</div>
                   <input
                     className="upload-name"
+                    placeholder="사진을 등록해주세요"
                     value={fileSelect}
                     disabled="disabled"
                   />
@@ -686,9 +679,9 @@ function RegisterPage(props) {
                   ) : null}
                   {/* 위치 검색할수있는 input */}
                 </div>
+
                 <div className="company-register-wrapper">
                   <div>사업자 번호</div>
-
                   <input
                     required
                     type="text"
@@ -697,6 +690,7 @@ function RegisterPage(props) {
                     placeholder="-를 제외하고 사업자번호를 입력하세요"
                   />
                 </div>
+
                 <div className="company-register-wrapper">
                   <div>사업자명</div>
 
@@ -706,6 +700,25 @@ function RegisterPage(props) {
                     value={CompanyName}
                     onChange={CompanyNameHandler}
                     placeholder="사업자명"
+                  />
+                </div>
+                <div className="jobseeker-register-wrapper">
+                  <div>회사 로고</div>
+                  <input
+                    className="upload-name"
+                    placeholder="사진을 등록해주세요"
+                    value={fileSelect}
+                    disabled="disabled"
+                  />
+                  <label for="file-upload">사진 업로드</label>
+                  <input
+                    required
+                    className="upload-hidden"
+                    id="file-upload"
+                    name="image"
+                    type="file"
+                    placeholder="프로필 사진을 등록하세요"
+                    onChange={ImgUploadHandler}
                   />
                 </div>
                 <div className="company-register-wrapper">
@@ -736,7 +749,9 @@ function RegisterPage(props) {
                   {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
                   {LoadingStatus && <LoadingModal />}
                   {/* 인증 버튼 누른 후 이메일 올때까지 Loading Modal */}
-                  <button onClick={CompanySubmitHandler}>인증하기</button>
+                  <button type="button" onClick={CompanySubmitHandler}>
+                    인증하기
+                  </button>
                   {/* 이메일 인증코드 오면 true로 바뀌어서 보여주기 */}
                   {CompanyEmailInput ? (
                     <div

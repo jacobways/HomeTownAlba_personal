@@ -29,6 +29,7 @@ export default function CompanyMyPage(props) {
   const BASE_URL = `${process.env.REACT_APP_SERVER_URL}`;
   const [Content, setContent] = useState("");
   const [FilePath, setFilePath] = useState("");
+  const [fileSelect, setFileSelect] = useState(null);
   // 이미지 수정을 위한 변수 선언
 
   // 사업자위치 state
@@ -80,6 +81,7 @@ export default function CompanyMyPage(props) {
   const [List, setList] = useState(false);
   const [eventStatus, setEventStatus] = useState(false); // useEffect로 변경사항이 화면에 바로 렌더링되게 도와주는 state
   const [ImgUploadBtn, setImgUploadBtn] = useState(false);
+
   // company 회원 정보 수정용
   const companyNameHandler = event => {
     setCompanyName(event.target.value);
@@ -92,6 +94,7 @@ export default function CompanyMyPage(props) {
   const imageHandler = event => {
     if (event.target) {
       setContent(event.target.files[0]);
+      setFileSelect(event.target.files[0].name);
       setImgUploadBtn(true);
     } else {
       setContent(FilePath);
@@ -133,7 +136,7 @@ export default function CompanyMyPage(props) {
     top: "0%",
     width: "400px",
     height: "400px",
-    left: "110px",
+    left: "30%",
   };
   // 카카오 주소검색 API 활용 공간
 
@@ -593,36 +596,30 @@ export default function CompanyMyPage(props) {
     <>
       <NavBar />
       <div className="company-myPage-container">
-        <div className="mypage">
+        <div className="company-myPage-wrapper">
           <h1>사업자 마이페이지</h1>
-          <h2 className="header2">회사 정보</h2>
+          <h2>회사 정보</h2>
           {!companyInfoUpdating ? (
-            <div className="user">
-              <tbody>
-                <table>
-                  <tr>
-                    <td>
-                      <img id="profile" src={Logo} alt="logo" />
-                    </td>
-                  </tr>
-                  <tr>
-                    <th scope="row">회사명</th>
-                    <td>{companyName}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">회사 주소</th>
-                    <td>{companyLocation}</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">사업자등록번호</th>
-                    <td>{businessNumber}</td>
-                  </tr>
-                </table>
-                <button
-                  id="left"
-                  className="login-btn"
-                  onClick={companyHandler}
-                >
+            <div className="company-info">
+              <div className="profile-wrapper">
+                <img id="profile" src={Logo} alt="logo" />
+                <div className="table">
+                  <div className="table-wrapper">
+                    <div>회사명</div>
+                    <div>{companyName}</div>
+                  </div>
+                  <div className="table-wrapper">
+                    <div>회사주소</div>
+                    <div>{companyLocation}</div>
+                  </div>
+                  <div className="table-wrapper">
+                    <div>사업자등록번호</div>
+                    <div>{businessNumber}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="company-btn-container">
+                <button className="login-btn" onClick={companyHandler}>
                   회원 정보 수정
                 </button>
                 {!passwordUpdating ? (
@@ -632,64 +629,73 @@ export default function CompanyMyPage(props) {
                 ) : (
                   <>
                     <input
-                      className="jobFlow"
                       placeholder="출신 초등학교는?"
                       name="question"
                       type="text"
                       onChange={questionHandler}
+                      style={{
+                        height: "45px",
+                        width: "235px",
+                        marginTop: "10px",
+                        textAlign: "center",
+                      }}
                     />
 
                     <input
-                      className="jobFlow"
                       placeholder="수정할 비밀번호"
                       name="password"
                       type="password"
                       onChange={passwordHandler}
+                      style={{
+                        height: "45px",
+                        width: "235px",
+                        marginTop: "10px",
+                        textAlign: "center",
+                      }}
                     />
-                    <span>{passwordErrorMessage}</span>
-                    <button
-                      id="left"
-                      className="login-btn"
-                      onClick={UpdatePassword}
-                    >
-                      완료
-                    </button>
-                    <button
-                      className="login-btn"
-                      onClick={CancelUpdatePassword}
-                    >
-                      취소
-                    </button>
+                    <div className="myPage-mobal">
+                      <button className="login-btn" onClick={UpdatePassword}>
+                        완료
+                      </button>
+                      <button
+                        className="login-btn"
+                        onClick={CancelUpdatePassword}
+                      >
+                        취소
+                      </button>
+                    </div>
                   </>
                 )}
-                <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
-              </tbody>
+              </div>
+              <WithdrawCompanyModal WithdrawCompany={WithdrawCompany} />
             </div>
           ) : (
-            <div className="user">
-              <tbody className="new">
-                <tr>
-                  <th scope="row">회사명</th>
-                  <input
-                    className="jobFlow"
-                    placeholder="회사명"
-                    name="name"
-                    type="text"
-                    onChange={companyNameHandler}
-                    value={companyName}
-                  />
-                </tr>
-                <tr>
-                  <th scope="row">회사 주소</th>
-                  {/* <td className="jobFlow">{companyLocation}</td>
-            <button className="login-btn" onClick={OpenCompanyPost}>주소창 열기</button> */}{" "}
-                  <input
-                    className="jobFlow"
-                    name="location"
-                    onClick={OpenJobPost}
-                    placeholder={companyLocation}
-                    value={jobLocation}
-                  />
+            <div className="company-info">
+              <div className="profile-wrapper">
+                <img id="profile" src={Logo} alt="logo" />
+                <div className="table">
+                  <div className="table-wrapper">
+                    <div>회사명</div>
+                    <input
+                      className="table-input"
+                      name="name"
+                      type="text"
+                      placeholder={companyName}
+                      onChange={companyNameHandler}
+                      value={companyName}
+                    />
+                  </div>
+                  <div className="table-wrapper">
+                    <div>회사 주소</div>
+                    <input
+                      className="table-input"
+                      name="location"
+                      type="text"
+                      placeholder={companyLocation}
+                      onChange={OpenJobPost}
+                      value={jobLocation}
+                    />
+                  </div>
                   {isOpenJobPost ? (
                     <>
                       <DaumPostcode
@@ -714,160 +720,159 @@ export default function CompanyMyPage(props) {
                     </>
                   ) : null}
                   {/* 위치 검색할수있는 input */}
-                </tr>
-                <tr>
-                  <th scope="row">사업자등록번호</th>
-                  <input
-                    className="jobFlow"
-                    placeholder="사업자등록번호"
-                    name="businessNumber"
-                    type="text"
-                    onChange={businessNumberHandler}
-                    value={businessNumber}
-                  />
-                </tr>
-                <tr>
-                  <th scope="row">사진</th>
-                  <input name="image" type="file" onChange={imageHandler} />
-                </tr>
-                <tr>
-                  {ImgUploadBtn ? (
-                    <button
-                      id="left"
-                      className="login-btn"
-                      onClick={upoadImage}
-                    >
-                      이미지 업로드
-                    </button>
-                  ) : null}
-                  <button className="login-btn" onClick={updateCompany}>
-                    수정 완료
-                  </button>
-                </tr>
-              </tbody>
-              <br />
-              <br />
-              <br />
+                  <div className="table-wrapper">
+                    <div>사업자등록번호</div>
+                    <input
+                      className="table-input"
+                      name="businessNumber"
+                      type="text"
+                      onChange={businessNumberHandler}
+                      value={businessNumber}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="company-btn-container-edit">
+                <input
+                  required
+                  placeholder="사진을 등록해주세요"
+                  value={fileSelect}
+                  style={{ textAlign: "center" }}
+                  className="upload-name"
+                  disabled="disabled"
+                />
+                <label for="file-upload">사진 업로드</label>
+                <input
+                  required
+                  className="upload-hidden"
+                  id="file-upload"
+                  name="image"
+                  type="file"
+                  onChange={imageHandler}
+                />
+                {ImgUploadBtn ? (
+                  <button onClick={upoadImage}>이미지 업로드</button>
+                ) : null}
+                <button
+                  type="button"
+                  className="login-btn"
+                  onClick={updateCompany}
+                >
+                  수정 완료
+                </button>
+              </div>
             </div>
           )}
-          <br></br>
-
+          <div className="career-submit-btn-wrapper"></div>
           <h2 className="header2">일자리 등록</h2>
           <div className="careerSection">
             <form>
-              <label>
-                {" "}
-                근무 요일 :
-                <input
-                  name="day"
-                  id="mon"
-                  type="checkbox"
-                  onClick={monHandler}
-                />
-                월
-                <input
-                  name="day"
-                  id="tue"
-                  type="checkbox"
-                  onClick={tueHandler}
-                />
-                화
-                <input
-                  name="day"
-                  id="wed"
-                  type="checkbox"
-                  onClick={wedHandler}
-                />
-                <label for="wed">수</label>
-                <input
-                  name="day"
-                  id="thu"
-                  type="checkbox"
-                  onClick={thuHandler}
-                />
-                <label for="thu">목</label>
-                <input
-                  name="day"
-                  id="fri"
-                  type="checkbox"
-                  onClick={friHandler}
-                />
-                <label for="fri">금</label>
-                <input
-                  name="day"
-                  id="sat"
-                  type="checkbox"
-                  onClick={satHandler}
-                />
-                <label for="sat">토</label>
-                <input
-                  name="day"
-                  id="sun"
-                  type="checkbox"
-                  onClick={sunHandler}
-                />
-                <label for="sun">일</label>
-              </label>
-              <br></br>
-              <label>
-                {" "}
-                근무 시간 :
-                <input
-                  name="startTime"
-                  type="time"
-                  placeholder="시작 시간"
-                  onChange={startTimeHandler}
-                />
-                <input
-                  name="endTime"
-                  type="time"
-                  placeholder="끝 시간"
-                  onChange={endTimeHandler}
-                />
-              </label>
-              <br></br>
-              <label>
-                {" "}
-                <input
-                  className="jobFlow"
-                  name="location"
-                  onClick={OpenJobPost}
-                  placeholder="클릭하셔서 주소를 검색해주세요"
-                  value={jobLocation}
-                />
-                {isOpenJobPost ? (
-                  <>
-                    <DaumPostcode
-                      onClick={OpenJobPost}
-                      style={postCodeStyle}
-                      autoClose
-                      onComplete={CompleteJobPost}
-                    />
-                  </>
-                ) : null}
-              </label>
-              <br></br>
-              <label>
-                {" "}
-                <input
-                  className="jobFlow"
-                  placeholder="포지션"
-                  name="position"
-                  type="text"
-                  onChange={positionHandler}
-                />
-              </label>
-              <br></br>
-              <label>
-                {" "}
-                <input
-                  className="jobFlow"
-                  placeholder="시급"
-                  name="hourlyWage"
-                  type="text"
-                  onChange={hourlyWageHandler}
-                />
-              </label>
+              <div className="career-input-wrapper">
+                <div className="career-input-item">
+                  <div>근무 요일 :</div>
+                  <input
+                    name="day"
+                    id="mon"
+                    type="checkbox"
+                    onClick={monHandler}
+                  />
+                  <label for="mon">월</label>
+                  <input
+                    name="day"
+                    id="tue"
+                    type="checkbox"
+                    onClick={tueHandler}
+                  />
+                  <label for="tue">화</label>
+                  <input
+                    name="day"
+                    id="wed"
+                    type="checkbox"
+                    onClick={wedHandler}
+                  />
+                  <label for="wed">수</label>
+                  <input
+                    name="day"
+                    id="thu"
+                    type="checkbox"
+                    onClick={thuHandler}
+                  />
+                  <label for="thu">목</label>
+                  <input
+                    name="day"
+                    id="fri"
+                    type="checkbox"
+                    onClick={friHandler}
+                  />
+                  <label for="fri">금</label>
+                  <input
+                    name="day"
+                    id="sat"
+                    type="checkbox"
+                    onClick={satHandler}
+                  />
+                  <label for="sat">토</label>
+                  <input
+                    name="day"
+                    id="sun"
+                    type="checkbox"
+                    onClick={sunHandler}
+                  />
+                  <label for="sun">일</label>
+                </div>
+                <label className="career-input-item">
+                  <div>근무 시간 :</div>
+                  <input
+                    name="startTime"
+                    type="time"
+                    placeholder="시작 시간"
+                    onChange={startTimeHandler}
+                  />
+                  <input
+                    name="endTime"
+                    type="time"
+                    placeholder="끝 시간"
+                    onChange={endTimeHandler}
+                  />
+                </label>
+                <label>
+                  <input
+                    className="jobFlow"
+                    name="location"
+                    onClick={OpenJobPost}
+                    placeholder="클릭하셔서 주소를 검색해주세요"
+                    value={jobLocation}
+                  />
+                  {isOpenJobPost ? (
+                    <>
+                      <DaumPostcode
+                        onClick={OpenJobPost}
+                        style={postCodeStyle}
+                        autoClose
+                        onComplete={CompleteJobPost}
+                      />
+                    </>
+                  ) : null}
+                </label>
+                <label>
+                  <input
+                    className="jobFlow"
+                    placeholder="포지션"
+                    name="position"
+                    type="text"
+                    onChange={positionHandler}
+                  />
+                </label>
+                <label>
+                  <input
+                    className="jobFlow"
+                    placeholder="시급"
+                    name="hourlyWage"
+                    type="text"
+                    onChange={hourlyWageHandler}
+                  />
+                </label>
+              </div>
 
               {!jobLocation ||
               day.length === 0 ||
@@ -888,7 +893,14 @@ export default function CompanyMyPage(props) {
             <span>모든 항목을 입력해주세요</span>
           </div>
           <div className="job-list-title-wrapper">
-            <h1 className="job-list-title">등록 일자리 목록</h1>
+            <h2
+              style={{
+                width: "100%",
+                paddingBottom: "10px",
+              }}
+            >
+              등록 일자리 목록
+            </h2>
           </div>
 
           {jobList.length === 0 ? (
@@ -911,11 +923,13 @@ export default function CompanyMyPage(props) {
                         </tr>
                       </thead>
                       <tbody>
-                        <tr>
-                          <td>{job.location}</td>
+                        <tr style={{ paddingTop: "10px" }}>
+                          <td style={{ textAlign: "start" }}>
+                            {job.location.substr(0, 20)}
+                          </td>
                           <td>{job.position}</td>
                           <td>{job.hourlyWage}</td>
-                          <td>{JSON.parse(job.day)}</td>
+                          <td>{job.day.replace(/"/g, "")}</td>
                           <td>
                             {job.startTime.slice(0, 5)}~
                             {job.endTime.slice(0, 5)}
@@ -961,7 +975,7 @@ export default function CompanyMyPage(props) {
                                 ) {
                                   return (
                                     <>
-                                      <tbody>
+                                      <tbody style={{ marginTop: "20px" }}>
                                         <tr key={jobSeeker.id}>
                                           <td>{jobSeeker.name}</td>
                                           <td>{jobSeeker.age}</td>
@@ -990,10 +1004,14 @@ export default function CompanyMyPage(props) {
                                   "accepted"
                                 ) {
                                   return (
-                                    <tr key={jobSeeker.id}>
-                                      <td>{jobSeeker.name}</td>
-                                      <td>{jobSeeker.age}</td>
-                                      <td>{jobSeeker.gender}</td>
+                                    <>
+                                      <tbody>
+                                        <tr key={jobSeeker.id}>
+                                          <td>{jobSeeker.name}</td>
+                                          <td>{jobSeeker.age}</td>
+                                          <td>{jobSeeker.gender}</td>
+                                        </tr>
+                                      </tbody>
                                       <ApplicantInfoModal
                                         jobSeeker={jobSeeker}
                                       />
@@ -1003,10 +1021,7 @@ export default function CompanyMyPage(props) {
                                         jobId={job.id}
                                         jobSeekerId={jobSeeker.id}
                                       />
-                                      <button className="login-btn">
-                                        채팅창 열기
-                                      </button>
-                                    </tr>
+                                    </>
                                   );
                                 }
                               }
