@@ -18,7 +18,7 @@ function NavBar() {
   };
 
   useEffect(() => {
-    axios.get("http://localhost:5000", { withCredentials: true }).then(res => {
+    axios.get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true }).then(res => {
       console.log(res.data);
       if (res.data.user) {
         setUserId(res.data.user.id); //GET요청시에 사용하면 되는 id : mysql에서 생성해주는 id
