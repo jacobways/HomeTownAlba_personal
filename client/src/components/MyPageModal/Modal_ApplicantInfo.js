@@ -22,7 +22,7 @@ export const ModalView = styled.div.attrs(props => ({
   border-radius: 10px;
   background-color: #ffffff;
   width: 300px;
-  height: 400px;
+  height: 500px;
   > div.close_btn {
     margin-top: 5px;
     cursor: pointer;
@@ -63,35 +63,116 @@ function ApplicantInfo({ jobSeeker }) {
       {isOpen === true ? (
         <ModalBackdrop onClick={openModalHandler}>
           <ModalView onClick={e => e.stopPropagation()}>
-            <span onClick={openModalHandler} className="close-btn">
-              &times;
-            </span>
-            <div>{jobSeeker.image}</div>
-            <span>이름 : {jobSeeker.name}</span>
-            <span>나이 : {jobSeeker.age}</span>
-            <span>성별 : {jobSeeker.gender}</span>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <button
+                onClick={openModalHandler}
+                // className="close-btn"
+                style={{
+                  border: "none",
+                  cursor: "pointer",
+                  width: "2rem",
+                  height: "2rem",
+                  backgroundColor: "pink",
+                  fontSize: "14px",
+                  fontWeight: 600,
+                }}
+              >
+                x
+              </button>
+              <h4
+                style={{
+                  fontWeight: 600,
+                  marginBottom: "1rem",
+                }}
+              >
+                [지원자 정보]
+              </h4>
+              <img
+                src={jobSeeker.image}
+                style={{ width: "150px", height: "150px" }}
+              />
+              <span style={{ margin: "5px", fontSize: "12px" }}>
+                <span style={{ fontWeight: 600, fontSize: "15px" }}>이름</span>{" "}
+                : {jobSeeker.name}
+              </span>
+              <span style={{ margin: "5px", fontSize: "12px" }}>
+                <span style={{ fontWeight: 600, fontSize: "15px" }}>나이</span>{" "}
+                : {jobSeeker.age}
+              </span>
+              <span style={{ margin: "5px", fontSize: "12px" }}>
+                <span style={{ fontWeight: 600, fontSize: "15px" }}>성별</span>{" "}
+                : {jobSeeker.gender}
+              </span>
+            </div>
             {careerList.length === 0 ? (
               <div>경력 정보가 없습니다</div>
             ) : (
-              <>
-                <h4>경력사항</h4>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "1rem",
+                }}
+              >
+                <h4
+                  style={{
+                    fontWeight: 600,
+                    marginBottom: "1rem",
+                  }}
+                >
+                  [경력사항]
+                </h4>
                 <table>
-                  <tr>
-                    <th>근무 회사</th>
-                    <th>포지션</th>
-                    <th>기간(월)</th>
-                  </tr>
+                  <thead>
+                    <tr
+                      style={{
+                        width: "200px",
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <th
+                        style={{
+                          fontSize: "15px",
+                          textAlign: "center",
+                        }}
+                      >
+                        근무 회사
+                      </th>
+                      <th style={{ fontSize: "15px", textAlign: "center" }}>
+                        포지션
+                      </th>
+                      <th style={{ fontSize: "15px", textAlign: "center" }}>
+                        기간(월)
+                      </th>
+                    </tr>
+                  </thead>
                   {careerList.map(career => {
                     return (
-                      <tr>
-                        <td>{career.company}</td>
-                        <td>{career.position}</td>
-                        <td>{career.period}</td>
-                      </tr>
+                      <tbody style={{ marginTop: "10px" }}>
+                        <tr>
+                          <td style={{ fontSize: "13px" }}>{career.company}</td>
+                          <td style={{ fontSize: "13px" }}>
+                            {career.position}
+                          </td>
+                          <td style={{ fontSize: "13px" }}>{career.period}</td>
+                        </tr>
+                      </tbody>
                     );
                   })}
                 </table>
-              </>
+              </div>
             )}
           </ModalView>
         </ModalBackdrop>

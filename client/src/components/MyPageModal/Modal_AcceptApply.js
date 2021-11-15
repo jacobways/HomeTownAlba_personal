@@ -1,18 +1,17 @@
-import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 
 import styled from "styled-components";
 
 export const ModalBackdrop = styled.div`
-  /* position: fixed; */
+  position: relative;
   z-index: 999;
-  top: 1;
-  left: 1;
-  bottom: 1;
-  right: 1;
-  background-color: rgba(0, 0, 0, 0.4);
-  display: -webkit-flex;
-  place-items: center;
+  width: 20rem;
+  background-color: whitesmoke;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 2rem 0rem;
+  align-items: center;
 `;
 
 function AccpetApplyModal({ idx, jobId, jobSeekerId, AcceptApply }) {
@@ -32,22 +31,37 @@ function AccpetApplyModal({ idx, jobId, jobSeekerId, AcceptApply }) {
   };
 
   return (
-    <>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <button id="left" className="login-btn" onClick={openModalHandler}>
         {isOpen === false ? "지원승인" : "지원승인중"}
       </button>
       {isOpen === true ? (
         <ModalBackdrop>
-          <span>지원을 승인하시겠습니까?</span>
-          <button id="left" className="login-btn" onClick={CloseModalHandler}>
+          <span style={{ color: "red", fontSize: "14px", fontWeight: 600 }}>
+            지원을 승인하시겠습니까?
+          </span>
+          <button
+            id="left"
+            className="login-btn login-btn-custom"
+            onClick={CloseModalHandler}
+          >
             아니요
           </button>
-          <button className="login-btn" onClick={CloseAndAccpetHandler}>
+          <button
+            className="login-btn login-btn-custom"
+            onClick={CloseAndAccpetHandler}
+          >
             지원 승인하기
           </button>
         </ModalBackdrop>
       ) : null}
-    </>
+    </div>
   );
 }
 

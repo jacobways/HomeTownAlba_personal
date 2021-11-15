@@ -515,9 +515,9 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
     return (
       <>
         <NavBar />
-        <div className="main">
+        <div className="jobseeker-myPage-container">
           <div>
-            <div className="mypage">
+            <div className="jobseeker-myPage-wrapper">
               <ul className="tag">
                 <li className="on">
                   {/* 아래 문구 수정 */}
@@ -529,10 +529,17 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                 </li>
               </ul>
               {/* 아래 문구 수정 */}
-              <h1 className="header">
+              <div
+                className="header"
+                style={{
+                  textAlign: "center",
+                  fontWeight: "800",
+                  fontSize: "1.5rem",
+                }}
+              >
                 비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분
                 내 자동으로 삭제됩니다.
-              </h1>
+              </div>
               <br />
               <div className="messageBox">
                 <ul>
@@ -546,9 +553,18 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   </li>
                 </ul>
               </div>
-              <br></br>
               <div className="line">
-                <h2>회원 정보</h2>
+                <h2
+                  style={{
+                    marginBottom: "20px",
+                    textAlign: "start",
+                    borderBottom: "ridge",
+                    width: "100%",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  회원 정보
+                </h2>
 
                 {/* <img className='profile' src='http://k.kakaocdn.net/dn/b73ZT6/btrjxAQccVG/CmkUAATTS22WaEhz6Wdq1K/img_640x640.jpg'/> */}
                 <tbody>
@@ -592,34 +608,41 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
               <br></br>
 
               {/* 아래와 같이 경력사항 표시, 수정, 삭제하는 코드 추가 */}
-              <div className="job">
-                <h2 className="header2">경력 사항</h2>
-                <div className="careerSection">
-                  <div className="careerDiv">
-                    <tbody>
-                      <div className="workCom">근무 회사</div>
-                      <div className="position">포지션</div>
-                      <div className="month">기간(월)</div>
-                    </tbody>
+              <div className="jobseeker-myPage-career-container">
+                <h2
+                  style={{
+                    textAlign: "start",
+                    width: "100%",
+                    paddingBottom: "10px",
+                    borderBottom: "ridge",
+                  }}
+                >
+                  경력 사항
+                </h2>
+                <div className="jobseeker-myPage-career">
+                  <div className="jobseeker-myPage-career-wrapper">
+                    <div>근무 회사</div>
+                    <div>포지션</div>
+                    <div>기간(월)</div>
                   </div>
-                  <table className="career">
+                  <div>
                     {careerList.length === 0 ? (
-                      <div>등록된 경력 사항이 없습니다.</div>
+                      <div style={{ marginTop: "20px", textAlign: "center" }}>
+                        등록된 경력 사항이 없습니다.
+                      </div>
                     ) : (
-                      <table className="career">
+                      <>
                         {careerList.map((career, idx) => {
                           return (
                             <>
+                              <div className="career-wrapper" key={career.id}>
+                                <div>{career.company}</div>
+                                <div>{career.position}</div>
+                                <div>{career.period}</div>
+                              </div>
                               {!careerUpdating[idx] ? (
-                                <div className="careerDiv">
-                                  <tr key={career.id}>
-                                    <td className="workCom">
-                                      {career.company}
-                                    </td>
-                                    <td className="position">
-                                      {career.position}
-                                    </td>
-                                    <td className="month">{career.period}</td>
+                                <>
+                                  <div className="career-btn-wrapper">
                                     <button
                                       className="login-btn"
                                       onClick={() => {
@@ -632,57 +655,60 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                                       deleteCareer={deleteCareer}
                                       id={career.id}
                                     />
-                                  </tr>
-                                </div>
+                                  </div>
+                                </>
                               ) : (
-                                <tr key={career.id}>
-                                  <td>
+                                <>
+                                  <div
+                                    className="career-edit-form"
+                                    key={career.id}
+                                  >
                                     <input
-                                      className="jobFlow"
                                       name="company"
                                       type="text"
                                       onChange={companyHandler}
                                       value={company}
                                     />
-                                  </td>
-                                  <td>
                                     <input
-                                      className="jobFlow"
                                       name="position"
                                       type="text"
-                                      onChange={careerPositionHandler}
-                                      value={careerPosition}
+                                      onChange={positionHandler}
+                                      value={position}
                                     />
-                                  </td>
-                                  <td>
                                     <input
-                                      className="jobFlow"
                                       name="period"
                                       type="text"
                                       onChange={periodHandler}
                                       value={period}
                                     />
-                                  </td>
-                                  <button
-                                    className="login-btn"
-                                    onClick={() => {
-                                      updateCareer(idx, career.id);
-                                    }}
-                                  >
-                                    수정 완료
-                                  </button>
-                                </tr>
+                                    <button
+                                      className="career-submit-btn"
+                                      onClick={() => {
+                                        updateCareer(idx, career.id);
+                                      }}
+                                    >
+                                      수정 완료
+                                    </button>
+                                  </div>
+                                </>
                               )}
                             </>
                           );
                         })}
-                      </table>
+                      </>
                     )}
-                  </table>
+                  </div>
                 </div>
               </div>
               {/* 아래에서는 경력사항 등록할 수 있도록 태크에 핸들러 추가 */}
-              <h2 className="header2">경력 사항 등록</h2>
+              <h2
+                style={{
+                  width: "100%",
+                  paddingBottom: "10px",
+                }}
+              >
+                경력 사항 등록
+              </h2>
               <div className="careerSection">
                 {/* 위의 형식대로 테이블 양식에 맞출지, 아래 처럼 일렬로 표현할지 결정 필요 */}
                 {/* <form> */}
@@ -693,6 +719,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   name="company"
                   type="text"
                   onChange={companyHandler}
+                  value={company}
                 />
 
                 <input
@@ -701,6 +728,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   name="position"
                   type="text"
                   onChange={careerPositionHandler}
+                  value={careerPosition}
                 />
 
                 <input
@@ -710,6 +738,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   type="text"
                   onChange={periodHandler}
                   placeholder="입력예시 : 3"
+                  value={period}
                 />
                 <input
                   className="login-btn"
@@ -721,7 +750,14 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
               {/* </form> */}
 
               {/* 아래와 같이 지원현황 및 지원결과 확인 코드 추가 */}
-              <h2 className="header2">지원 현황</h2>
+              <h2
+                style={{
+                  width: "100%",
+                  paddingBottom: "10px",
+                }}
+              >
+                지원 현황
+              </h2>
               {applyList.length === 0 ? (
                 <div className="careerSection">지원 내역이 없습니다</div>
               ) : (
@@ -737,42 +773,50 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                           <th>시급</th>
                           <th>예상 월급여</th>
                           <th>포지션</th>
-                          <th></th>
                         </tr>
                       </thead>
+                      {applyList.map(job => {
+                        return (
+                          <>
+                            <tbody style={{ marginTop: "20px" }}>
+                              <tr key={job.id}>
+                                <td>{job.companyName}</td>
+                                <td style={{ textAlign: "start" }}>
+                                  {job.location.substr(0, 20)}
+                                </td>
+                                <td>{job.day.replace(/"/g, "")}</td>
+                                <td>
+                                  {job.startTime}~{job.endTime}
+                                  <br />({job.time}시간)
+                                </td>
+                                <td>{job.hourlyWage}</td>
+                                <td>{job.monthlyWage}</td>
+                                <td>{job.position}</td>
+                              </tr>
+                            </tbody>
+                            <CancelApplyModal
+                              CancelApply={CancelApply}
+                              jobId={job.id}
+                            />
+                          </>
+                        );
+                      })}
                     </table>
                   </div>
-                  {applyList.map(job => {
-                    return (
-                      <div className="job-list-table-container">
-                        <table>
-                          <thead>
-                            <tr key={job.id}>
-                              <td>{job.companyName}</td>
-                              <td>{job.location}</td>
-                              <td>{job.day}</td>
-                              <td>
-                                {job.startTime}~{job.endTime} ({job.time}시간)
-                              </td>
-                              <td>{job.hourlyWage}</td>
-                              <td>{job.monthlyWage}</td>
-                              <td>{job.position}</td>
-                              <CancelApplyModal
-                                CancelApply={CancelApply}
-                                jobId={job.id}
-                              />
-                            </tr>
-                          </thead>
-                        </table>
-                      </div>
-                    );
-                  })}
                 </div>
               )}
               <br></br>
-              <h3>지원 결과</h3>
+              <h2
+                style={{
+                  borderBottom: "ridge",
+                  width: "100%",
+                  paddingBottom: "10px",
+                }}
+              >
+                지원 결과
+              </h2>
               {resultList.length === 0 ? (
-                <div>지원 결과가 없습니다</div>
+                <div style={{ marginTop: "20px" }}>지원 결과가 없습니다</div>
               ) : (
                 <div className="job-list-table-container">
                   <table>
@@ -786,51 +830,51 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                         <th>예상 월급여</th>
                         <th>포지션</th>
                         <th>결과</th>
-                        <th></th>
                       </tr>
                     </thead>
                     {resultList.map((job, number) => {
                       if (statusList[number]) {
                         if (statusList[number].status === "rejected") {
                           return (
-                            <tr key={job.id}>
-                              <td>{job.companyName}</td>
-                              <td>{job.location}</td>
-                              <td>{job.day}</td>
-                              <td>
-                                {job.startTime}~{job.endTime} ({job.time}시간)
-                              </td>
-                              <td>{job.hourlyWage}</td>
-                              <td>{job.monthlyWage}</td>
-                              <td>{job.position}</td>
-                              <td>지원 거절</td>
-                              <CancelApplyModal
-                                CancelApply={CancelApply}
-                                jobId={job.id}
-                              />
-                            </tr>
+                            <tbody style={{ marginTop: "20px" }} key={job.id}>
+                              <tr>
+                                <td>{job.companyName}</td>
+                                <td>{job.location}</td>
+                                <td>{job.day}</td>
+                                <td>
+                                  {job.startTime}~{job.endTime} ({job.time}시간)
+                                </td>
+                                <td>{job.hourlyWage}</td>
+                                <td>{job.monthlyWage}</td>
+                                <td>{job.position}</td>
+                                <td>지원 거절</td>
+                                <CancelApplyModal
+                                  CancelApply={CancelApply}
+                                  jobId={job.id}
+                                />
+                              </tr>
+                            </tbody>
                           );
                         } else if (statusList[number].status === "accepted") {
                           return (
-                            <tr key={job.id}>
-                              <td>{job.companyName}</td>
-                              <td>{job.location}</td>
-                              <td>{job.day}</td>
-                              <td>
-                                {job.startTime}~{job.endTime} ({job.time}시간)
-                              </td>
-                              <td>{job.hourlyWage}</td>
-                              <td>{job.monthlyWage}</td>
-                              <td>{job.position}</td>
-                              <td>지원 승인</td>
-                              <CancelApplyModal
-                                CancelApply={CancelApply}
-                                jobId={job.id}
-                              />
-                              <button id="chat" className="login-btn">
-                                채팅창 열기
-                              </button>
-                            </tr>
+                            <tbody key={job.id}>
+                              <tr>
+                                <td>{job.companyName}</td>
+                                <td>{job.location}</td>
+                                <td>{job.day}</td>
+                                <td>
+                                  {job.startTime}~{job.endTime} ({job.time}시간)
+                                </td>
+                                <td>{job.hourlyWage}</td>
+                                <td>{job.monthlyWage}</td>
+                                <td>{job.position}</td>
+                                <td>지원 승인</td>
+                                <CancelApplyModal
+                                  CancelApply={CancelApply}
+                                  jobId={job.id}
+                                />
+                              </tr>
+                            </tbody>
                           );
                         }
                       }
@@ -838,17 +882,6 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   </table>
                 </div>
               )}
-
-              {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
-              <br />
-              <div className="bottomButton">
-                <button id="left" className="login-btn">
-                  수정 완료
-                </button>
-                <button id="change" className="login-btn">
-                  회원탈퇴
-                </button>
-              </div>
             </div>
           </div>
         </div>
@@ -859,7 +892,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
     return (
       <>
         <NavBar />
-        <div className="main">
+        <div className="jobseeker-myPage-container">
           <div
             style={{
               display: "flex",
@@ -868,7 +901,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
               alignItems: "center",
             }}
           >
-            <div className="mypage">
+            <div className="company-myPage-wrapper">
               <ul className="tag">
                 <li>
                   {/* 아래 문구 수정 */}
@@ -880,10 +913,17 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                 </li>
               </ul>
               {/* 아래 문구 수정 */}
-              <h1 className="header">
+              <div
+                className="header"
+                style={{
+                  textAlign: "center",
+                  fontWeight: "800",
+                  fontSize: "1.5rem",
+                }}
+              >
                 비회원 상태로 기능을 체험할 수 있으며, 등록하시는 데이터는 5분
                 내 자동으로 삭제됩니다.
-              </h1>
+              </div>
               <div className="messageBox">
                 <ul>
                   <li>
@@ -896,9 +936,18 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   </li>
                 </ul>
               </div>
-              <br></br>
               <div className="line">
-                <h2>사업자 정보</h2>
+                <h2
+                  style={{
+                    marginBottom: "20px",
+                    textAlign: "start",
+                    borderBottom: "ridge",
+                    width: "100%",
+                    paddingBottom: "10px",
+                  }}
+                >
+                  회사 정보
+                </h2>
                 <tbody>
                   <tr>
                     <th>회사명</th>
@@ -918,13 +967,22 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                   </tr>
                 </tbody>
 
-                <h1 className="companyJob">일자리 등록</h1>
+                <h2
+                  style={{
+                    borderBottom: "ridge",
+                    width: "100%",
+                    paddingBottom: "10px",
+                    textAlign: "start",
+                  }}
+                >
+                  일자리 등록
+                </h2>
 
                 {/* tbody 내에서 input 태그에 이벤트 핸들러 할당 & 주소 부분은 다음 API 사용하도록 코드 수정 */}
                 <tbody>
                   {/* 제목 부분은 필요 없어서 삭제 */}
 
-                  <tr>
+                  <tr style={{ marginTop: "20px" }}>
                     <th>주소</th>
                     <td>
                       <input
@@ -1043,24 +1101,22 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                       />
                     </td>
                   </tr>
-                  {!jobLocation ||
-                  day.length === 0 ||
-                  !startTime ||
-                  !endTime ||
-                  !position ||
-                  !hourlyWage ? (
-                    <>
-                      <br></br>
-                      <button className="login-btn">제출</button>
-                      <br></br>
-                      <span>모든 항목을 입력해주세요</span>
-                    </>
-                  ) : (
-                    <button className="login-btn" onClick={createJob}>
-                      제출
-                    </button>
-                  )}
                 </tbody>
+                {!jobLocation ||
+                day.length === 0 ||
+                !startTime ||
+                !endTime ||
+                !position ||
+                !hourlyWage ? (
+                  <>
+                    <button className="login-btn">제출</button>
+                    <div>모든 항목을 입력해주세요</div>
+                  </>
+                ) : (
+                  <button className="login-btn" onClick={createJob}>
+                    제출
+                  </button>
+                )}
 
                 {/* <form>
             <label>
@@ -1114,7 +1170,16 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
 
                 <br></br>
                 <div className="job-list-title-wrapper">
-                  <h1 className="job-list-title">등록 일자리 목록</h1>
+                  <h2
+                    style={{
+                      borderBottom: "ridge",
+                      width: "100%",
+                      paddingBottom: "10px",
+                      textAlign: "start",
+                    }}
+                  >
+                    등록 일자리 목록
+                  </h2>
                 </div>
                 {/* 아래처럼 등록된 일자리 및 지원자를 확인하는 코드 추가 */}
                 {jobList.length === 0 ? (
@@ -1138,7 +1203,7 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                                 </tr>
                               </thead>
                               <tbody>
-                                <tr className="last">
+                                <tr>
                                   <td>{job.location}</td>
                                   <td>{job.position}</td>
                                   <td>{job.hourlyWage}</td>
@@ -1174,13 +1239,13 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                                   <h5>아직 지원자가 없습니다</h5>
                                 ) : (
                                   <table>
-                                    <tr>
-                                      <th>이름</th>
-                                      <th>나이</th>
-                                      <th>성별</th>
-                                      <th></th>
-                                      <th></th>
-                                    </tr>
+                                    <thead>
+                                      <tr>
+                                        <th>이름</th>
+                                        <th>나이</th>
+                                        <th>성별</th>
+                                      </tr>
+                                    </thead>
                                     {applicantList[idx].map(
                                       (jobSeeker, number) => {
                                         if (applyStatusList[idx]) {
@@ -1189,10 +1254,14 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                                               .status === "waiting"
                                           ) {
                                             return (
-                                              <tr key={jobSeeker.id}>
-                                                <td>{jobSeeker.name}</td>
-                                                <td>{jobSeeker.age}</td>
-                                                <td>{jobSeeker.gender}</td>
+                                              <>
+                                                <tbody>
+                                                  <tr key={jobSeeker.id}>
+                                                    <td>{jobSeeker.name}</td>
+                                                    <td>{jobSeeker.age}</td>
+                                                    <td>{jobSeeker.gender}</td>
+                                                  </tr>
+                                                </tbody>
                                                 <ApplicantInfoModal
                                                   jobSeeker={jobSeeker}
                                                 />
@@ -1208,30 +1277,29 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                                                   jobId={job.id}
                                                   jobSeekerId={jobSeeker.id}
                                                 />
-                                              </tr>
+                                              </>
                                             );
                                           } else if (
                                             applyStatusList[idx][number]
                                               .status === "accepted"
                                           ) {
                                             return (
-                                              <tr key={jobSeeker.id}>
-                                                <td>{jobSeeker.name}</td>
-                                                <td>{jobSeeker.age}</td>
-                                                <td>{jobSeeker.gender}</td>
-                                                <ApplicantInfoModal
-                                                  jobSeeker={jobSeeker}
-                                                />
-                                                <RejectApplyModal
-                                                  RejectApply={RejectApply}
-                                                  idx={idx}
-                                                  jobId={job.id}
-                                                  jobSeekerId={jobSeeker.id}
-                                                />
-                                                <button className="login-btn">
-                                                  채팅창 열기
-                                                </button>
-                                              </tr>
+                                              <tbody>
+                                                <tr key={jobSeeker.id}>
+                                                  <td>{jobSeeker.name}</td>
+                                                  <td>{jobSeeker.age}</td>
+                                                  <td>{jobSeeker.gender}</td>
+                                                  <ApplicantInfoModal
+                                                    jobSeeker={jobSeeker}
+                                                  />
+                                                  <RejectApplyModal
+                                                    RejectApply={RejectApply}
+                                                    idx={idx}
+                                                    jobId={job.id}
+                                                    jobSeekerId={jobSeeker.id}
+                                                  />
+                                                </tr>
+                                              </tbody>
                                             );
                                           }
                                         }
@@ -1247,19 +1315,6 @@ function GuestMyPage({ guestApplyStatus, guestApplyStatusHandler }) {
                     })}
                   </>
                 )}
-
-                <br></br>
-
-                {/* 아래 수정완료 버튼과 회원탈퇴 버튼은 지워도 될 것 같아요 */}
-                <div className="bottomButton">
-                  <button id="left" className="login-btn">
-                    수정 완료
-                  </button>
-                  <button className="login-btn">회원탈퇴</button>
-                  <br />
-                  <br />
-                  <br />
-                </div>
               </div>
             </div>
           </div>
