@@ -1,4 +1,11 @@
-# HomeTownAlba
+## HomeTownAlba_personal 저장소
+- 팀 프로젝트 이후 리팩토링을 위한 개인 Repository입니다.
+- 기존 팀 Repository : https://github.com/codestates/HomeTownAlba
+- 기존 팀 issue 게시판 : https://github.com/codestates/HomeTownAlba/issues
+
+***
+
+## HomeTownAlba
 ### 지도로 근처 동네 알바 구하기
 
 - 지도를 통해 위치 기반으로 일자리 정보를 전달합니다.
