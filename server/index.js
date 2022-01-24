@@ -98,7 +98,7 @@ app.use("/applicant", applicantRouter);
 app.use("/auth", authRouter);
 app.use("/mail", mailRouter);
 
-const port = 5000;
+const port = process.env.PORT || 5000
 
 app.get("/", (req, res) => {
   // console.log("로그인했니", req.user);
