@@ -19,7 +19,6 @@ function NavBar() {
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_SERVER_URL}`, { withCredentials: true }).then(res => {
-      console.log(res.data);
       if (res.data.user) {
         setUserId(res.data.user.id); //GET요청시에 사용하면 되는 id : mysql에서 생성해주는 id
         console.log("mysql에서 생성해주는id", UserId);
@@ -49,57 +48,57 @@ function NavBar() {
     });
   };
 
-  if (jobSeeker === undefined) {
-    return (
-      <header className="navbar-header-container">
-        <div className="navbar-header-logo">
-          <Link to="/">logo</Link>
-        </div>
-        <div className="menuBar-container">
-          <div className="menuBar-icon"></div>
-        </div>
-        <ul className="navbar-header-menu">
-          <li>
-            <Link to="/guest/mypage">마이페이지</Link>
-          </li>
-          <li>
-            <Link to="/login">로그인</Link>
-          </li>
-          <li>
-            <Link to="/register">회원가입</Link>
-          </li>
-        </ul>
-        <div className="hamburger-Btn" onClick={toggleHamburger}>
-          <i className="fas fa-bars"></i>
-        </div>
-        <aside
-          className={
-            isOpenHamburger ? "show-hamburgerBar" : "hide-hamburgerBar"
-          }
-        >
-          <div className="hamburgerBar_menu">
-            <div className="hamburgerBar_exitBtn" onClick={toggleHamburger}>
-              <i className="fas fa-times"></i>
-            </div>
-            <ul className="hamburgerBar-menu">
-              <li className="hamburgerBar-list">
-                <Link to="/login">로그인</Link>
-              </li>
-              <li className="hamburgerBar-list">
-                <Link to="/map">알바 찾기</Link>
-              </li>
-              <li className="hamburgerBar-list">
-                <Link to="/guest/mypage">마이페이지(게스트)</Link>
-              </li>
-              <li className="hamburgerBar-list">
-                <Link to="/register">회원가입</Link>
-              </li>
-            </ul>
-          </div>
-        </aside>
-      </header>
-    );
-  }
+  // if (jobSeeker === undefined) {
+  //   return (
+  //     <header className="navbar-header-container">
+  //       <div className="navbar-header-logo">
+  //         <Link to="/">logo</Link>
+  //       </div>
+  //       <div className="menuBar-container">
+  //         <div className="menuBar-icon"></div>
+  //       </div>
+  //       <ul className="navbar-header-menu">
+  //         <li>
+  //           <Link to="/guest/mypage">마이페이지</Link>
+  //         </li>
+  //         <li>
+  //           <Link to="/login">로그인</Link>
+  //         </li>
+  //         <li>
+  //           <Link to="/register">회원가입</Link>
+  //         </li>
+  //       </ul>
+  //       <div className="hamburger-Btn" onClick={toggleHamburger}>
+  //         <i className="fas fa-bars"></i>
+  //       </div>
+  //       <aside
+  //         className={
+  //           isOpenHamburger ? "show-hamburgerBar" : "hide-hamburgerBar"
+  //         }
+  //       >
+  //         <div className="hamburgerBar_menu">
+  //           <div className="hamburgerBar_exitBtn" onClick={toggleHamburger}>
+  //             <i className="fas fa-times"></i>
+  //           </div>
+  //           <ul className="hamburgerBar-menu">
+  //             <li className="hamburgerBar-list">
+  //               <Link to="/login">로그인</Link>
+  //             </li>
+  //             <li className="hamburgerBar-list">
+  //               <Link to="/map">알바 찾기</Link>
+  //             </li>
+  //             <li className="hamburgerBar-list">
+  //               <Link to="/guest/mypage">마이페이지(게스트)</Link>
+  //             </li>
+  //             <li className="hamburgerBar-list">
+  //               <Link to="/register">회원가입</Link>
+  //             </li>
+  //           </ul>
+  //         </div>
+  //       </aside>
+  //     </header>
+  //   );
+  // }
   if ((jobSeeker && jobSeeker.loginSuccess) || Login) {
     return (
       <header className="navbar-header-container">

@@ -16,8 +16,6 @@ export default function Map({ guestApplyStatus, guestApplyStatusHandler }) {
   const [endTimeFilter, setEndTimeFilter] = useState();
   const [minWageFilter, setMinWageFilter] = useState();
   const [maxWageFilter, setMaxWageFilter] = useState();
-  console.log(startTimeFilter);
-  console.log(endTimeFilter);
   const [mapLocation, setMapLocation] = useState([
     37.5665406708322, 126.97787259165268,
   ]); //[위도, 경도]
